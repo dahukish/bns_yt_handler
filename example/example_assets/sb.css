@@ -1,0 +1,300 @@
+/* small business service bar */
+
+.is980 .sb #service-menu li.a {
+	width: 205px !important;
+}
+.is980 .sb #service-menu li.a a.tab {
+	width: 175px;
+}
+.is980 .sb #service-menu li.c {
+	left: 0 !important;
+	width: 222px !important;
+}
+/* commercial service bar */
+
+.is980 .com #service-menu li.b .content {
+	width: 355px!important;
+	height: 315px !important;
+}
+.is980 .com #service-menu li.c .content {
+	left: 0 !important;
+	width: 222px !important;
+	height: 240px !important;
+}
+.is980 .com #service-menu li.a .content h4 {
+	color: #535353;
+	font-size: 1.2em;
+	padding: 5px 0;
+	margin-top: 10px;
+}
+.is980 .com #service-menu li.a .content .service-menu-group, .is980 .com #service-menu li.a .content ul {
+	float: left;
+	width: 155px;
+	margin-top: 10px;
+	border-left: 20px solid white;
+	overflow: hidden;
+}
+.is980 .com #service-menu li.a .content ul li.hr {
+	background: transparent url(/rd/gfx/hr.gif) no-repeat bottom left;
+	margin-bottom: 3px;
+	padding-bottom: 8px;
+}
+.is980 .com #service-menu li.a .content ul li {
+	height: auto;
+	line-height: 1.1em;
+	padding: 5px 0;
+	font-size: 1.2em;
+}
+.is980 .com #service-menu li.a .content {
+	width: 178px!important;
+	height: 220px!important;
+}
+/*agricultural bios */
+    .agricuturalBio {
+	background:#e0e0e0;
+	padding: 20px 18px 20px 18px;
+	width: 100%;
+	height:200px;
+	margin-bottom:20px;
+}
+.agricuturalBio img {
+	float: left;
+	margin:0 20px 0 0;
+	width: 25%;
+	height:auto;
+	padding-bottom: 60px;
+}
+.is320 .agricuturalBio img {
+	float: right;
+	margin:0 0 0 20px;
+	width: 25%;
+	height:auto;
+	padding-bottom: 0px;
+}
+.is320 .agricuturalBio, .is480 .agricuturalBio {
+	width:85%;
+}
+/* SIGN IN SB */
+#sign-in-panel {
+	list-style: none;
+	width: 25em;
+}
+#sign-in-panel h3 {
+	padding: 0 19px;
+}
+#sign-in-panel li .content {
+	width: 25em;
+}
+/* SIGN IN  Commercial */
+#sign-in-panel.com {
+	list-style: none;
+	width: 27em;
+}
+#sign-in-panel.com h3 {
+	padding: 0 19px;
+}
+#sign-in-panel.com li .content {
+	width: 25em;
+}
+/* SB FOOTER */
+
+#footer .sb.scotiabank-products li p:before, #footer .scotiabank-contact li p.icon:before {
+	background-image: url('/ca/common/icons/sprites-sb.png')!important;
+}
+#footer .sb.scotiabank-products li.a p:before {
+	background-position: -236px -262px;
+}
+#footer .sb.scotiabank-products li.b p:before {
+	background-position: -236px -395px;
+}
+#footer .sb.scotiabank-products li.d p:before {
+	background-position: -236px -323px;
+}
+#footer .sb li.commercial p.icon:before {
+	background-position: -237px -38px;
+	margin: -6px -50px 0;
+}
+#footer .sb li.commercial p.icon {
+	/*background:url('/ca/common/icons/sprites-sb.png') -237px -38px no-repeat!important;
+*/
+
+height: 35px;
+	padding: 5px 0 0 47px;
+	font-size: 1.2em;
+	line-height: 1em;
+}
+#footer .sb li.locator p.icon:before {
+	background-position: -236px -77px;
+	margin: -6px -50px 0;
+}
+#footer .sb li.locator p.icon {
+	/*background:url('/ca/common/icons/sprites-sb.png') -236px -77px no-repeat!important;*/
+height: 35px;
+	padding: 5px 0 0 50px;
+	font-size: 1.2em;
+	line-height: 1em;
+}
+#footer-news.sb ul li a span strong {
+	color:#D81E05!important;
+	display:block;
+}
+#footer-news.sb ul li {
+	width:100%;
+}
+.is980 #footer .sb.social-media-links {
+	top: 156px;
+}
+/* commercial footer */
+#footer .scotiabank-products.comm li {
+	width: 172px;
+}
+#footer .scotiabank-products.comm li p a:hover {
+	color: #898E8F!important;
+}
+#footer .scotiabank-products.comm li.a p:before {
+	background: url(/ca/common/icons/ftr-icn-sb-banking-g.gif) 0 7px no-repeat;
+}
+#footer .scotiabank-products.comm li.b p:before {
+	background: url(/ca/common/icons/ftr-icn-financing-g.gif) 0 13px no-repeat;
+}
+#footer .scotiabank-products.comm li.c p:before {
+	background: url(/ca/common/icons/ftr-icn-comm-leasing-g.gif) 0 11px no-repeat;
+}
+#footer .scotiabank-products.comm li.d p:before {
+	background: url(/ca/common/icons/ftr-icn-industries-g.gif) 0 8px no-repeat;
+}
+#footer .scotiabank-products.comm li.e p:before {
+	background: url(/ca/common/icons/ftr-icn-intl-trade-g.gif) 0 7px no-repeat;
+}
+#footer .scotiabank-contact.comm li.spot-light {
+	padding-left: 0!important;
+	width:450px;
+}
+#footer .scotiabank-contact.comm {
+	width:100%;
+}
+#footer .scotiabank-contact.comm p.icon {
+	font-size:1.2em!important;
+}
+#footer .scotiabank-contact.comm li.spot-light p.icon:before {
+	background: url('/ca/common/icons/sprites.png') 5px -208px no-repeat;
+}
+#footer .scotiabank-contact.comm li.gtb p.icon:before {
+	background: url('/ca/common/icons/gtb-footer-globe.png') no-repeat!important;
+}
+#footer .scotiabank-contact.comm li.toggle p.icon:before {
+	background: url('/ca/common/icons/ftr-small-business.gif') no-repeat!important;
+}
+ @media only screen and (min-device-width: 320px) and (max-device-width: 767px) {
+#footer .sb.scotiabank-products li p:before {
+	margin: -10px -40px 0;
+}
+#footer .sb.scotiabank-products li.a p:before {
+	background-position: -730px -210px
+}
+#footer .sb.scotiabank-products li.b p:before {
+	background-position: -730px -323px;
+}
+#footer .sb.scotiabank-products li.c p:before {
+	background-position: 4px -322px;
+}
+#footer .sb.scotiabank-products li.d p:before {
+	background-position: -730px -260px;
+}
+#footer .sb li.locator p.icon:before {
+	background-position: -456px -63px;
+	margin: 0px -55px 0;
+}
+#footer .sb li.commercial p.icon:before {
+	background-position: -457px -30px;
+	margin: -6px -50px 0;
+}
+.footer-wrapper #footer .scotiabank-products li.e > a {
+	padding-left: 45px !important;
+}
+#footer .scotiabank-products.comm li p:before {
+	margin: -5px -45px 0;
+	background-size: 35px !important;
+	-webkit-background-size: 35px auto !important;
+}
+#footer .scotiabank-contact.comm li.gtb p.icon:before, #footer .scotiabank-contact.comm li.toggle p.icon:before {
+	background-size: 35px !important;
+	-webkit-background-size: 35px auto !important;
+	height: 40px;
+}
+#footer .scotiabank-contact.comm li.spot-light p.icon:before {
+	background: url('/ca/common/icons/sprites.png') 5px -167px no-repeat;
+}
+}
+ @media only screen and (min-device-width: 0px) and (max-device-width: 319px) {
+#footer .sb.scotiabank-products li p:before {
+	margin: -10px -40px 0;
+}
+#footer .sb.scotiabank-products li.a p:before {
+	background-position: -730px -210px
+}
+#footer .sb.scotiabank-products li.b p:before {
+	background-position: -730px -323px;
+}
+#footer .sb.scotiabank-products li.c p:before {
+	background-position: 4px -322px;
+}
+#footer .sb.scotiabank-products li.d p:before {
+	background-position: -730px -260px;
+}
+#footer .sb li.locator p.icon:before {
+	background-position: -456px -63px;
+	margin: 0px -55px 0;
+}
+#footer .sb li.commercial p.icon:before {
+	background-position: -457px -30px;
+	margin: -6px -50px 0;
+}
+.footer-wrapper #footer .scotiabank-products li.e > a {
+	padding-left: 45px !important;
+}
+#footer .scotiabank-products.comm li p:before {
+	margin: -5px -45px 0;
+	background-size: 35px !important;
+	-webkit-background-size: 35px auto !important;
+}
+#footer .scotiabank-contact.comm li.gtb p.icon:before, #footer .scotiabank-contact.comm li.toggle p.icon:before {
+	background-size: 35px !important;
+	-webkit-background-size: 35px auto !important;
+	height: 40px;
+}
+#footer .scotiabank-contact.comm li.spot-light p.icon:before {
+	background: url('/ca/common/icons/sprites.png') 5px -167px no-repeat;
+}
+}
+ @media only screen and (min-device-width : 768px) and (max-device-width : 1024px) and (orientation : portrait) {
+.is980 .sb #service-menu li.a, .is980 .sb #service-menu li.c {
+	width: 20% !important;
+}
+#footer .sb.scotiabank-products li.a p:before {
+	background-position: -190px -206px;
+}
+#footer .sb.scotiabank-products li.b p:before {
+	background-position: -192px -320px;
+}
+#footer .sb.scotiabank-products li.d p:before {
+	background-position: -190px -260px;
+}
+#footer div.social-media-links.sb {
+	top: 150px;
+}
+}
+ @media only screen and (min-device-width : 768px) and (max-device-width : 1024px) and (orientation : landscape) {
+#footer .sb.scotiabank-products li.a p:before {
+	background-position: -190px -206px;
+}
+#footer .sb.scotiabank-products li.b p:before {
+	background-position: -192px -320px;
+}
+#footer .sb.scotiabank-products li.d p:before {
+	background-position: -190px -260px;
+}
+.is980 .sb #service-menu li.a, .is980 .sb #service-menu li.c {
+	width: 20% !important;
+}
+}

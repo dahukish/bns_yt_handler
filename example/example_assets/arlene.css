@@ -1,0 +1,158 @@
+/* Chat-Arlene */
+.carousel .Chat-Arlene {
+	/*background: url("/ca/common/carousel/img/slides/QA-Arlene-bg.jpg") no-repeat scroll 0 0 transparent;*/
+	background: url("/ca/common/carousel/img/slides/QA-ArleneChat-bg.jpg") no-repeat scroll 0 0 transparent;
+	background-position: -90px 0px !important;
+	background-size: 1100px;
+	
+}
+.carousel .Chat-Arlene .content .richness {
+	background:url('/ca/common/carousel/img/slides/Arlene-txt.png') 0 0 no-repeat;
+	top: 30px;
+	left: 0px;
+	width: 465px;
+	height: 151px;
+}
+.carousel .Chat-Arlene .content {
+	position: absolute;
+	top: 40px;
+	left: 40px;
+	width: 570px;
+}
+.carousel .Chat-Arlene h6 {
+	font-size: 52px;
+	padding-bottom:10px;
+	font-weight: normal;
+	line-height: 105%;
+}
+.carousel .Chat-Arlene .content p strong {
+	display: block;
+	font-size: 32px;
+	font-weight: normal;
+	padding: 10px 0;
+}
+
+.carousel .Chat-Arlene .content p {
+    color: rgb(0, 0, 0);
+    display: block;
+    font-size: 16px;
+    line-height: 22px;
+    padding-bottom: 10px;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    position: absolute;
+    top: 140px;
+}
+.carousel .Chat-Arlene .content a.red-btn {
+	font-size: 15px;
+	font-weight: bold;
+	width: 135px;
+	position: absolute;
+    top: 200px;
+}
+.carousel .menu .menu-slide .Chat-Arlene-tab img {
+	float: left;
+	margin: 2px 5px 0 0px;
+	pointer-events: none;
+}
+.carousel .menu .menu-slide .slide-change.Chat-Arlene-tab div {
+	padding: 17px 0 0 5px !important;
+	width: 180px !important;
+}
+.carousel .menu .menu-slide .Chat-Arlene-tab h3 {
+	font-size: 18px;
+	font-weight: normal;
+	line-height: 20px;
+}
+
+
+ @media only screen and (min-device-width : 768px) and (max-device-width : 1024px) and (orientation : landscape) {
+.carousel .flexslider li div.Chat-Arlene {
+	background-size: 1024px;
+	-webkit-background-size: 1024px auto;
+}
+}
+
+ @media only screen and (min-device-width : 768px) and (max-device-width : 1024px) and (orientation : portrait) {
+.carousel .flexslider li div.Chat-Arlene {
+	background-position: -150px 0px !important;
+	background-size: 1024px;
+	-webkit-background-size: 1024px auto;
+}
+.carousel .flexslider li div.Chat-Arlene .content {
+	top: 30px;
+	left: 30px;
+	width: 60%;
+	display: block;
+	position: relative;
+}
+.carousel .flexslider li div.Chat-Arlene a.red-btn {
+	top: 220px;
+}
+}
+
+/*Most mobile Phones */
+@media only screen and (min-width: 320px) and (max-width: 767px) {
+.carousel .flexslider li div.Chat-Arlene {
+	background-position: -380px 0 !important;
+	background-size: 820px;
+	-webkit-background-size: 820px auto;
+}
+.carousel .Chat-Arlene .content {
+	left: 5%!important;
+top: 17%!important;
+width:44%!important;
+}
+.carousel .Chat-Arlene .content .richness {
+	top: -20px !important;
+}
+.carousel .flexslider li div.Chat-Arlene h6 {
+	font-size: 16px;
+}
+.carousel .flexslider li div.Chat-Arlene p{
+		font-size: 12px;
+		top: 35px !important;
+}
+.carousel .flexslider li div.Chat-Arlene p.red,
+.carousel .flexslider li div.Chat-Arlene p strong {display:none;}
+
+.carousel .flexslider li div.Chat-Arlene a.red-btn {
+	font-size: 11px;
+	top: 125px;
+}
+}
+/* iPhone 5 */
+ @media only screen and (min-width: 320px) and (max-width: 767px) and (orientation : landscape) {
+.carousel .flexslider li div.Chat-Arlene {
+	background-position: -100px 0 !important;
+	background-size: 700px;
+	-webkit-background-size: 700px auto;
+}
+.carousel .Chat-Arlene .content .richness {
+	top: -20px !important;
+}
+
+.carousel .flexslider li div.Chat-Arlene .content {
+	left: 20px!important;
+	top: 30px!important;
+	width:45%!important;
+}
+.carousel .flexslider li div.Chat-Arlene h6 {
+	font-size: 2em;
+	width: 70%
+}
+
+.carousel .flexslider li div.Chat-Arlene p.red,
+.carousel .flexslider li div.Chat-Arlene p strong {display:block;font-size: 14px;padding:0;}
+
+.carousel .flexslider li div.Chat-Arlene p {
+	font-size: 14px;
+	display:block;
+	top: 35px !important;
+}
+.carousel .flexslider li div.Chat-Arlene a.red-btn {
+	font-size: 11px;
+	top:110px;
+}
+}

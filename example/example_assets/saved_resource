@@ -1,0 +1,337 @@
+mmcore.SetCookie('mmid','-1895142685|PAAAAArm5dai5AoAAA==',365,1);mmcore.SetCookie('pd','-338376314|PAAAAAoBQubl1qLkCsYyi5gEAC8/v8tej9FIAA0AAACOrtLXj4rRSAAAAAD/////AP//////////AAZEaXJlY3QB5AoEAAAAAAABAAAAAAD///////////////8AAAAAAAFF',365);mmcore.SetCookie('srv','nycvwcgus02',365);(function(){if(typeof(mmcore.GenInfo)!='object')mmcore.GenInfo={};mmcore.EH=function(e){var s=e.message+'\r\n';if(!window.mm_error)window.mm_error=s;else window.mm_error+=s;};
+try{
+;(function () {
+	mmcore.snippets = mmcore.snippets || {};
+	mmcore.snippets.Style = function (css) {
+		var doc = document, st = doc.createElement("style");
+		st.type = "text/css";
+		st.media = "screen";
+		function attach(css) {
+			if (st && css) {
+				if (st.styleSheet) {
+					st.styleSheet.cssText += css;
+				} else {
+					st.innerHTML += css;
+				}
+			}
+		}
+
+		function detach() {
+			st && st.parentNode.removeChild(st);
+			st = null;
+		}
+
+		attach(css);
+		var mm = doc.getElementById(mmcore.cprefix + 1);
+		mm.parentNode.insertBefore(st, mm);
+		return {
+			attach: attach,
+			detach: detach
+		}
+	}
+}());
+}catch(err){mmcore.EH(err);}
+try{
+;(function () {
+        /*new criteria list
+	1 IS BL: Banking
+	2 MaxSegment
+	3 IS BL: Wealth
+	4 IS Bank: Retail
+	5 IS Bank: Brrw
+	6 IS Inv: Retail
+	7 IS Inv: Wealth
+	8 Province
+	9 Age Segment
+	10 CatLastViewd
+	11 SubCatLastViewd
+	12 CategoryRecency
+	13 SubCatRecency
+	14 LoginPageLoaded
+	15 Master Campaign
+		16 UserInterest */
+        var criteriaCookie = (mmcore.GetCookie('mm_criteria', 1) || '').split('|');
+        var data = window.contentProfile || {};
+        var wlh = window.location.href,
+			mask1 = wlh.match(/http.*:\/\/www\.scotiabank\.com\/ca\/en.*/), 
+			mask2 = wlh.match(/http.*:\/\/www\.scotiabank\.com\/itrade.*/),
+			mask3 = wlh.match(/http.*:\/\/www\.scotiabank\.com\/rrsp_tool.*/),
+			mask4 = wlh.match(/http.*:\/\/www\.scotiabank\.com\/tfsa.*/),
+			mask5 = wlh.match(/http.*:\/\/cgi\.scotiabank\.com\/planwriter\/scotia_sb\.html.*/);
+		if (mask1 || mask2 || mask3 || mask4 || mask5){
+			/* 16 UserInterest*/
+			// -- index 0 - 5 = investments, small business, mortgages, momentum, value, scene
+			// -- index 6 = last visited
+			var uiCounters = (mmcore.GetCookie('mm_userinter', 1) || '0|0|0|0|0|0|0').split('|'),
+				wlh = window.location.href,
+				r_investments = /\/ca\/en\/0,,9,00\.html|\/ca\/en\/0,,78,00\.html|\/ca\/en\/0,,74,00\.html|\/ca\/en\/0,,76,00\.html|\/ca\/en\/0,,75,00\.html|\/ca\/en\/0,,77,00\.html|\/ca\/en\/0,,666,00\.html|\/ca\/en\/0,,714,00\.html|\/ca\/en\/0,,715,00\.html|\/ca\/en\/0,,716,00\.html|\/ca\/en\/0,,717,00\.html|\/ca\/en\/0,,863,00\.html|\/ca\/en\/0,,3102,00\.html|\/ca\/en\/0,,718,00\.html|\/ca\/en\/0,,719,00\.html|\/ca\/en\/0,,720,00\.html|\/ca\/en\/0,,721,00\.html|\/ca\/en\/0,,795,00\.html|\/ca\/en\/0,,796,00\.html|\/ca\/en\/0,,797,00\.html|\/ca\/en\/0,,798,00\.html|\/ca\/en\/0,,799,00\.html|\/ca\/en\/0,,800,00\.html|\/ca\/en\/0,,4373,00\.html|\/ca\/en\/0,,722,00\.html|\/ca\/en\/0,,723,00\.html|\/ca\/en\/0,,725,00\.html|\/ca\/en\/0,,729,00\.html|\/ca\/en\/0,,730,00\.html|\/ca\/en\/0,,731,00\.html|\/ca\/en\/0,,710,00\.html|\/ca\/en\/0,,711,00\.html|\/ca\/en\/0,,712,00\.html|\/ca\/en\/0,,79,00\.html|\/ca\/en\/0,,157,00\.html|\/ca\/en\/0,,152,00\.html|\/ca\/en\/0,,7232,00\.html|\/ca\/en\/0,,158,00\.html|\/ca\/en\/0,,151,00\.html|\/ca\/en\/0,,159,00\.html|\/ca\/en\/0,,155,00\.html|\/ca\/en\/0,,130,00\.html|\/ca\/en\/0,,132,00\.html|\/ca\/en\/0,,128,00\.html|\/ca\/en\/0,,6676,00\.html|\/ca\/en\/0,,143,00\.html|\/ca\/en\/0,,140,00\.html|\/ca\/en\/0,,141,00\.html|\/ca\/en\/0,,139,00\.html|\/ca\/en\/0,,142,00\.html|\/ca\/en\/0,,80,00\.html|\/itrade|\/rrsp_tool|\/tfsa/,
+				r_smallBusiness = /ca\/en\/0,,3,00\.html|ca\/en\/0,,616,00\.html|ca\/en\/0,,4631,00\.html|ca\/en\/0,,4607,00\.html|ca\/en\/0,,4632,00\.html|ca\/en\/0,,4638,00\.html|ca\/en\/0,,4639,00\.html|ca\/en\/0,,4608,00\.html|ca\/en\/0,,4630,00\.html|ca\/en\/0,,4641,00\.html|ca\/en\/0,,4643,00\.html|ca\/en\/0,,612,00\.html|ca\/en\/0,,613,00\.html|ca\/en\/0,,611,00\.html|ca\/en\/0,,614,00\.html|ca\/en\/0,,620,00\.html|ca\/en\/0,,617,00\.html|ca\/en\/0,,626,00\.html|ca\/en\/0,,627,00\.html|ca\/en\/0,,628,00\.html|ca\/en\/0,,968,00\.html|ca\/en\/0,,1066,00\.html|ca\/en\/0,,1067,00\.html|ca\/en\/0,,6167,00\.html|ca\/en\/0,,546,00\.html|ca\/en\/0,,5715,00\.html|ca\/en\/0,,554,00\.html|ca\/en\/0,,969,00\.html|ca\/en\/0,,555,00\.html|ca\/en\/0,,545,00\.html|ca\/en\/0,,551,00\.html|ca\/en\/0,,552,00\.html|ca\/en\/0,,553,00\.html|ca\/en\/0,,547,00\.html|ca\/en\/0,,556,00\.html|ca\/en\/0,,557,00\.html|ca\/en\/0,,559,00\.html|ca\/en\/0,,560,00\.html|ca\/en\/0,,561,00\.html|ca\/en\/0,,562,00\.html|ca\/en\/0,,970,00\.html|ca\/en\/0,,563,00\.html|ca\/en\/0,,6713,00\.html|ca\/en\/0,,565,00\.html|ca\/en\/0,,6440,00\.html|ca\/en\/0,,573,00\.html|ca\/en\/0,,3133,00\.html|ca\/en\/0,,574,00\.html|ca\/en\/0,,572,00\.html|ca\/en\/0,,566,00\.html|ca\/en\/0,,567,00\.html|ca\/en\/0,,568,00\.html|ca\/en\/0,,592,00\.html|planwriter\/scotia_sb\.html|ca\/en\/0,,589,00\.html|ca\/en\/0,,597,00\.html/,
+				r_mortgages = /ca\/en\/0,,8,00\.html|ca\/en\/0,,173,00\.html|ca\/en\/0,,213,00\.html|ca\/en\/0,,214,00\.html|ca\/en\/0,,215,00\.html|ca\/en\/0,,216,00\.html|ca\/en\/0,,174,00\.html|ca\/en\/0,,219,00\.html|ca\/en\/0,,220,00\.html|ca\/en\/0,,4250,00\.html|ca\/en\/0,,175,00\.html|ca\/en\/0,,222,00\.html|ca\/en\/0,,3208,00\.html|ca\/en\/0,,225,00\.html|ca\/en\/0,,914,00\.html|ca\/en\/0,,176,00\.html|ca\/en\/0,,227,00\.html|ca\/en\/0,,228,00\.html|ca\/en\/0,,229,00\.html|ca\/en\/0,,28,00\.html|ca\/en\/0,,7327,00\.html|ca\/en\/0,,2653,00\.html|ca\/en\/0,,31,00\.html|ca\/en\/0,,290,00\.html|ca\/en\/0,,288,00\.html/,
+				r_momentum = /ca\/en\/0,,112,00\.html|ca\/en\/0,,2357,00\.html|ca\/en\/0,,246,00\.html|ca\/en\/0,,247,00\.html|ca\/en\/0,,249,00\.html|ca\/en\/0,,250,00\.html|ca\/en\/0,,254,00\.html|ca\/en\/0,,346,00\.html|ca\/en\/0,,4658,00\.html|ca\/en\/0,,697,00\.html|ca\/en\/0,,7,00\.html|ca\/en\/0,,86,00\.html|ca\/en\/0,,957,00\.html|ca\/en\/0,,958,00\.html|ca\/en\/0,,88,00\.html|ca\/en\/0,,87,00\.html|ca\/en\/0,,89,00\.html/,
+				r_value = /ca\/en\/0,,124,00\.html|ca\/en\/0,,104,00\.html|ca\/en\/0,,102,00\.html|ca\/en\/0,,346,00\.html/,
+				r_scene = /ca\/en\/0,,277,00\.html|ca\/en\/0,,6905,00\.html|ca\/en\/0,,51,00\.html|ca\/en\/0,,87,00\.html|ca\/en\/0,,15,00\.html|ca\/en\/0,,91,00\.html/;
+			if(r_investments.test(wlh)){
+			   uiCounters[0] = +uiCounters[0] + 1;
+			   uiCounters[6] = 0;
+			} else if(r_smallBusiness.test(wlh)){
+			   uiCounters[1] = +uiCounters[0] + 1;
+			   uiCounters[6] = 1;
+			} else if(r_mortgages.test(wlh)){
+			   uiCounters[2] = +uiCounters[2] + 1.5;
+			   uiCounters[6] = 2;
+			} else if(r_momentum.test(wlh)){
+			   uiCounters[3] = +uiCounters[3] + 3;
+			   uiCounters[6] = 3;
+			} else if(r_value.test(wlh)){
+			   uiCounters[4] = +uiCounters[4] + 3;
+			   uiCounters[6] = 4;
+			} else if(r_scene.test(wlh)){
+			   uiCounters[5] = +uiCounters[5] + 3;
+			   uiCounters[6] = 5;
+			}
+			var biggestIndex = 0,
+				biggestValue = -1;
+			for(var i = 0; i < uiCounters.length - 1; i++){
+				if(uiCounters[i] > biggestValue){
+					biggestValue = uiCounters[i];
+					biggestIndex = i;
+				}
+			}
+			for(var i = 0; biggestValue && i < uiCounters.length - 1; i++){
+				if(biggestIndex != i && uiCounters[i] == biggestValue){
+					biggestValue = 0;
+					biggestIndex = uiCounters[6];
+				}
+			}
+			mmcore.SetCookie('mm_userinter', uiCounters.join('|'), 365, 1);
+			var UserInterest = ['Investments','SmallBusiness','Mortgages',
+								'MomentumInfinite','ValueVisa','SceneVisa'][biggestIndex];
+			mmcore.SetPersCriterion('UserInterest', criteriaCookie[3] = UserInterest || criteriaCookie[3]);
+		}
+        /*	1 , 2(removed)*/
+        var present = 'no',
+            codes = ['R:', 'B:'];
+        if (data.BLS) {
+            for (var k = 0; k < codes.length; k++) {
+                for (var i = 0; i < data.BLS.length; i++) {
+                    if (data.BLS[i] == codes[k]) {
+                        present = codes[k];
+                        break;
+                    }
+                }
+            }
+        }
+        mmcore.SetPersCriterion('IS BL Banking', criteriaCookie[0] = present || criteriaCookie[0]);
+
+        /* 2 new */
+        if (window.jQuery) {
+            mmcore.AddDocLoadHandler(function () {
+                    jQuery('#wgt-sub-area-msg-body ul li').each(function () {
+                            var mm_msg = '';
+                            if (jQuery(this).find('a span').text().indexOf('Scotia InfoAlerts are now FREE!') > -1) {
+                                mm_msg = 'WinBack';
+                                mmcore.SetPersCriterion('MaxSegment', criteriaCookie[1] = mm_msg || criteriaCookie[1]);
+                            } else if (jQuery(this).find('a span').text().indexOf('Enhance your Scotia InfoAlerts – now for Free') > -1) {
+                                mm_msg = 'CrossSell';
+                                mmcore.SetPersCriterion('MaxSegment', criteriaCookie[1] = mm_msg || criteriaCookie[1]);
+                            } else if (jQuery(this).find('a span').text().indexOf('Important news: Scotia InfoAlerts continue to get better!') > -1) {
+                                mm_msg = 'Retention';
+                                mmcore.SetPersCriterion('MaxSegment', criteriaCookie[1] = mm_msg || criteriaCookie[1]);
+                            }
+                        });
+                });
+        }
+
+
+        /*	3, 4(removed)	*/
+        var present = 'no',
+            codes = ['TRST:EB', 'SPCGIIA:', 'SMI:AW', 'SMI:FMB', 'SMI:PLUS', 'SMI:PINN', 'SMI:SUMM', 'CASL:', 'SDBI:SL'];
+        if (data.BLS) {
+            for (var k = 0; k < codes.length; k++) {
+                for (var i = 0; i < data.BLS.length; i++) {
+                    if (data.BLS[i] == codes[k]) {
+                        present = codes[k];
+                        break;
+                    }
+                }
+            }
+        }
+        mmcore.SetPersCriterion('IS BL Wealth', criteriaCookie[2] = present || criteriaCookie[2]);
+
+
+        /*	5, 6(removed)	*/
+        var present = 'no',
+            codes = ['SAV:SAV:AG', 'SAV:SAV:NI', 'SAV:SAV:BB', 'SAV:SAV:BC', 'SAV:SAV:CS', 'DDA:DDA:CA', 'DDA:DDA:', 'SAV:SAV:GT', 'SAV:SAV:DI', 'SAV:SAV:GP', 'SAV:SAV:BM', 'SAV:SAV:MB', 'SAV:SAV:PC', 'SAV:SAV:PB', 'SAV:SAV:', 'DDA:DDA:SC', 'SAV:SAV:MA', 'SAV:SAV:SO', 'SAV:SAV:EM', 'SAV:SAV:HI', 'SAV:SAV:VL', 'SAV:SAV:UD'];
+        if (data.PRODS) {
+            for (var k = 0; k < codes.length; k++) {
+                for (var i = 0; i < data.PRODS.length; i++) {
+                    if (data.PRODS[i] == codes[k]) {
+                        present = codes[k];
+                        break;
+                    }
+                }
+            }
+        }
+        mmcore.SetPersCriterion('IS Bank Retail', criteriaCookie[4] = present || criteriaCookie[4]);
+
+
+        /*	7, 8(removed)	*/
+        var present = 'no',
+            codes = ['VIS:VIC:AI', 'VIS:VIC:AU', 'LOC:LOC:BC', 'OLL:OLL:', 'OLL:OLL:OL', 'OLL:OLL:OP', 'OLL:OLL:TM', 'LOC:LOC:FD', 'LOC:LOC:', 'VIS:VCL:SV', 'SCL:SCL:', 'OLL:OLL:', 'OLL:OLL:OL', 'OLL:OLL:OP', 'OLL:OLL:TM', 'VIS:VGD:NF', 'VIS:VLR:NF', 'VIS:VCL:SS', 'VIS:VCL:ZZ', 'SCL:SCL:IM', 'SCL:SCL:IL', 'VIS:VCL:NF', 'VIS:VCL:DM', 'VIS:VCL:RE', 'VIS:VCL:RG', 'VIS:VCL:ST', 'VIS:VCL:AD', 'VIS:VCL:GR', 'VIS:VCL:SC', 'VIS:VCL:SL', 'VIS:VCL:SU', 'MOR:MOR:', 'MOR:MOR:DI', 'MOR:MOR:IN', 'MOR:MOR:MT', 'MOR:MOR:UN', 'SPL:SPL:', 'SCL:SSL:SP', 'SCL:SCL:RL', 'SCL:SSL:', 'SCL:SSL:LN', 'TEQ:TEQ:', 'VIS:VGD:PB', 'VIS:VGD:PE', 'VIS:VGD:RE', 'VIS:VGD:RG', 'VIS:VGD:SP', 'VIS:VGD:ST', 'VIS:BLV:YY', 'VIS:VIC:YY', 'VIS:VGD:', 'VIS:VCL:NH', 'SCL:SCL:CS', 'SCL:SCL:IN', 'SCL:SCL:RS', 'VIS:VIC:', 'VIS:VIC:RG', 'VIS:VIC:RS', 'SCL:SSL:LI', 'VIS:VIC:CV', 'VIS:BLV:IN', 'VIS:VIC:IN', 'VIS:BLV:UN', 'VIS:VIC:UN', 'VAX:VAX:', 'VAX:VAX:SC', 'VAX:VAX:SS', 'VIS:VCL:AC', 'VIS:VCL:AE', 'VIS:VCL:AI', 'VIS:VCL:AM', 'VIS:VCL:AN', 'VIS:VCL:AP', 'VIS:VCL:AR', 'VIS:VCL:AS', 'VIS:VCL:CC', 'VIS:VCL:RF', 'VAX:VAX:GC', 'VAX:VAX:GS', 'VAX:VAX:PC', 'VIS:VLR:RC', 'VIS:VCL:', 'VIS:VLR:', 'VIS:VLR:RG'];
+        if (data.PRODS) {
+            for (var k = 0; k < codes.length; k++) {
+                for (var i = 0; i < data.PRODS.length; i++) {
+                    if (data.PRODS[i] == codes[k]) {
+                        present = codes[k];
+                        break;
+                    }
+                }
+            }
+        }
+        mmcore.SetPersCriterion('IS Bank Brrw', criteriaCookie[6] = present || criteriaCookie[6]);
+
+
+        /*	9, 10(removed)	*/
+        var present = 'no',
+            codes = ['IP:IPP:', 'RN:LIF:', 'RN:LIF:SP', 'RN:LRA:', 'RN:LRA:SP', 'RN:LRF:', 'RN:LRF:SP', 'RN:LRP:', 'RN:LRP:SP', 'IP:NRS:', 'IP:NRS:CD', 'IP:NRS:CN', 'IP:NRS:CP', 'IP:NRS:CT', 'IP:NRS:EN', 'IP:NRS:EP', 'IP:NRS:FT', 'IP:NRS:HT', 'IP:NRS:NP', 'IP:NRS:SN', 'IP:NRS:ST', 'IP:NRS:WD', 'IP:NRS:WT', 'IP:NRS:BU', 'IP:NRS:NE', 'IP:NRS:PE', 'IP:NRS:PR', 'IP:NRS:TN', 'IP:NRS:TP', 'GIC:GIC:', 'GIC:GIC:MN', 'GIC:GIC:MR', 'GIC:GIC:NB', 'GIC:GIC:NM', 'GIC:GIC:NN', 'GIC:GIC:NR', 'GIC:GIC:NS', 'GIC:GIC:RD', 'GIC:GIC:RM', 'GIC:GIC:TN', 'GIC:GIC:VN', 'GIC:GIC:VR', 'GIC:GIC:MU', 'GIC:GIC:UM', 'GIC:GIC:US', 'IP:REF:SB', 'IP:REF:', 'IP:REI:SB', 'IP:REI:', 'RN:RIF:', 'RN:RIF:SP', 'RN:RSP:', 'RN:RSP:RS', 'RN:RSP:SP', 'IP:RDS:SB', 'IP:RDS:', 'IP:LIE:SB', 'IP:LRI:SB', 'IP:PRI:SB', 'IP:RIS:SB', 'IP:RRI:SB', 'IP:LIE:', 'IP:LRI:', 'IP:PRI:', 'IP:RIS:', 'IP:RRI:', 'IP:LIR:SB', 'IP:LIS:SB', 'IP:RRS:SB', 'IP:RSS:SB', 'IP:LIR:', 'IP:LIS:', 'IP:RRS:', 'IP:RSS:', 'IP:RLI:SB', 'IP:RLI:', 'IP:RSL:SB', 'IP:RSL:', 'RES:RES:', 'RES:RES:FM', 'RES:RES:IN', 'IP:TFS:SB', 'IP:TFS:'];
+        if (data.PRODS) {
+            for (var k = 0; k < codes.length; k++) {
+                for (var i = 0; i < data.PRODS.length; i++) {
+                    if (data.PRODS[i] == codes[k]) {
+                        present = codes[k];
+                        break;
+                    }
+                }
+            }
+        }
+        mmcore.SetPersCriterion('IS Inv Retail', criteriaCookie[8] = present || criteriaCookie[8]);
+
+
+        /*	11, 12(removed)	*/
+        var present = 'no',
+            codes = ['EXT:EX:0', 'TRST:EO:', 'TRST:EO:2', 'TRST:EO:5', 'TRST:EO:1', 'TRST:EA:', 'TRST:EA:2', 'TRST:EA:5', 'TRST:EA:1', 'CASL:DA:', 'CASL:DA:2', 'CASL:DA:5', 'CASL:DA:1', 'CASL:DB:', 'CASL:DB:2', 'CASL:DB:5', 'CASL:DB:1', 'CASL:DC:', 'CASL:DC:2', 'CASL:DC:5', 'CASL:DC:1', 'SPCGIIA:IIAAW:', 'SPCGIIA:IIAAW:2', 'SPCGIIA:IIAAW:5', 'SPCGIIA:IIAAW:1', 'SPCGIIA:IIAFMB:', 'SPCGIIA:IIAFMB:2', 'SPCGIIA:IIAFMB:5', 'SPCGIIA:IIAFMB:1', 'SDBI:SL:', 'SDBI:SL:2', 'SDBI:SL:5', 'SDBI:SL:1', 'SMI:AW:', 'SMI:AW:2', 'SMI:AW:5', 'SMI:AW:1', 'SMI:FMB:', 'SMI:FMB:2', 'SMI:FMB:5', 'SMI:FMB:1', 'SMI:PINN:', 'SMI:PINN:2', 'SMI:PINN:5', 'SMI:PINN:1', 'SMI:PLUS:', 'SMI:PLUS:2', 'SMI:PLUS:5', 'SMI:PLUS:1', 'SMI:SUMM:', 'SMI:SUMM:2', 'SMI:SUMM:5', 'SMI:SUMM:1', 'TRST:EA:', 'TRST:EA:2', 'TRST:EA:5', 'TRST:EA:1', 'TRST:EB:', 'TRST:EB:2', 'TRST:EB:5', 'TRST:EB:1', 'TRST:FA:', 'TRST:FA:2', 'TRST:FA:5', 'TRST:FA:1', 'TRST:FB:', 'TRST:FB:2', 'TRST:FB:5', 'TRST:FB:1', 'TRST:FC:', 'TRST:FC:2', 'TRST:FC:5', 'TRST:FC:1', 'TRST:GA:', 'TRST:GA:2', 'TRST:GA:5', 'TRST:GA:1', 'TRST:GB:', 'TRST:GB:2', 'TRST:GB:5', 'TRST:GB:1', 'TRST:GG:', 'TRST:GG:2', 'TRST:GG:5', 'TRST:GG:1', 'TRST:GH:', 'TRST:GH:2', 'TRST:GH:5', 'TRST:GH:1', 'TRST:HA:', 'TRST:HA:2', 'TRST:HA:5', 'TRST:HA:1'];
+        if (data.PRODS) {
+            for (var k = 0; k < codes.length; k++) {
+                for (var i = 0; i < data.PRODS.length; i++) {
+                    if (data.PRODS[i] == codes[k]) {
+                        present = codes[k];
+                        break;
+                    }
+                }
+            }
+        }
+        mmcore.SetPersCriterion('IS Inv Wealth', criteriaCookie[10] = present || criteriaCookie[10]);
+
+
+        /*	13	*/
+        var code = '',
+            codes = ['AB', 'BC', 'MB', 'NL', 'NB', 'NT', 'NU', 'NS', 'ON', 'PE', 'QC', 'SK'];
+        if (data.PROV) {
+            for (var k = 0; k < codes.length; k++) {
+                if (data.PROV == codes[k]) {
+                    code = codes[k];
+                    break;
+                }
+            }
+        }
+        mmcore.SetPersCriterion('Province', criteriaCookie[12] = code || criteriaCookie[12]);
+
+
+        /*	14	*/
+        var code = 'Unknown',
+            codes = {
+                '017': '0-17',
+                '1824': '18-24',
+                '2534': '25-34',
+                '3544': '35-44',
+                '4554': '45-54',
+                '5564': '55-64',
+                '65999': '65+'
+            };
+        if (data.AGESEGMENT) {
+            for (var key in codes) {
+                if ('' + contentProfile.AGESEGMENT.MIN + contentProfile.AGESEGMENT.MAX == key) {
+                    code = codes[key];
+                    break;
+                }
+            }
+        }
+        mmcore.SetPersCriterion('Age Segment', criteriaCookie[13] = code || criteriaCookie[13]);
+
+        if (/scotiaonline(.*)scotiabank.com\/online\/authentication\/authentication\.bns/.test(location.href))
+            criteriaCookie[18] = "yes";
+        mmcore.SetPersCriterion('LoginPageLoaded', criteriaCookie[18] = criteriaCookie[18] || "no");
+
+        mmcore.SetCookie('mm_criteria', criteriaCookie.join('|'), 365, 1);
+
+        mmcore.AddDocLoadHandler(function () {
+
+                var criteriaCookie = (mmcore.GetCookie('mm_criteria', 1) || '').split('|');
+
+                mmcore.SetPersCriterion('CatLastViewd', criteriaCookie[14] = (window.s ? s.prop13 : '') || criteriaCookie[14]);
+                mmcore.SetPersCriterion('SubCatLastViewd', criteriaCookie[15] = (window.s ? s.prop14 : '') || criteriaCookie[15]);
+
+                (window.s && s.prop13 && mmcore.SetCookie('mm_last_cat_viewed', +(new Date()), 365, 1));
+                (window.s && s.prop14 && mmcore.SetCookie('mm_last_subcat_viewed', +(new Date()), 365, 1));
+
+                var currentTime = +(new Date());
+                var lastCatTime = mmcore.GetCookie('mm_last_cat_viewed', 1);
+                var lastSubCatTime = mmcore.GetCookie('mm_last_subcat_viewed', 1);
+
+                if (lastCatTime) {
+                    var val = '';
+                    if (currentTime - lastCatTime <= 2 * 60 * 60 * 1000)
+                        val = 'Within last 2 hours';
+                    else if (currentTime - lastCatTime <= 48 * 60 * 60 * 1000)
+                        val = 'Within last 48 hours';
+                    else if (currentTime - lastCatTime <= 14 * 24 * 60 * 60 * 1000)
+                        val = 'Within last two weeks';
+                    else if (currentTime - lastCatTime <= 90 * 24 * 60 * 60 * 1000)
+                        val = 'Within last quarter';
+
+                    mmcore.SetPersCriterion('CategoryRecency', criteriaCookie[16] = val || criteriaCookie[16]);
+                }
+
+                if (lastSubCatTime) {
+                    var val = '';
+                    if (currentTime - lastSubCatTime <= 2 * 60 * 60 * 1000)
+                        val = 'Within last 2 hours';
+                    else if (currentTime - lastSubCatTime <= 48 * 60 * 60 * 1000)
+                        val = 'Within last 48 hours';
+                    else if (currentTime - lastSubCatTime <= 14 * 24 * 60 * 60 * 1000)
+                        val = 'Within last two weeks';
+                    else if (currentTime - lastSubCatTime <= 90 * 24 * 60 * 60 * 1000)
+                        val = 'Within last quarter';
+
+                    mmcore.SetPersCriterion('SubCatRecency', criteriaCookie[17] = val || criteriaCookie[17]);
+                }
+
+                mmcore.SetCookie('mm_criteria', criteriaCookie.join('|'), 365, 1);
+            });
+    })();
+}catch(err){mmcore.EH(err);}
+try{
+;(function(){
+	function bind(el, func){
+		if(el.addEventListener){
+			el.addEventListener('beforeprint', func, false);
+		}else if(el.attachEvent){
+			el.attachEvent('onbeforeprint', func);
+		}	
+	}
+
+	if(navigator.userAgent.match(/msie/i)){
+		bind(window, function(){
+			var nodes = document.getElementsByTagName('script');
+			for(var i = nodes.length; i--;){
+				if((nodes[i].id || '').match(mmcore.cprefix))
+					nodes[i].removeAttribute('src');
+			}
+		});
+	}
+})();
+
+}catch(err){mmcore.EH(err);}
+if(typeof mmcore._callback=='object'&&typeof mmcore._callback[1]=='function'){try{mmcore._callback[1]();}catch(err){mmcore.EH(err);}
+finally{mmcore._callback[1]=null;}}
+})();

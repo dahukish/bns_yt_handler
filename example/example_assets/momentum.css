@@ -1,0 +1,184 @@
+/* Momentum */
+.carousel .swatch-tactical {
+    background: url('/ca/common/carousel/img/slides/swatch-tactical-bg.jpg') no-repeat;
+    background-position: 0 10px !important;
+    background-size: 330px;
+}
+.carousel .swatch-tactical .content {
+	position: absolute;
+	left: 40px;
+	top: 20px;
+	width: 420px;
+}
+.carousel .swatch-tactical h6 {
+    color: #666666;
+    font-size: 48px;
+    font-weight: normal;
+    left: 320px;
+    letter-spacing: -0.04em;
+    line-height: 1em;
+    position: absolute;
+    top: 70px;
+    width: 595px;
+}
+.carousel .swatch-tactical p {
+    color: #666666;
+    font-size: 1.6em;
+    left: 320px;
+    position: absolute;
+    top: 185px;
+    width: 595px;
+}
+.carousel .swatch-tactical a.red-btn {
+    font-size: 16px;
+    left: 320px;
+    position: absolute;
+    top: 255px;
+    width: 150px;
+}
+.carousel .menu .menu-slide .slide-change.swatch-tactical-tab div {
+    display: block;
+    height: 64px !important;
+    padding: 26px 10px 0 10px !important;
+    width: 170px !important;
+}
+
+.carousel .menu .menu-slide .swatch-tactical-tab img {
+    float: left;
+    margin: 8px 5px 0 22px;
+    pointer-events: none;
+}
+.carousel .menu .menu-slide .swatch-tactical-tab h3 {
+	color: #6B6B6B;
+	font-size: 18px;
+	font-weight: normal;
+	line-height: 20px;
+}
+ @media only screen and (min-device-width : 768px) and (max-device-width : 1024px) and (orientation : landscape) {
+.carousel .flexslider li div.swatch-tactical {
+	background-size: 320px;
+	-webkit-background-size: 320px auto;
+}
+.carousel .swatch-tactical .content {
+	position: absolute;
+	left: 40px;
+	top: 0px;
+	width: 460px;
+}
+}
+
+ @media only screen and (min-device-width : 768px) and (max-device-width : 1024px) and (orientation : portrait) {
+.carousel .flexslider li div.swatch-tactical {
+	background-size: 300px;
+	-webkit-background-size: 300px auto;
+}
+.carousel .swatch-tactical .content {
+	position: absolute;
+	left: 40px;
+	top: 0px;
+	width: 460px;
+}
+.carousel .swatch-tactical h6 {
+    color: #666666;
+    font-size: 36px;
+    font-weight: normal;
+    left: 260px;
+    letter-spacing: -0.04em;
+    line-height: 1em;
+    position: absolute;
+    top: 80px;
+    width: 460px;
+}
+.carousel .swatch-tactical p {
+    color: #666666;
+    font-size: 1.6em;
+    left: 260px;
+    position: absolute;
+    top: 160px;
+    width: 360px;
+}
+.carousel .swatch-tactical a.red-btn {
+    font-size: 16px;
+    left: 260px;
+    position: absolute;
+    top: 240px;
+    width: 150px;
+}
+}
+
+
+/*Most mobile Phones */
+@media only screen and (min-width: 320px) and (max-width: 767px) {
+.carousel .flexslider li div.swatch-tactical {
+	background-position: 0px 0 !important;
+	background-size: 180px;
+	-webkit-background-size:180px auto;
+}
+.carousel .flexslider li div.swatch-tactical .content {
+	position: absolute;
+	left: 40px;
+	top: 20px;
+	width: 140px;
+}
+.carousel .flexslider li div.swatch-tactical h6 {
+    color: #666666;
+    font-size: 20px;
+    font-weight: normal;
+    left: 140px;
+    letter-spacing: -0.04em;
+    line-height: 1em;
+    position: absolute;
+    top: 20px;
+    width: 100%;
+}
+.carousel .flexslider li div.swatch-tactical p {
+	display:none;
+}
+.carousel .flexslider li div.swatch-tactical a.red-btn {
+    font-size: 11px;
+    left: 140px;
+    position: absolute;
+    top: 130px;
+    width: 120px;
+}
+}
+/* iPhone 5 */
+ @media only screen and (min-width: 320px) and (max-width: 767px) and (orientation : landscape) {
+.carousel .flexslider li div.swatch-tactical {
+	background-position: 0px -40px !important;
+	background-size: 280px;
+	-webkit-background-size: 280px auto;
+}
+.carousel .flexslider li div.swatch-tactical .content {
+	position: absolute;
+	left: 140px;
+	top: 20px;
+	width: 280px;
+}
+.carousel .flexslider li div.swatch-tactical h6 {
+color: #666666;
+font-size: 28px;
+font-weight: normal;
+left: 140px;
+letter-spacing: -0.04em;
+line-height: 1em;
+position: absolute;
+top: 20px;
+width: 100%;
+}
+.carousel .flexslider li div.swatch-tactical p {
+    color: #666666;
+    font-size: 1.4em;
+    left: 250px;
+    position: absolute;
+    top: 20px;
+    width: 480px;
+}
+.carousel .flexslider li div.swatch-tactical a.red-btn {
+    font-size: 11px;
+    left: 140px;
+    position: absolute;
+    top: 120px;
+    width: 150px;
+}
+}

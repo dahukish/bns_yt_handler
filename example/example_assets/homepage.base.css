@@ -1,0 +1,1348 @@
+/*
+ * jQuery FlexSlider v2.0
+ * http://www.woothemes.com/flexslider/
+ *
+ * Copyright 2012 WooThemes
+ * Free to use under the GPLv2 license.
+ * http://www.gnu.org/licenses/gpl-2.0.html
+ *
+ * Contributing author: Tyler Smith (@mbmufffin)
+ */
+/* Browser Resets */
+.flex-container a:active, .flexslider a:active, .flex-container a:focus, .flexslider a:focus {
+	outline: none;
+}
+.slides, .flex-control-nav, .flex-direction-nav {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+/* FlexSlider Necessary Styles
+*********************************/.flexslider {
+	margin: 0;
+	padding: 0;
+	height: 360px;
+}
+.flexslider .slides {
+	height: 100%;
+}
+.flexslider .slides > li {
+	display: none;
+	position: relative;
+	height: 100%;
+}
+/* Hide the slides before the JS is loaded. Avoids image jumping */
+.flexslider .slides > li div {
+	height: 100%;
+}
+.flexslider .slides img {
+	width: 100%;
+	display: block;
+}
+.flex-pauseplay span {
+	text-transform: capitalize;
+}
+/* Clearfix for the .slides element */
+.slides:after {
+	content: ".";
+	display: block;
+	clear: both;
+	visibility: hidden;
+	line-height: 0;
+	height: 0;
+}
+html[xmlns] .slides {
+	display: block;
+}
+* html .slides {
+	height: 1%;
+}
+/* No JavaScript Fallback */
+/* If you are not using another script, such as Modernizr, make sure you
+ * include js that eliminates this class on page load */
+.no-js .slides > li:first-child {
+	display: block;
+}
+/* FlexSlider Default Theme
+*********************************/
+.flexslider {
+	margin: 0 0 60px;
+	background: #fff;
+	position: relative;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	-o-border-radius: 4px;
+	border-radius: 4px;
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+	-webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+	-moz-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+	-o-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+	zoom: 1;
+}
+.flex-viewport {
+	height: 100%;
+	max-height: 2000px;
+	-webkit-transition: all 1s ease;
+	-moz-transition: all 1s ease;
+	transition: all 1s ease;
+}
+.loading .flex-viewport {
+	max-height: 300px;
+}
+.flexslider .slides {
+	zoom: 1;
+}
+.carousel li {
+	margin-right: 0px;
+}
+/* Direction Nav */
+.flex-direction-nav {
+ *height: 0;
+}
+.flex-direction-nav a {
+	width: 30px;
+	height: 30px;
+	margin: -20px 0 0;
+	display: block;
+	background: url(images/bg_direction_nav.png) no-repeat 0 0;
+	position: absolute;
+	top: 50%;
+	z-index: 10;
+	cursor: pointer;
+	text-indent: -9999px;
+	opacity: 0;
+	-webkit-transition: all .3s ease;
+}
+.flex-direction-nav .flex-next {
+	background-position: 100% 0;
+	right: -36px;
+}
+.flex-direction-nav .flex-prev {
+	left: -36px;
+}
+.flexslider:hover .flex-next {
+	opacity: 0.8;
+	right: 5px;
+}
+.flexslider:hover .flex-prev {
+	opacity: 0.8;
+	left: 5px;
+}
+.flexslider:hover .flex-next:hover, .flexslider:hover .flex-prev:hover {
+	opacity: 1;
+}
+.flex-direction-nav .flex-disabled {
+	opacity: .3!important;
+	filter: alpha(opacity=30);
+	cursor: default;
+}
+/* Control Nav */
+.flex-control-nav {
+	width: 100%;
+	position: absolute;
+	bottom: -40px;
+	text-align: center;
+}
+.flex-control-nav li {
+	margin: 0 6px;
+	display: inline-block;
+	zoom: 1;
+ *display: inline;
+}
+.flex-control-paging li a {
+	width: 11px;
+	height: 11px;
+	display: block;
+	background: #666;
+	background: rgba(0, 0, 0, 0.5);
+	cursor: pointer;
+	text-indent: -9999px;
+	-webkit-border-radius: 20px;
+	-moz-border-radius: 20px;
+	-o-border-radius: 20px;
+	border-radius: 20px;
+	box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.3);
+}
+.flex-control-paging li a:hover {
+	background: #333;
+	background: rgba(0, 0, 0, 0.7);
+}
+.flex-control-paging li a.flex-active {
+	background: #000;
+	background: rgba(0, 0, 0, 0.9);
+	cursor: default;
+}
+.flex-control-thumbs {
+	margin: 5px 0 0;
+	position: static;
+	overflow: hidden;
+}
+.flex-control-thumbs li {
+	width: 25%;
+	float: left;
+	margin: 0;
+}
+.flex-control-thumbs img {
+	width: 100%;
+	display: block;
+	opacity: .7;
+	cursor: pointer;
+}
+.flex-control-thumbs img:hover {
+	opacity: 1;
+}
+.flex-control-thumbs .flex-active {
+	opacity: 1;
+	cursor: default;
+}
+@media screen and (max-width: 860px) {
+.flex-direction-nav .flex-prev {
+	opacity: 1;
+	left: 0;
+}
+.flex-direction-nav .flex-next {
+	opacity: 1;
+	right: 0;
+}
+}
+#mega-menu, #content {
+	border-bottom: 1px solid #F1F1F1;
+}
+.carousel {
+	height: 448px;
+	margin-left: 1px;
+	width: 978px;
+}
+.carousel > div {
+	clear: both;
+	overflow: hidden;
+	position: relative;
+	width: 100%;
+}
+.carousel .wrapper {
+	box-shadow: none;
+	height: 360px;
+}
+.carousel .slider {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	position: absolute;
+}
+.carousel .slider > li {
+	float: left;
+	position: relative;
+}
+.prev, .next {
+	cursor: pointer;
+	display: block;
+	position: relative;
+}
+.carousel div.controls {
+	border: medium none;
+	height: auto;
+}
+.slide-change {
+	cursor: pointer;
+	display: block;
+	overflow: hidden;
+	text-decoration: none;
+	width: 100%;
+}
+.slide-change span {
+	display: block;
+	height: 88px;
+	position: absolute;
+	width: 100%;
+}
+.carousel .slide {
+	cursor: pointer;
+	left: 0;
+	position: absolute;
+	top: 0;
+}
+.carousel .slide.left {
+	display: none;
+	left: -978px;
+}
+.carousel .slide.right {
+	display: none;
+	left: 978px;
+}
+.carousel .slide h3 {
+	color: #FFFFFF;
+	left: 20px;
+	position: absolute;
+	top: 20px;
+}
+.carousel .wrapper .markers {
+	bottom: 20px;
+	height: 20px;
+	left: 50%;
+	list-style-type: none;
+	position: absolute;
+	z-index: 200;
+}
+.carousel .wrapper .markers li {
+	cursor: pointer;
+	float: left;
+	height: 19px;
+	width: 19px;
+}
+.carousel .wrapper .markers li a {
+	display: block;
+	font-size: 0;
+	height: 100%;
+	text-decoration: none;
+	width: 100%;
+}
+.carousel .wrapper .markers li.current {
+	color: #CF0000;
+}
+.carousel .menu {
+	background: none repeat scroll 0 0 transparent;
+	border: medium none;
+	clear: none;
+	float: left;
+	height: 100px;
+	overflow: hidden;
+	position: absolute;
+	top: 348px;
+	width: 978px;
+	z-index: 100;
+}
+.carousel .menu ul {
+	left: 0;
+	list-style-type: none;
+	position: absolute;
+	top: 0;
+}
+.carousel .menu .menu-slide {
+	background: url("/ca/common/carousel/img/bg.gif") no-repeat scroll right 0 #f7f7f7;
+	float: left;
+	height: 88px;
+	padding: 0;
+	position: relative;
+	top: 12px;
+	width: 326px;
+}
+.carousel .menu .menu-slide.l, .carousel .menu .menu-slide.c {
+	background: url("/ca/common/carousel/img/bg.gif") no-repeat scroll left 0 #f7f7f7;
+}
+.carousel .menu .menu-slide.r {
+	background: url("/ca/common/carousel/img/bg.gif") no-repeat scroll left 0 #f7f7f7;
+}
+.carousel .menu .flex-active {
+	background: url("/ca/common/carousel/img/bg-current.png?v3") no-repeat scroll 0 -10px transparent;
+	border: medium none;
+	padding-top: 12px;
+	top: 0;
+}
+.carousel .menu .menu-slide .slide-change {
+	height: 88px;
+	text-decoration: none;
+}
+.carousel .menu .menu-slide.current .slide-change {
+	border: medium none !important;
+	display: block;
+	height: inherit;
+	position: absolute;
+}
+.carousel .menu .menu-slide .slide-change div {
+	float: left;
+	overflow: hidden;
+	padding: 25px 0 0 10px;
+}
+.carousel .menu .menu-slide.fixed a div {
+	padding: 19px 10px 0 35px;
+}
+.carousel .menu .menu-slide h4 {
+	color: #6B6B6B;
+	font-size: 14px;
+	font-weight: normal;
+}
+.carousel .menu .menu-slide h3 {
+	color: #6B6B6B;
+	font-size: 15px;
+	font-weight: bold;
+}
+.carousel .menu .menu-slide img {
+	float: left;
+	margin: 6px 0 6px 20px;
+	pointer-events: none;
+}
+ul.markers {
+	display: none;
+	margin-top: 20px;
+}
+.carousel .wrapper .markers li {
+	background: url("/ca/common/carousel/img/marker.png") no-repeat scroll 0 0 transparent;
+	color: #FFFFFF;
+	font-size: 30px;
+}
+.carousel .wrapper .markers li.current {
+	background: url("/ca/common/carousel/img/marker_current.png") no-repeat scroll 0 0 transparent;
+}
+.carousel .menu .menu-slide h3 {
+	font-family: Arial, Helvetica, sans-serif;
+}
+.carousel .slider {
+	font-size: 18px;
+}
+.carousel .slider > li {
+	border: 1px solid #DDDDDD;
+	height: 200px;
+	margin: 2px;
+	padding: 5px;
+	width: 954px;
+}
+.carousel .menu .menu-slide {
+	border-top: 0px solid #EAEAEA;
+}
+.carousel .menu .menu-slide.ll {
+	display: none;
+	left: -311px;
+}
+.carousel .menu .menu-slide.l {
+	left: 0;
+}
+.carousel .menu .menu-slide.c {
+	left: 326px;
+}
+.carousel .menu .menu-slide.r {
+	left: 652px;
+}
+.carousel .menu .menu-slide.rr {
+	display: none;
+	left: 980px;
+}
+.carousel .menu .menu-slide.l.fixed {
+	left: 0;
+	width: 465px;
+}
+.carousel .menu .menu-slide.c.fixed {
+	left: 466px;
+	width: 465px;
+}
+.carousel .menu .menu-slide.r.fixed {
+	display: none;
+}
+#carousel .wrapper ul.slider li {
+	display: none;
+	height: 360px;
+}
+#carousel .wrapper ul.slider li > div {
+	height: 100%;
+	width: 100%;
+}
+#carousel .wrapper ul.slider li:first-child {
+	display: block;
+}
+#carousel .menu, #carousel .controls {
+	display: block;
+	z-index: 500;
+}
+.slide > div > img {
+	display: none;
+}
+.slider > li > div > a {
+	text-decoration: none;
+}
+.slide-change:hover h3, .slide-change:hover h4, .slide-change:focus h3, .slide-change:focus h4 {
+	color: #D81E05 !important;
+}
+#timerPlay {
+	position: absolute;
+	right: 10px;
+	top: 10px;
+	z-index: 99;
+}
+#timerPlay a {
+	background: url("/ca/common/carousel/img/btn-play.gif") no-repeat scroll right top transparent;
+	display: block;
+	height: 14px;
+	width: 14px;
+}
+.ui-helper-hidden {
+	display: none;
+}
+.ui-helper-hidden-accessible {
+	display: none;
+	position: absolute;
+}
+.ui-helper-reset {
+	border: 0 none;
+	font-size: 100%;
+	line-height: 1.3;
+	list-style: none outside none;
+	margin: 0;
+	outline: 0 none;
+	padding: 0;
+	text-decoration: none;
+}
+.ui-helper-clearfix:after {
+	clear: both;
+	content: ".";
+	display: block;
+	height: 0;
+	visibility: hidden;
+}
+.ui-helper-clearfix {
+	display: inline-block;
+}
+* html .ui-helper-clearfix {
+	height: 1%;
+}
+.ui-helper-clearfix {
+	display: block;
+}
+.ui-helper-zfix {
+	height: 100%;
+	left: 0;
+	opacity: 0;
+	position: absolute;
+	top: 0;
+	width: 100%;
+}
+.ui-slider {
+	position: relative;
+	text-align: left;
+}
+.ui-slider .ui-slider-handle {
+	cursor: default;
+	height: 1.2em;
+	position: absolute;
+	width: 1.2em;
+	z-index: 2;
+}
+.ui-slider .ui-slider-range {
+	border: 0 none;
+	display: block;
+	font-size: 0.7em;
+	position: absolute;
+	z-index: 1;
+}
+.ui-slider-horizontal {
+	height: 0.8em;
+}
+.ui-slider-horizontal .ui-slider-handle {
+	margin-left: -0.6em;
+	top: -0.3em;
+}
+.ui-slider-horizontal .ui-slider-range {
+	height: 100%;
+	top: 0;
+}
+.ui-slider-horizontal .ui-slider-range-min {
+	left: 0;
+}
+.ui-slider-horizontal .ui-slider-range-max {
+	right: 0;
+}
+.player-container {
+	display: block;
+	margin: 0 0 10px;
+	min-width: 270px;
+	padding: 0;
+}
+.player-container span, .player-container object {
+	display: block;
+	margin: 0;
+	padding: 0;
+}
+.player-container .video {
+	line-height: 0;
+}
+.player-container .flashReplace {
+	background-color: #000000;
+	color: #FFFFFF;
+	font-size: 1.2em;
+	line-height: 1em;
+	padding: 10px;
+	text-align: center;
+}
+.player-container .flashReplace a, .player-container .flashReplace a:link {
+	color: #00AEFF;
+}
+.player-container .flashReplace a:hover, .player-container .flashReplace a:focus, .player-container .flashReplace a:active {
+	text-decoration: none;
+}
+.player-container .flashReplace a:visited {
+	color: #B8B8B8;
+}
+.player-container .control-bar {
+	height: 1%;
+	padding-top: 5px;
+	position: relative;
+	text-align: center;
+}
+.player-container .functional-controls {
+	margin: 0 0 0 -3em;
+	text-align: center;
+	width: auto;
+}
+.player-container .volume-controls {
+	height: 1%;
+	position: absolute;
+	right: 10px;
+	text-align: right;
+	top: 5px;
+	width: 9em;
+}
+.player-container .control-bar button {
+	cursor: pointer;
+	height: 20px;
+	margin: 0 2px;
+	padding: 0;
+	text-indent: -999em;
+	width: 20px;
+}
+.player-container .volume-controls button {
+	margin: 0 1px;
+}
+.player-container .volume-controls .vol-display {
+	display: inline-block;
+	vertical-align: 1px;
+	width: 2em;
+}
+.player-container .timer-bar {
+	clear: both;
+	padding: 5px 10px;
+	position: relative;
+}
+.player-container .timer-bar .current-time, .player-container .timer-bar .duration-time {
+	position: absolute;
+	top: 5px;
+}
+.player-container .timer-bar .current-time {
+	left: 10px;
+}
+.player-container .timer-bar .duration-time {
+	right: 10px;
+}
+.player-container .timer-bar .ui-slider {
+	margin: 0 5em;
+}
+.player-container .control-bar .ui-slider .ui-slider-handle {
+	font-size: 1em;
+	height: 97%;
+	margin: 0 0 0 -0.4em;
+	position: absolute;
+	top: 0;
+	width: 0.7em;
+	z-index: 3;
+}
+.player-container .timer-bar .progress-bar, .player-container .timer-bar .loaded-bar {
+	position: absolute;
+	top: 0;
+}
+.player-container.player-wide {
+	min-width: 580px;
+}
+.player-container.player-wide .control-bar {
+	padding-top: 10px;
+}
+.player-container.player-wide .volume-controls {
+	top: 10px;
+	width: 12em;
+}
+.player-container.player-wide .control-bar button {
+	height: auto;
+	margin: 0;
+	padding: 15px 6px 0;
+	text-indent: 0;
+	width: auto;
+}
+.player-container.player-wide .volume-controls button {
+	margin: 0;
+}
+.player-container.player-wide .volume-controls .vol-up, .player-container.player-wide .volume-controls .vol-down {
+	width: 30px;
+}
+.player-container.player-wide .timer-bar {
+	padding: 10px;
+}
+.player-container.player-wide .timer-bar .current-time, .player-container.player-wide .timer-bar .duration-time {
+	top: 9px;
+}
+.player-container {
+	background-color: #FFFFFF;
+	color: #000000;
+	font: 13px Helvetica, Arial, sans-serif;
+}
+.player-container span, .player-container object {
+	font-size: 90%;
+}
+.player-container .video {
+	background: none repeat scroll 0 0 #000000;
+	position: relative;
+	z-index: 3000;
+}
+.player-container-ie .video {
+	height: 1%;
+}
+.player-container .video .caption {
+	background-color: #000000;
+	bottom: 0;
+	color: #FFFFFF;
+	font-size: 1.2em;
+	font-weight: 700;
+	line-height: 1.5em;
+	padding: 10px 0;
+	position: absolute;
+	text-align: center;
+	width: 100%;
+}
+.player-container .control-bar {
+	background: url("/ca/common/carousel/img/player/bg.gif") no-repeat scroll center top #cccccc;
+	border-color: #FAFAFA #CDCDCD #9F9F9F;
+	border-style: solid;
+	border-width: 1px;
+}
+.player-container .ui-state-default {
+	background: none repeat scroll 0 0 transparent;
+	border: medium none;
+	color: #333333;
+}
+.player-container a:focus, .player-container a:active, .player-container .ui-state-default {
+	outline: medium none;
+}
+.player-container .control-bar .logo {
+	background: url("/ca/common/carousel/img/player/nomensa-logo-small.gif") no-repeat scroll 0 0 transparent;
+	display: block;
+	float: left;
+	height: 17px;
+	left: 10px;
+	position: absolute;
+	text-indent: -9999em;
+	top: 7px;
+	width: 16px;
+}
+.player-container .control-bar .logo:hover, .player-container .control-bar .logo:focus {
+	background: url("/ca/common/carousel/img/player/nomensa-logo-small.gif") no-repeat scroll -16px 0 transparent;
+}
+.player-container .control-bar button {
+	background-position: 50% 5px;
+	background-repeat: no-repeat;
+	color: #333333;
+	font-family: Arial, verdana, sans-serif;
+	font-size: 1.1em;
+}
+.player-container .stop {
+	background-image: url("/ca/common/carousel/img/player/button-restart.gif");
+}
+.player-container .rewind {
+	background-image: url("/ca/common/carousel/img/player/button-rewind.gif");
+}
+.player-container .play {
+	background-image: url("/ca/common/carousel/img/player/button-play.gif");
+}
+.player-container .pause {
+	background-image: url("/ca/common/carousel/img/player/button-pause.gif");
+}
+.player-container .forward {
+	background-image: url("/ca/common/carousel/img/player/button-forward.gif");
+}
+.player-container .mute {
+	background-image: url("/ca/common/carousel/img/player/button-volon.gif");
+}
+.player-container .vol-down {
+	background-image: url("/ca/common/carousel/img/player/button-voldown.gif");
+}
+.player-container .vol-up {
+	background-image: url("/ca/common/carousel/img/player/button-volup.gif");
+}
+.player-container .captions {
+	background-image: url("/ca/common/carousel/img/player/button-cc.gif");
+}
+.player-container .control-bar .ui-state-hover, .player-container .control-bar .ui-state-focus {
+	background-position: 50% -107px;
+}
+.player-container .control-bar .ui-state-active {
+	background-position: 50% -219px;
+	color: #777777;
+}
+.player-container .control-bar .captions-off {
+	background-image: url("/ca/common/carousel/img/player/button-cc-off.gif");
+}
+.player-container .control-bar .volume-controls .ui-state-active {
+	background-image: url("/ca/common/carousel/img/player/button-volmute.gif");
+	background-position: 50% 5px;
+	color: #333333;
+}
+.player-container .control-bar .volume-controls .muted {
+	background-image: url("/ca/common/carousel/img/player/button-volmute.gif");
+	background-position: 50% 0;
+}
+.player-container .control-bar .volume-controls .ui-state-hover, .player-container .control-bar .volume-controls .ui-state-focus {
+	background-position: 50% -107px;
+}
+.player-container .timer-bar .ui-slider {
+	background: url("/ca/common/carousel/img/player/timeline-bg.gif") repeat-x scroll left top #ffffff;
+	border-color: silver #BEBEBE;
+	border-style: solid;
+	border-width: 1px;
+}
+.player-container .control-bar .ui-slider .ui-slider-handle {
+	background: url("/ca/common/carousel/img/player/timeline-point.gif") no-repeat scroll 50% 0 #000000;
+	border: medium none;
+	font-size: 1em;
+}
+.player-container .control-bar .ui-slider .ui-state-hover, .player-container .control-bar .ui-slider .ui-state-focus {
+	background-position: 50% 0;
+}
+.player-container .timer-bar .progress-bar, .player-container .timer-bar .loaded-bar {
+	background: none repeat scroll 0 0 transparent;
+	border: medium none;
+}
+.player-container .timer-bar .progress-bar {
+	background: url("/ca/common/carousel/img/player/timeline-played.gif") repeat-x scroll 0 0 #969696;
+	z-index: 2;
+}
+.player-container .timer-bar .loaded-bar {
+	background: url("/ca/common/carousel/img/player/timeline-loaded.gif") repeat-x scroll 0 0 #e1e1e1;
+	z-index: 0;
+}
+.player-container.player-wide .control-bar .logo {
+	background: url("/ca/common/carousel/img/player/nomensa-logo.gif") no-repeat scroll 0 0 transparent;
+	height: 26px;
+	top: 12px;
+	width: 89px;
+}
+.player-container.player-wide .control-bar .logo:hover, .player-container.player-wide .control-bar .logo:focus {
+	background: url("/ca/common/carousel/img/player/nomensa-logo.gif") no-repeat scroll -90px 0 transparent;
+}
+.player-container.player-wide .control-bar button {
+	background-position: 50% 0;
+}
+.player-container.player-wide .control-bar .ui-state-hover, .player-container.player-wide .control-bar .ui-state-focus {
+	background-position: 50% -112px;
+}
+.player-container.player-wide .control-bar .ui-state-active {
+	background-position: 50% -224px;
+}
+.player-container.player-wide .control-bar .volume-controls .ui-state-active {
+	background-image: url("/ca/common/carousel/img/player/button-volmute.gif");
+	background-position: 50% 0;
+	color: #333333;
+}
+.player-container.player-wide .control-bar .volume-controls .ui-state-hover, .player-container.player-wide .control-bar .volume-controls .ui-state-focus {
+	background-position: 50% -112px;
+}
+.player-container.player-wide .control-bar .ui-slider .ui-state-hover, .player-container.player-wide .control-bar .ui-slider .ui-state-focus {
+	background-position: 50% 0;
+}
+.player-container-ie .control-bar button {
+	float: left;
+}
+.player-container-ie .functional-controls {
+	margin-left: 45px;
+}
+.player-container-ie .functional-controls button {
+	float: left;
+}
+.player-container-ie .volume-controls {
+	top: 4px;
+}
+.player-container-ie .control-bar .volume-controls span {
+	display: block;
+	padding-top: 6px;
+}
+.player-container-ie .timer-bar {
+	padding-left: 0;
+	text-align: left;
+}
+.player-container-ie .control-bar .ui-slider {
+	height: 10px;
+	margin-left: 5.8em;
+}
+.player-container-ie .control-bar .ui-slider .ui-slider-handle {
+	background-position: 50% 0;
+}
+.player-container-ie.player-wide .control-bar {
+	padding-top: 5px;
+}
+.player-container-ie.player-wide .functional-controls {
+	margin: 0;
+	text-align: center;
+	width: 95%;
+}
+.player-container-ie.player-wide .control-bar button {
+	padding: 17px 0 0;
+}
+.player-container-ie.player-wide .functional-controls button {
+	float: none;
+}
+.player-container-ie.player-wide .volume-controls {
+	top: 5px;
+	width: 11em;
+}
+.player-container-ie.player-wide .control-bar .ui-state-default {
+	background-position: 50% 5px;
+}
+.player-container-ie.player-wide .control-bar .ui-state-hover, .player-container-ie.player-wide .control-bar .ui-state-focus {
+	background-position: 50% -107px;
+}
+.player-container-ie.player-wide .control-bar .ui-state-active {
+	background-position: 50% -219px;
+}
+.player-container-ie.player-wide .control-bar .volume-controls .ui-state-active {
+	background-position: 50% 5px;
+}
+.player-container-ie.player-wide .control-bar .volume-controls .ui-state-hover, .player-container-ie.player-wide .control-bar .volume-controls .ui-state-focus {
+	background-position: 50% -107px;
+}
+.player-container-ie.player-wide .control-bar .ui-slider-handle {
+	background-position: 50% 0;
+}
+.player-container-ie.player-wide .control-bar .volume-controls span {
+	display: block;
+	padding-top: 20px;
+}
+.player-container-ie-6 .control-bar .ui-slider {
+	overflow: hidden;
+}
+.videoPlayer {
+	width: 600px;
+}
+.player-container {
+	background: none repeat scroll 0 0 transparent;
+	margin: 0;
+}
+.overlay a.close, .ui-dialog-titlebar-close {
+	background: url("/ca/common/carousel/img/player/button/close.png") no-repeat scroll 0 0 transparent;
+	color: #000000;
+	font-size: 0;
+	height: 20px;
+	left: 18px;
+	right: auto;
+	text-indent: 0;
+	top: 60px;
+	width: 19px;
+	z-index: 200000;
+}
+.ui-dialog-titlebar, .ui-dialog {
+	background: none repeat scroll 0 0 transparent;
+	box-shadow: none;
+}
+.player-container {
+	color: #FFFFFF;
+}
+.player-container .control-bar {
+	background: url("/ca/common/carousel/img/player/bg.png") no-repeat scroll 0 0 transparent;
+	border: 0 none;
+	height: 53px;
+	padding: 0;
+}
+.player-container .control-bar .player-controls, .player-container .control-bar .volume-controls, .player-container .control-bar .timer-bar {
+	float: right;
+	height: 39px;
+	overflow: hidden;
+	padding-top: 14px;
+	position: relative;
+}
+.player-container .control-bar .player-controls {
+	float: left;
+	height: 53px;
+	padding: 0;
+	width: 132px;
+}
+.player-container .control-bar .volume-controls {
+	right: auto;
+	top: auto;
+	width: 83px;
+}
+.player-container .control-bar .timer-bar {
+	clear: none;
+	height: 31px;
+	padding: 21px 0 0;
+	width: 322px;
+}
+.player-container .control-bar .logo {
+	display: none;
+}
+.player-container .control-bar button.play {
+	background-image: url("/ca/common/carousel/img/player/button/play.png");
+	background-position: 0 0;
+	height: 43px;
+	left: 43px;
+	position: absolute;
+	top: 4px;
+	width: 44px;
+}
+.player-container .control-bar button.pause {
+	background-image: url("/ca/common/carousel/img/player/button/pause.png");
+	background-position: 0 0;
+	height: 43px;
+	left: 43px;
+	position: absolute;
+	top: 4px;
+	width: 44px;
+}
+.player-container .control-bar button.mute {
+	background-image: url("/ca/common/carousel/img/player/button/speaker.png");
+	background-position: 0 0;
+	height: 43px;
+	left: 5px;
+	position: absolute;
+	top: 0;
+	width: 44px;
+}
+.player-container .control-bar button.mute.muted {
+	background-image: url("/ca/common/carousel/img/player/button/mute.png");
+	background-position: 0 0;
+}
+.player-container .volume-controls .vol-down {
+	background: url("/ca/common/carousel/img/player/button/decrease.png") no-repeat scroll 0 0 transparent;
+	height: 26px;
+	left: 39px;
+	position: absolute;
+	top: 19px;
+	width: 30px;
+}
+.player-container .volume-controls .vol-up {
+	background: url("/ca/common/carousel/img/player/button/increase.png") no-repeat scroll 0 0 transparent;
+	height: 28px;
+	left: 39px;
+	position: absolute;
+	top: 0;
+	width: 30px;
+}
+.player-container .control-bar button.rewind {
+	background: url("/ca/common/carousel/img/player/button/rewind.png") no-repeat scroll 0 0 transparent;
+	float: left;
+	height: 36px;
+	margin: 5px 6px;
+	width: 39px;
+}
+.player-container .control-bar button.forward {
+	background: url("/ca/common/carousel/img/player/button/forward.png") no-repeat scroll 0 0 transparent;
+	float: right;
+	height: 32px;
+	margin: 5px 6px;
+	width: 43px;
+}
+.player-container .timer-bar .current-time, .player-container .timer-bar .duration-time {
+	top: 21px;
+}
+.player-container .timer-bar .ui-slider {
+	background: url("/ca/common/carousel/img/player/timeline-bg.png") repeat-x scroll left top #000000;
+	border-color: #000000 #2B2B2B #2B2B2B #3F3F3F;
+	border-style: solid;
+	border-width: 1px;
+	margin: 0 6em;
+}
+.player-container .control-bar .ui-slider .ui-slider-handle {
+	margin: 0;
+}
+.player-container .timer-bar .progress-bar {
+	background: url("/ca/common/carousel/img/player/timeline-played.png") repeat-x scroll left top #000000;
+	height: 72% !important;
+	top: 1px;
+}
+.player-container .control-bar button.ui-state-hover, .player-container .control-bar button.ui-state-focus, .player-container .control-bar .volume-controls button.ui-state-hover, .player-container .control-bar .volume-controls button.ui-state-focus {
+	background-position: 0 -43px;
+}
+.player-container .timer-bar .loaded-bar {
+	display: none;
+}
+.player-container .volume-controls .vol-display {
+	left: 12px;
+	position: absolute;
+	top: 36px;
+}
+.player-container-ie .control-bar .volume-controls span {
+	padding-top: 0;
+}
+.carousel .slide > div {
+	height: 360px;
+	width: 978px;
+}
+.carousel .richness {
+	font-size: 18px;
+	position: absolute;
+}
+.carousel .menu .menu-slide.current h3 {
+	color: #666666 !important;
+}
+.carousel .red-btn:hover, .carousel .red-btn:focus {
+	box-shadow: 0 0 7px #FFFFFF;
+}
+.slider {
+	width:100%;
+	height:360px;
+}
+.carousel .slider > li {
+	width:100%;
+	height:100%;
+	padding:0;
+	margin:0;
+	border: 0;
+}
+.carousel .menu ul {
+	width:100%;
+}
+.carousel .menu li {
+	width:33%;
+	float:left;
+	padding-top: 13px;
+}
+.carousel .menu li img {
+	float:left;
+	margin: 15px 0 0 25px;
+	pointer-events: none;
+}
+.carousel .menu li div {
+	float:left;
+	padding: 22px 0 0 10px !important;
+	overflow: hidden;
+}
+.carousel .menu li div h3 {
+	font-size: 18px;
+	font-weight: normal;
+	line-height: 20px;
+}
+.carousel .slide {
+	cursor: pointer!important;
+}
+.ui-helper-hidden-accessible {
+	display: none!important;
+}
+
+/* most tablets */
+ @media only screen and (min-width: 768px) and (max-width: 980px) {
+#timerPlay a {
+	display: none;
+}
+#carousel {
+	width: 100%;
+}
+.carousel {
+	height: 448px;
+	margin-left: 0;
+}
+.carousel ul.markers {
+	display: block;
+	margin-top: 20px;
+	top: 85%;
+	bottom: auto;
+}
+.carousel ul.markers li a {
+	color: transparent;
+	border: none;
+}
+.carousel .menu {
+	width: 100%;
+	display: block;
+}
+.carousel .menu li.menu-slide {
+	width: 33.33%;
+	position: relative !important;
+	left: 0 !important;
+}
+.carousel .menu li.menu-slide.flex-active {
+	background: url("/ca/common/carousel/img/bg-current.png") 45% center no-repeat transparent;
+}
+.carousel .menu li.menu-slide h3 {
+	font-size: 14px !important;
+}
+.carousel .menu li.menu-slide .slide-change {
+	width: 100%;
+}
+.carousel .menu li.menu-slide .slide-change div {
+	width: 125px !important;
+}
+.carousel .menu li.menu-slide img {
+	width: 33%;
+}
+}
+
+
+
+/* iPad */
+ @media only screen and (min-device-width : 768px) and (max-device-width : 1024px) and (orientation : portrait) {
+#timerPlay a {
+	display: none;
+}
+.carousel .menu {
+	display:none!important;
+}
+.carousel {
+	height: 360px!important;
+}
+}
+ @media only screen and (min-device-width : 768px) and (max-device-width : 1024px) and (orientation : landscape) {
+#timerPlay a {
+	display: none;
+}
+#carousel {
+	width: 100%;
+}
+.carousel {
+	height: 448px;
+	margin-left: 0;
+}
+.carousel ul.markers {
+	display: block;
+	margin-top: 20px;
+	top: 85%;
+	bottom: auto;
+}
+.carousel ul.markers li a {
+	color: transparent;
+	border: none;
+}
+.carousel .menu {
+	width: 100%;
+	display: block;
+}
+.carousel .menu li.menu-slide {
+	width: 33.33%;
+	position: relative !important;
+	left: 0 !important;
+}
+.carousel .menu li.menu-slide.flex-active {
+	background: url("/ca/common/carousel/img/bg-current.png") 45% left no-repeat transparent;
+}
+.carousel .menu li.menu-slide h3 {
+	font-size: 2em !important;
+}
+.carousel .menu li.menu-slide .slide-change {
+	width: 100%;
+}
+.carousel .menu li.menu-slide .slide-change div {
+	width: 100% !important;
+}
+}
+/*Most mobile Phones */
+@media only screen and (min-width: 320px) and (max-width: 767px) {
+#timerPlay a,
+.carousel .menu {
+	display: none !important;
+}
+.carousel,
+.carousel .flexslider li div {
+	height: 220px !important;
+	width: 100% !important;
+	margin-left: 0;
+}
+.carousel .wrapper,
+.carousel .flexslider  {
+	height: 220px;
+}
+.carousel ul.markers {
+	display: block;
+	margin-top: 20px;
+	top: 170px;
+	bottom: auto;
+}
+.carousel ul.markers li {
+	background-size: 130% !important;
+}
+.carousel ul.markers li a {
+	color: transparent;
+	border: none;
+}
+
+.carousel .flexslider li div {
+	background-position: center center !important;
+}
+
+.carousel .flexslider li {
+	width: 100%;
+}
+.carousel .flexslider li a.red-btn {
+	top: 130px;
+	width: 125px;
+	font-size: 11px;
+}
+
+.carousel .flexslider li div h6 {
+	background-size: 45% !important;
+	-webkit-background-size: 45% auto !important;
+	font-size: 20px;
+}
+.carousel .flexslider li div h6.richness {
+	top: 20px;
+	left: 15px;
+}
+.carousel .flexslider li div h3 {
+	font-size: 10px !important;
+}
+.carousel .flexslider li div p {
+	font-size: 14px;
+	line-height: 1em!important;
+	width: auto;
+}
+.carousel .flexslider li div .content {
+	left: 15px;
+	top: 90px;
+}
+.carousel .flexslider li div img {
+	width: 50%;
+}
+/* BB10 Q10 */
+
+
+ .is720 #timerPlay a,
+ .is720 .carousel .menu  {
+	display: none!important;
+}
+.is720 .carousel, .is720 .carousel .flexslider li div {
+	height: 220px !important;
+	width: 100% !important;
+	margin-left: 0;
+}
+.is720 .carousel .wrapper, .is720 .carousel .flexslider {
+	height: 220px;
+}
+.is720 .carousel ul.markers {
+	display: block;
+	margin-top: 20px;
+	top: 170px;
+	bottom: auto;
+}
+.is720 .carousel ul.markers li {
+	background-size: 130% !important;
+}
+.is720 .carousel ul.markers li a {
+	color: transparent;
+	border: none;
+}
+
+.is720 .carousel .flexslider li div {
+	background-position: center center !important;
+}
+.is720 .carousel .flexslider li {
+	width: 100%;
+}
+.is720 .carousel .flexslider li a.red-btn {
+	top: 130px;
+	width: 125px;
+	font-size: 11px;
+}
+.is720 .carousel .flexslider li div h6 {
+	background-size: 45% !important;
+	-webkit-background-size: 45% auto !important;
+	font-size: 20px;
+}
+.is720 .carousel .flexslider li div h6.richness {
+	top: 20px;
+	left: 15px;
+}
+.is720 .carousel .flexslider li div h3 {
+	font-size: 10px !important;
+}
+.is720 .carousel .flexslider li div p {
+	font-size: 14px;
+	line-height: 1em!important;
+	width: auto;
+}
+.is720 .carousel .flexslider li div .content {
+	left: 15px;
+	top: 90px;
+}
+.is720 .carousel .flexslider li div img {
+	width: 50%;
+}
+}

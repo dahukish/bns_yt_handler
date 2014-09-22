@@ -1,0 +1,131 @@
+/* Professionals_lawyers for business */
+.carousel .Professionals_lawyers {
+	background:url('/ca/common/carousel/img/slides/Professionals_lawyers-bg.jpg') 0 0 no-repeat;
+}
+.carousel .Professionals_lawyers .content {
+	position: absolute;
+	left: 40px;
+	top: 10%;
+	width: 340px;
+}
+.carousel .Professionals_lawyers h6 {
+	display: block;
+	background: url("/ca/common/carousel/img/slides/Professionals_Lawyers-txt.png") 0 0 no-repeat;
+	width: 466px;
+	height: 210px;
+	position: relative;
+}
+.carousel .Professionals_lawyers p {
+	color: #fff;
+	font-size: 18px;
+	line-height: 120%;
+}
+
+.carousel .Professionals_lawyers p sup {
+font-size: 10px;
+}
+
+.carousel .Professionals_lawyers a.red-btn {
+	width: 160px;
+	font-size: 15px;
+	top: 1em;
+}
+.carousel .menu .menu-slide .Professionals_lawyers-tab img {
+    float: left;
+    margin: 17px 0 0 10px;
+    pointer-events: none;
+}
+.carousel .menu .menu-slide .Professionals_lawyers-tab h3 {
+	font-size: 18px;
+	font-weight: normal;
+	line-height: 20px;
+}
+.carousel .menu .menu-slide .slide-change.Professionals_lawyers-tab div {
+    display: block;
+    height: 60px !important;
+    padding: 26px 0 0 15px !important;
+    width: 160px !important;
+}
+ @media only screen and (min-device-width : 768px) and (max-device-width : 1024px) and (orientation : landscape) {
+.carousel .flexslider li div.Professionals_lawyers {
+	background-size: 1024px;
+	-webkit-background-size: 1024px auto;
+}
+}
+ @media only screen and (min-device-width : 768px) and (max-device-width : 1024px) and (orientation : portrait) {
+.carousel .flexslider li div.Professionals_lawyers {
+	background-size: 1024px;
+	-webkit-background-size: 1024px auto;
+	background-position: -150px 0px !important;
+}
+.carousel .flexslider li div.Professionals_lawyers .content {
+	left: 40px;
+	top: 0%;
+	width: 50%;
+	display: block;
+	position: relative;
+}
+.carousel .flexslider li div.Professionals_lawyers h6 {
+	background-size: 400px !important;
+	-webkit-background-size: 400px auto !important;
+	background-position: 0px 30px !important;
+}
+}
+
+/*Most mobile Phones */
+@media only screen and (min-width: 320px) and (max-width: 767px) {
+.carousel .flexslider li div.Professionals_lawyers {
+	background-position: -170px 0px !important;
+background-size: 610px;
+-webkit-background-size: 610px auto;
+}
+.carousel .Professionals_lawyers .content {
+	left: 5%!important;
+	top: 8%!important;
+	width:44%!important;
+}
+.carousel .flexslider li div.Professionals_lawyers h6 {
+	top: 0px;
+	left: 0;
+	width: 200px;
+	height: 100px;
+	background-size: 200px !important;
+	-webkit-background-size: 200px auto !important;
+}
+.carousel .flexslider li div.Professionals_lawyers p {
+	font-size: 12px;
+}
+.carousel .flexslider li div.Professionals_lawyers a.red-btn {
+	font-size: 11px;
+	top:5px;
+}
+}
+/* iPhone 5 */
+ @media only screen and (min-width: 320px) and (max-width: 767px) and (orientation : landscape) {
+.carousel .flexslider li div.Professionals_lawyers {
+	background-position: -10px 0 !important;
+	background-size: 620px;
+	-webkit-background-size: 620px auto;
+}
+.carousel .flexslider li div.Professionals_lawyers .content {
+	left: 20px!important;
+	top: 17%!important;
+	width:45%!important;
+}
+.carousel .flexslider li div.Professionals_lawyers h6 {
+	top: 0;
+	left: 0;
+	width: 200px;
+	height: 100px;
+	background-size: 190px !important;
+	-webkit-background-size: 190px auto !important;
+}
+.carousel .flexslider li div.Professionals_lawyers p {
+	font-size: 12px;
+	display:block;
+}
+.carousel .flexslider li div.Professionals_lawyers a.red-btn {
+	font-size: 11px;
+	top:10px;
+}
+}
