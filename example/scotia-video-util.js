@@ -5,24 +5,40 @@
 (function(window){
     
     /* stil in progess */
-    function youTubeAPI (apiKey) {
+    function youTubeAPI (apiKey, gapi) {
       this.apiKey = apiKey || false;
       this.apiCache = [];
       this.videoCodes = [];
+      this.apiHandler = gapi || null;
     }
 
     youTubeAPI.prototype = {
       constructor: youTubeAPI,
-      addVideos: function(key) {
-        if(key) {
-          if(key.constructor === Array) {
-            for (k in key) {
-              this.videoCodes.push(key[k]);  
-            }
-          } else {
-            this.videoCodes.push(key);
+      initApi: function() {
+        if(! this.apiKey || ! this.apiHandler && (typeof callback !== "function")) return; 
+        
+        this.apiHandler.client.setApiKey(this.apiKey);
+        this.apiHandler.client.load('youtube', 'v3', function() {
+          this.fetchVideoInfo();
+        });
+
+      },
+      addVideoKey: function(videoKey) {
+        if(videoKey) {
+           this.videoCodes.push(videoKey);
           }
         }
+      },
+      addVideoKeys: function(videoList) {
+        for (var videoIndex = 0; videoIndex > (videoList.length -1); videoIndex++) {
+          this.addVideoKey(videoList[videoIndex]);
+        }
+      },
+      fetchVideoInfo: function() {
+        return; 
+      },
+      clearVideoCache: function() {
+        this.apiCache = [];
       }
     };
     /*******************/
