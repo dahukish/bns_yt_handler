@@ -6,6 +6,52 @@
  */
 (function(window, $){
     
+    function YouTubeVideoInfoCollection (videoItemsArray) {
+      this.videoItems = videoItemsArray || [];
+      this.cachedList = {};
+      if(this.videoItems.length) this.buildList();
+    }
+
+    YouTubeVideoInfoCollection.prototype = {
+      constructor: YouTubeVideoInfoCollection,
+      buildList: function(){
+
+        for (var item in this.videoItems) {
+          var current = this.videoItems[item];
+          this.cachedList[current.id] = {
+            id: current.id,
+            title: current.snippet.title,
+            description: current.snippet.description,
+            thumbnails: current.snippet.thumbnails
+          };
+        }
+        return this;
+      },
+      getItem: function(itemKey) {
+        return this.cachedList[itemKey];
+      },
+      listItems: function(itemFilter) {
+        var tempItems = [];
+        for (var item in this.cachedList) {
+          var current = this.cachedList[item];
+          console.log(item, current);
+          var tempItem  = (itemFilter) ? current[itemFilter] : current;
+          tempItems.push(tempItem);
+        }
+        return tempItems;
+      },
+      listDescriptions: function() {
+        return this.listItems('description');
+      },
+      listTitles: function() {
+        return this.listItems('title');
+      },
+      listThumbnails: function() {
+        return this.listItems('thumbnails');
+      }
+    };
+
+    /*****************************/
     function YouTubeAPI (apiKey) { 
       this.apiKey = apiKey || false;
       this.apiCache = null;
@@ -39,6 +85,8 @@
         
         if(this.apiCache !== null) return this.apiCache;
 
+        // TODO remove these dependancies to a config.json file or something -SH
+
         var that = this;
         $.ajax({
           url: 'https://www.googleapis.com/youtube/v3/videos',
@@ -50,39 +98,37 @@
           success: function(apiJSON, textStatus, jqXHR) {
             if(jqXHR.status === 200) {
               that.apiCache = apiJSON;
-              console.log(that, callback);
               if (typeof callback === 'function') callback();
             }
           },
           dataType: 'json'
         });
       },
-      listItems: function(itemFilter) {
-        var tempItems = [];
-
-        for (var item in this.apiCache.items) {
-          var current = this.apiCache.items[item];
-          var tempItem  = (itemFilter) ? current.snippet[itemFilter] : current.snippet;
-          tempItems.push(tempItem);
-        }
-        return tempItems;
+      getVideoItems: function() {
+        return (this.apiCache) ? this.apiCache.items : false;
       },
-      listDescriptions: function() {
-        return this.listItems('description');
-      },
-      listTitles: function() {
-        return this.listItems('title');
-      },
-      listThumbnails: function() {
-        return this.listItems('thumbnails');
-      },
-      clearVideoCache: function() {
+      flushVideoCache: function() {
         this.apiCache = [];
       }
     };
-  
+    /***********************************/
+    function youTubeVideoListFactory(videoKeys, callback) {
+      
+      if(!videoKeys || (!callback && typeof callback !== 'function')) return;
 
-    function ScotiaVideoTemplate (options) {}
+        var ytApi = new YouTubeAPI('AIzaSyC1voi8E7DWtNEGZMf59MD13in_ueQlsLQ'); // put API Key into config file -SH
+        
+        ytApi
+        .addVideoKeys(videoKeys)
+        .fetchVideoInfo(function(){
+          callback(new YouTubeVideoInfoCollection(ytApi.getVideoItems()));
+        });
+    }
+    /***********************************/
+
+    function ScotiaVideoTemplate (contentModelObj) {
+      this.contentModelObj = contentModelObj || null;
+    }
 
     ScotiaVideoTemplate.prototype = {
       constructor: ScotiaVideoTemplate,
@@ -341,7 +387,9 @@
 
     // add some util functions to the global scope once if not defined
     if(typeof window.ScotiaVideoTemplate === 'undefined') {
-          window.YouTubeAPI = YouTubeAPI;
+          window.youTubeVideoListFactory = youTubeVideoListFactory;
+          // window.YouTubeAPI = YouTubeAPI;
+          // window.YouTubeVideoInfoCollection = YouTubeVideoInfoCollection;
           window.ScotiaVideoTemplate = ScotiaVideoTemplate;
           window.processVideoItem = processVideoItem;
           window.applyApiOverrides = applyApiOverrides;

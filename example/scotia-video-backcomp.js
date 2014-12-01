@@ -118,31 +118,6 @@
               
               $($this.attr('href') + "_dialog").dialog(dialogObjFactory($this, _this.templateHelper));
 
-              // $($this.attr('href') + "_dialog").dialog({
-              //     resizable: false,
-              //     modal: true,
-              //     width: 980,
-              //     open: function() {
-              //       $vidObj = $(this);
-              //       console.log('open');
-              //       $('body').append(_this.templateHelper.buildModalOverlay())
-              //       .find('#main_video_overlay')
-              //       .show()
-              //       .on('click', closeDialogFactory($vidObj));
-              //       showCurrentDialogSection($this, $vidObj);
-                    
-              //       initClickHandler("a[href^='#meet_']", $vidObj, _this.templateHelper);
-                    
-              //       // $vidParent.find('.career-video').focus();
-              //     },
-              //     close: function() { 
-              //       $('#main_video_overlay').remove();
-              //       $(this).remove();
-              //       // kill the old and remake anew
-              //       $('body').append(this);
-              //       initClickHandler("a[href^='#meet_']", $(this), _this.templateHelper);
-              //     }
-              //   });
             });
 
           }
@@ -258,6 +233,27 @@
       return initHandler;
     }
 
+    function parseVideoKeys(selector) {
+      
+      var tempKeyList = [];
+      switch(selector) {
+        case "career-video":
+          $('iframe').each(function(index, ele){
+            var match = /www\.youtube\.com\/embed\/(\w+)/i.exec($(ele).attr('src'));
+            if(match) tempKeyList.push(match[1]);
+          });
+        break;
+        case "credit-card-video-popup":
+        case "video":
+          $('a[href^="http://www.youtube.com"]').each(function(index, ele){
+            var match = /www\.youtube\.com\/watch\?v=(\w+)/i.exec($(ele).attr('href'));
+            if(match) tempKeyList.push(match[1]);
+          });
+        break;
+      }
+      return tempKeyList;
+    }
+
     function getVideoSelector() {
 
       if(window.videoLengthObj) {
@@ -286,7 +282,8 @@
         if(! opts.init) return this; // if no handler abort the whole process
         
         // setup template helper
-        var templateHelper = new ScotiaVideoTemplate();
+        var contentModelObj = (opts.contentModelObj)? opts.contentModelObj : null;
+        var templateHelper = new ScotiaVideoTemplate(contentModelObj);
         // console.log(opts);
         var initHandler = new InitHandler(templateHelper);
         initHandler[opts.init](this);
@@ -303,21 +300,13 @@
     // start
     $(function() {
         
-        var vidKeys = [
-          'xt4AB2xsGxs',
-          'xE3qt144dM8'
-        ];
-
-        var ytApi = new YouTubeAPI('AIzaSyC1voi8E7DWtNEGZMf59MD13in_ueQlsLQ');
-        
-        ytApi.addVideoKeys(vidKeys)
-        .fetchVideoInfo(function(){
-          console.log(ytApi.listDescriptions());
-        });
-
         var selector = getVideoSelector();
+
         if (selector) {
-          $("."+selector.selClass).scotiaVideo({init: selector.initHandler});
+            youTubeVideoListFactory(parseVideoKeys(selector.selClass), function(youTubeVideoList){
+              console.log(youTubeVideoList);
+              $("."+selector.selClass).scotiaVideo({init: selector.initHandler, contentModelObj: youTubeVideoList});
+            });
         }
     });
 })(jQuery);
