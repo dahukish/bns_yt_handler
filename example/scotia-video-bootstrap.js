@@ -1,3 +1,5 @@
+'use strict';
+
 /*!
  * bootstrap for jQuery Scotia Video Plugin
  */
@@ -25,7 +27,6 @@
         return tempItem;
       },
       recurrsiveLoad: function(scriptItem){
-        
         if (! scriptItem) return false;
         var tempUrl = (scriptItem.src)? scriptItem.src: scriptItem.href;
         var that = this;
@@ -74,11 +75,7 @@
                                     href: '../custom/css/player-theme.css'
                                   }];
 
-              loaderFiles.js  = [
-                                {
-                                  src: 'https://apis.google.com/js/client.js?onload=load'
-                                },
-                                {
+              loaderFiles.js  = [{
                                   src: '../core/javascript/swfobject/swfobject.js' 
                                 },
                                 {
@@ -103,11 +100,7 @@
               } 
 
               loaderFiles.css = {};
-              loaderFiles.js = [
-                                // {
-                                // src: 'https://apis.google.com/js/client.js?onload=load'
-                                // },
-                                {
+              loaderFiles.js = [{
                                   src: 'scotia-video-util.js'
                                 },
                                 {
@@ -128,6 +121,7 @@
           
           var jsLoader = new Loader(loadFiles.js, $);
           jsLoader.loadScripts();
+
         }
 
     })(DynaLoader);

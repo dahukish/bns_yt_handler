@@ -1,3 +1,5 @@
+'use strict';
+
 /*!
  * jQuery ScotiaVideo Plugin
  * TODO

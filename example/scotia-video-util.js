@@ -1,47 +1,86 @@
+'use strict';
+
 /*!
  * Util functions for Scotia Video Stuff
  * TODO
  */
-(function(window){
+(function(window, $){
     
-    /* stil in progess */
-    function youTubeAPI (apiKey, gapi) {
+    function YouTubeAPI (apiKey) { 
       this.apiKey = apiKey || false;
-      this.apiCache = [];
-      this.videoCodes = [];
-      this.apiHandler = gapi || null;
+      this.apiCache = null;
+      this.videoKeys = [];
     }
 
-    youTubeAPI.prototype = {
-      constructor: youTubeAPI,
-      initApi: function() {
-        if(! this.apiKey || ! this.apiHandler && (typeof callback !== "function")) return; 
-        
-        this.apiHandler.client.setApiKey(this.apiKey);
-        this.apiHandler.client.load('youtube', 'v3', function() {
-          this.fetchVideoInfo();
-        });
-
-      },
+    YouTubeAPI.prototype = {
+      constructor: YouTubeAPI,
       addVideoKey: function(videoKey) {
         if(videoKey) {
-           this.videoCodes.push(videoKey);
+           this.videoKeys.push(videoKey);
           }
-        }
       },
       addVideoKeys: function(videoList) {
-        for (var videoIndex = 0; videoIndex > (videoList.length -1); videoIndex++) {
+        for (var videoIndex = 0; videoIndex < videoList.length; videoIndex++) {
           this.addVideoKey(videoList[videoIndex]);
         }
+        return this;
       },
-      fetchVideoInfo: function() {
-        return; 
+      getVideoKeys: function() {
+        return this.videoKeys;
+      },
+      normalizeVideos: function() {
+        var vidCodes = this.getVideoKeys();
+        if(vidCodes.length){
+          return vidCodes.join(',');
+        }
+        return;
+      },
+      fetchVideoInfo: function(callback) {
+        
+        if(this.apiCache !== null) return this.apiCache;
+
+        var that = this;
+        $.ajax({
+          url: 'https://www.googleapis.com/youtube/v3/videos',
+          data: {
+            id: this.normalizeVideos(),
+            key: this.apiKey,
+            part: 'snippet'
+          },
+          success: function(apiJSON, textStatus, jqXHR) {
+            if(jqXHR.status === 200) {
+              that.apiCache = apiJSON;
+              console.log(that, callback);
+              if (typeof callback === 'function') callback();
+            }
+          },
+          dataType: 'json'
+        });
+      },
+      listItems: function(itemFilter) {
+        var tempItems = [];
+
+        for (var item in this.apiCache.items) {
+          var current = this.apiCache.items[item];
+          var tempItem  = (itemFilter) ? current.snippet[itemFilter] : current.snippet;
+          tempItems.push(tempItem);
+        }
+        return tempItems;
+      },
+      listDescriptions: function() {
+        return this.listItems('description');
+      },
+      listTitles: function() {
+        return this.listItems('title');
+      },
+      listThumbnails: function() {
+        return this.listItems('thumbnails');
       },
       clearVideoCache: function() {
         this.apiCache = [];
       }
     };
-    /*******************/
+  
 
     function ScotiaVideoTemplate (options) {}
 
@@ -302,10 +341,11 @@
 
     // add some util functions to the global scope once if not defined
     if(typeof window.ScotiaVideoTemplate === 'undefined') {
+          window.YouTubeAPI = YouTubeAPI;
           window.ScotiaVideoTemplate = ScotiaVideoTemplate;
           window.processVideoItem = processVideoItem;
           window.applyApiOverrides = applyApiOverrides;
           window.buildVideoTile = buildVideoTile;
-    }
+      }
 
-})(window);
+})(window, jQuery);

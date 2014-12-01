@@ -1,3 +1,5 @@
+'use strict';
+
 /*!
  * jQuery ScotiaVideo Plugin For Backwards compatibility
  * TODO
@@ -300,6 +302,19 @@
 
     // start
     $(function() {
+        
+        var vidKeys = [
+          'xt4AB2xsGxs',
+          'xE3qt144dM8'
+        ];
+
+        var ytApi = new YouTubeAPI('AIzaSyC1voi8E7DWtNEGZMf59MD13in_ueQlsLQ');
+        
+        ytApi.addVideoKeys(vidKeys)
+        .fetchVideoInfo(function(){
+          console.log(ytApi.listDescriptions());
+        });
+
         var selector = getVideoSelector();
         if (selector) {
           $("."+selector.selClass).scotiaVideo({init: selector.initHandler});
