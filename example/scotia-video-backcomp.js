@@ -4,8 +4,18 @@
  * jQuery ScotiaVideo Plugin For Backwards compatibility
  * TODO
  */
-(function($){
+(function($, window){
     
+    
+    function CareerVideoHelper (jQueryObject) {
+      this._videoObj = jQueryObject;
+    }
+
+    CareerVideoHelper.prototype = {
+      constructor: CareerVideoHelper
+    };
+
+
     function classHardReset(jqObj){
       jqObj.removeClass('show-video');
       jqObj.removeClass('show-transcript-en');
@@ -32,7 +42,7 @@
                   modal: opts.modal || true,
                   width: opts.width || 980,
                   open: function() {
-                    $vidObj = $(this);
+                    var $vidObj = $(this);
                     $('body').append(templateHelper.buildModalOverlay())
                     .find('#main_video_overlay')
                     .show()
@@ -74,6 +84,21 @@
       prntObj.find(viewDataObj.selector).addClass(viewDataObj.class);
     }
 
+    function updateDialog(jqObj, contentModelObj) {
+      var videoID = parseVideoEmbedSrc(jqObj.find('iframe').attr('src'));
+      var modelObj = contentModelObj.getItem(videoID);
+      var divCopy = jqObj.find('.copy');
+      var divCopyTitle = divCopy.find('.frutiger');
+      var divCopyDesc = divCopy.find('p:eq(0)');
+      var divCopyDesc = divCopy.find('p:eq(0)');
+      
+      divCopyTitle.html(modelObj.title);
+      divCopyDesc.html(modelObj.description);
+
+      // TODO: add duration -SH
+
+    }
+
     function initClickHandler(selector, prntObj, tmpHelper) {
       
       $(selector, prntObj).each(function(index, item) {
@@ -106,6 +131,9 @@
             var $transcriptObj = $videoObj.next();
             hrefSelector.push($transcriptObj.children('a.youtube').attr('href'));
             
+            //refresh the careers dialog to use the YouTube data -SH
+            updateDialog($videoObj, window.contentModelObj);
+
             var dialogSelector = hrefSelector[ele]+'_dialog';
             $videoParentObj.attr('id', dialogSelector.substring(1));
 
@@ -114,8 +142,8 @@
             $(".video-retail-banking a[href="+hrefSelector[ele]+"]").live('click', function(e){
               e.preventDefault();
               
-              $this = $(this);
-              
+              var $this = $(this);
+              // TODO: add youtube Integration here
               $($this.attr('href') + "_dialog").dialog(dialogObjFactory($this, _this.templateHelper));
 
             });
@@ -156,6 +184,7 @@
             })($videoObj.find('.transcript'));
             
             var _this = this;
+            // TODO: add youtube Integration here
             vidObjDlogCol[videoCode] = $(this.templateHelper.buildModalDialog({
             // $videoDialog = $(this.templateHelper.buildModalDialog({
               dialogTitle: "",
@@ -254,6 +283,15 @@
       return tempKeyList;
     }
 
+    function parseVideoEmbedSrc(embedUrl) {
+      var index = embedUrl.indexOf('embed/');
+      var indexShift = 6;
+      if(index > -1) {
+        return embedUrl.substring(index + indexShift);
+      }
+      return false;
+    }
+
     function getVideoSelector() {
 
       if(window.videoLengthObj) {
@@ -282,9 +320,11 @@
         if(! opts.init) return this; // if no handler abort the whole process
         
         // setup template helper
-        var contentModelObj = (opts.contentModelObj)? opts.contentModelObj : null;
-        var templateHelper = new ScotiaVideoTemplate(contentModelObj);
-        // console.log(opts);
+        window.contentModelObj = (opts.contentModelObj)? opts.contentModelObj : null; //try this on the window object for now -SH
+        // var contentModelObj = (opts.contentModelObj)? opts.contentModelObj : null;
+        
+        var templateHelper = new ScotiaVideoTemplate(window.contentModelObj);
+        
         var initHandler = new InitHandler(templateHelper);
         initHandler[opts.init](this);
 
@@ -304,9 +344,8 @@
 
         if (selector) {
             youTubeVideoListFactory(parseVideoKeys(selector.selClass), function(youTubeVideoList){
-              console.log(youTubeVideoList);
               $("."+selector.selClass).scotiaVideo({init: selector.initHandler, contentModelObj: youTubeVideoList});
             });
         }
     });
-})(jQuery);
+})(jQuery, window);

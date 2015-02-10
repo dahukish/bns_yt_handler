@@ -9,6 +9,7 @@
     function YouTubeVideoInfoCollection (videoItemsArray) {
       this.videoItems = videoItemsArray || [];
       this.cachedList = {};
+      this.currentItem = null;
       if(this.videoItems.length) this.buildList();
     }
 
@@ -18,6 +19,7 @@
 
         for (var item in this.videoItems) {
           var current = this.videoItems[item];
+          console.log(current);
           this.cachedList[current.id] = {
             id: current.id,
             title: current.snippet.title,
@@ -30,11 +32,16 @@
       getItem: function(itemKey) {
         return this.cachedList[itemKey];
       },
+      getItemPart: function(itemKey, part, fallback) {
+        return (this.cachedList[itemKey] && this.cachedList[itemKey][part]) ? this.cachedList[itemKey][part] : fallback;
+      },
+      getItems: function() { // alias for listItems
+        return this.listItems();
+      },
       listItems: function(itemFilter) {
         var tempItems = [];
         for (var item in this.cachedList) {
           var current = this.cachedList[item];
-          console.log(item, current);
           var tempItem  = (itemFilter) ? current[itemFilter] : current;
           tempItems.push(tempItem);
         }
@@ -86,7 +93,6 @@
         if(this.apiCache !== null) return this.apiCache;
 
         // TODO remove these dependancies to a config.json file or something -SH
-
         var that = this;
         $.ajax({
           url: 'https://www.googleapis.com/youtube/v3/videos',
