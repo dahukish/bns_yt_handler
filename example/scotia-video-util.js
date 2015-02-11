@@ -1,15 +1,13 @@
-'use strict';
-
 /*!
  * Util functions for Scotia Video Stuff
  * TODO
  */
 (function(window, $){
+    'use strict';
     
     function YouTubeVideoInfoCollection (videoItemsArray) {
       this.videoItems = videoItemsArray || [];
       this.cachedList = {};
-      this.currentItem = null;
       if(this.videoItems.length) this.buildList();
     }
 
@@ -19,12 +17,12 @@
 
         for (var item in this.videoItems) {
           var current = this.videoItems[item];
-          console.log(current);
           this.cachedList[current.id] = {
             id: current.id,
             title: current.snippet.title,
             description: current.snippet.description,
-            thumbnails: current.snippet.thumbnails
+            thumbnails: current.snippet.thumbnails,
+            duration: this._formatTime(current.contentDetails.duration)
           };
         }
         return this;
@@ -33,7 +31,7 @@
         return this.cachedList[itemKey];
       },
       getItemPart: function(itemKey, part, fallback) {
-        return (this.cachedList[itemKey] && this.cachedList[itemKey][part]) ? this.cachedList[itemKey][part] : fallback;
+        return (this.cachedList[itemKey] && this.cachedList[itemKey][part])? this.cachedList[itemKey][part] : fallback;
       },
       getItems: function() { // alias for listItems
         return this.listItems();
@@ -55,7 +53,24 @@
       },
       listThumbnails: function() {
         return this.listItems('thumbnails');
+      },
+      _padTime: function(numAsString, bypass){
+        if(bypass) return numAsString; //skip this if needed - SH
+        
+        var num = parseInt(numAsString);
+        return (num > 9)? num : ('0'+num); 
+      },
+
+      _formatTime: function(ytTimeString){
+        var match = /^PT(\d{0,3})?M?(\d{0,2})S/.exec(ytTimeString);
+        if(match[1] && match[2]) {
+          return (this._padTime(match[1], true) + ':' + this._padTime(match[2])) + " min";
+        } else if(match[1] && (match[2] === "")) {
+          return this._padTime(match[1]) + " sec";
+        }
+        return false;
       }
+
     };
 
     /*****************************/
@@ -99,7 +114,7 @@
           data: {
             id: this.normalizeVideos(),
             key: this.apiKey,
-            part: 'snippet'
+            part: 'contentDetails,snippet'
           },
           success: function(apiJSON, textStatus, jqXHR) {
             if(jqXHR.status === 200) {
@@ -132,9 +147,7 @@
     }
     /***********************************/
 
-    function ScotiaVideoTemplate (contentModelObj) {
-      this.contentModelObj = contentModelObj || null;
-    }
+    function ScotiaVideoTemplate () {}
 
     ScotiaVideoTemplate.prototype = {
       constructor: ScotiaVideoTemplate,
@@ -203,7 +216,7 @@
         if(contObj.dialogTitle) {
           html += '<span class="ui-dialog-title" id="ui-dialog-video-title">'+contObj.dialogTitle+'</span>';
         }
-        html += '<a href="#" class="ui-dialog-titlebar-close ui-corner-all" role="button">'
+        html += '<a href="#" class="ui-dialog-titlebar-close ui-corner-all" role="button">';
         html += '<span class="ui-icon ui-icon-closethick">Close dialog</span>';
         html += '</a>';
         html += '</div>';
@@ -211,7 +224,7 @@
         html += '<div class="youtube-overlay ui-dialog-content ui-widget-content">';
         html += '<img src="http://www.scotiabank.com/ca/common/icons/logo-scotiabank-lrg.png" alt="Scotiabank®">';
         
-        html += '<div class="career-video">'
+        html += '<div class="career-video">';
         var ifrm = contObj.iFrameObj;
         html += '<iframe class="youtube-player" type="text/html" tabindex="-1" width="'+ifrm.width+'" height="'+ifrm.height+'" src="'+ifrm.src+'" data-video-src="'+ifrm.src+'" frameborder="0"></iframe>';
         
@@ -364,31 +377,6 @@
         }
 
         return false;
-    };
-
-    function applyApiOverrides(domObj, options) {
-      return domObj.testText = {
-        text: "testing again"
-      };
-    }
-
-    function buildVideoTile(domObj, templateHelper, context) {
-      if(domObj["videoImage"]) {
-        var modalObject = {
-          title: domObj["videoImage"].alt,
-          imgSrc: domObj["videoImage"].src
-        };
-        
-      }
-
-      if(domObj["videoImage"]) {
-        var modalObject = {
-          title: domObj["videoImage"].alt,
-          imgSrc: domObj["videoImage"].src
-        };
-        
-      }
-
     }
 
     // add some util functions to the global scope once if not defined
@@ -398,8 +386,6 @@
           // window.YouTubeVideoInfoCollection = YouTubeVideoInfoCollection;
           window.ScotiaVideoTemplate = ScotiaVideoTemplate;
           window.processVideoItem = processVideoItem;
-          window.applyApiOverrides = applyApiOverrides;
-          window.buildVideoTile = buildVideoTile;
       }
 
 })(window, jQuery);

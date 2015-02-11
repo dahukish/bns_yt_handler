@@ -1,9 +1,11 @@
-'use strict';
-
 /*!
  * bootstrap for jQuery Scotia Video Plugin
  */
 (function($, window, document, undefined){
+    
+    'use strict';
+
+
     function DynaLoader (scriptItems, jQueryInst, useCaching) {
       this.scriptItems = scriptItems || [];
       this.jQuery = jQueryInst || null;

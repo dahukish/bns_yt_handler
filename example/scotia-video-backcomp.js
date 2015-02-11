@@ -1,11 +1,9 @@
-'use strict';
-
-/*!
+\/*!
  * jQuery ScotiaVideo Plugin For Backwards compatibility
  * TODO
  */
 (function($, window){
-    
+    'use strict';   
     
     function CareerVideoHelper (jQueryObject) {
       this._videoObj = jQueryObject;
@@ -63,7 +61,6 @@
     function showCurrentDialogSection(jqObj, prntObj) {
       var viewDataObj = (function(viewData){
         var match = /show-transcript-(\w{2})/i.exec(viewData);
-        // console.log(match, viewData);
         if (match) {
           return {
             selector: '.youtube-overlay',
@@ -77,26 +74,23 @@
         };
       })((jqObj && jqObj.data('view')) || null);
 
-      // console.log(viewDataObj);
-      
       //nuke all the styles
       classHardReset(prntObj.find(viewDataObj.selector));
       prntObj.find(viewDataObj.selector).addClass(viewDataObj.class);
     }
 
-    function updateDialog(jqObj, contentModelObj) {
+    function updateCareersDialog(jqObj, contentModelObj) {
       var videoID = parseVideoEmbedSrc(jqObj.find('iframe').attr('src'));
       var modelObj = contentModelObj.getItem(videoID);
       var divCopy = jqObj.find('.copy');
       var divCopyTitle = divCopy.find('.frutiger');
       var divCopyDesc = divCopy.find('p:eq(0)');
-      var divCopyDesc = divCopy.find('p:eq(0)');
+      var divCopyDuration = divCopy.find('.duration');
       
       divCopyTitle.html(modelObj.title);
       divCopyDesc.html(modelObj.description);
-
-      // TODO: add duration -SH
-
+      divCopyDesc.html(modelObj.description);
+      divCopyDuration.html(modelObj.duration);
     }
 
     function initClickHandler(selector, prntObj, tmpHelper) {
@@ -123,7 +117,7 @@
     
     InitHandler.prototype = {
       constructor: InitHandler,
-      careerInit: function (jqObj) {
+      careerInit: function (jqObj, contentModelObj) {
         var hrefSelector = new Array();
         for (var ele = 0; ele < jqObj.length; ele++) {
             var $videoObj = $(jqObj[ele]);
@@ -132,7 +126,7 @@
             hrefSelector.push($transcriptObj.children('a.youtube').attr('href'));
             
             //refresh the careers dialog to use the YouTube data -SH
-            updateDialog($videoObj, window.contentModelObj);
+            contentModelObj && updateCareersDialog($videoObj, contentModelObj);
 
             var dialogSelector = hrefSelector[ele]+'_dialog';
             $videoParentObj.attr('id', dialogSelector.substring(1));
@@ -150,7 +144,7 @@
 
           }
       },
-      videoInit: function (jqObj) {
+      videoInit: function (jqObj, contentModelObj) {
         var vidObjDlogCol = [];
         for (var ele = 0; ele < jqObj.length; ele++) {
           
@@ -186,7 +180,6 @@
             var _this = this;
             // TODO: add youtube Integration here
             vidObjDlogCol[videoCode] = $(this.templateHelper.buildModalDialog({
-            // $videoDialog = $(this.templateHelper.buildModalDialog({
               dialogTitle: "",
               dialogID: videoCode,
               iFrameObj: {
@@ -194,6 +187,11 @@
                 height: 385,
                 src: 'http://www.youtube.com/embed/'+videoCode
               },
+              copy: {
+                title: contentModelObj.getItemPart(videoCode, 'title', ''),
+                body: contentModelObj.getItemPart(videoCode, 'description', '')
+              },
+              duration: contentModelObj.getItemPart(videoCode, 'duration', ''),
               transcriptsList: transListObj
             })).css('display', 'none');
 
@@ -217,22 +215,27 @@
           }
         }
       },
-      creditCardInit: function(jqObj) {
+      creditCardInit: function(jqObj, contentModelObj) {
         
         if(! $(jqObj).data('youtube-ref')) return;
 
         var $videoLink = $('a.video');
         var videoCode = $(jqObj).data('youtube-ref');
-        
+
         $videoLink.attr('href','#'+videoCode);
-        $videoDialog = $(this.templateHelper.buildModalDialog({
+        var $videoDialog = $(this.templateHelper.buildModalDialog({
           dialogTitle: "",
           dialogID: videoCode,
           iFrameObj: {
             width: 640,
             height: 385,
             src: 'http://www.youtube.com/embed/'+videoCode
-          }
+          },
+          copy: {
+                title: contentModelObj.getItemPart(videoCode, 'title', ''),
+                body: contentModelObj.getItemPart(videoCode, 'description', '')
+          },
+          duration: contentModelObj.getItemPart(videoCode, 'duration', '')
         })).css('display', 'none');
         
         var _this = this;
@@ -263,16 +266,21 @@
     }
 
     function parseVideoKeys(selector) {
-      
       var tempKeyList = [];
       switch(selector) {
         case "career-video":
           $('iframe').each(function(index, ele){
+            console.log(index, ele);
             var match = /www\.youtube\.com\/embed\/(\w+)/i.exec($(ele).attr('src'));
             if(match) tempKeyList.push(match[1]);
           });
         break;
         case "credit-card-video-popup":
+        $('div.credit-card-video-popup').each(function(index, ele){
+            var youtubeRef = $(ele).data('youtube-ref');
+            if(youtubeRef) tempKeyList.push(youtubeRef);
+          });
+        break;
         case "video":
           $('a[href^="http://www.youtube.com"]').each(function(index, ele){
             var match = /www\.youtube\.com\/watch\?v=(\w+)/i.exec($(ele).attr('href'));
@@ -320,19 +328,12 @@
         if(! opts.init) return this; // if no handler abort the whole process
         
         // setup template helper
-        window.contentModelObj = (opts.contentModelObj)? opts.contentModelObj : null; //try this on the window object for now -SH
-        // var contentModelObj = (opts.contentModelObj)? opts.contentModelObj : null;
+        var contentModelObj = (opts.contentModelObj)? opts.contentModelObj : null;
         
-        var templateHelper = new ScotiaVideoTemplate(window.contentModelObj);
+        var templateHelper = new ScotiaVideoTemplate();
         
         var initHandler = new InitHandler(templateHelper);
-        initHandler[opts.init](this);
-
-        // for (var sVideo = 0; sVideo < this.length; sVideo++) {
-          // var domObj = processVideoItem($(this[sVideo]));
-          // applyApiOverrides(domObj);
-          // buildvideoTile(domObj, scotiaTemplate, $(this[sVideo]));
-        // }
+        initHandler[opts.init](this, contentModelObj);
 
         return this;
     };
