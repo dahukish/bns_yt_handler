@@ -5,6 +5,7 @@
 (function($, window){
     'use strict';   
     
+    //* This might be needed - SH
     function CareerVideoHelper (jQueryObject) {
       this._videoObj = jQueryObject;
     }
@@ -12,7 +13,7 @@
     CareerVideoHelper.prototype = {
       constructor: CareerVideoHelper
     };
-
+    //*
 
     function classHardReset(jqObj){
       jqObj.removeClass('show-video');
@@ -178,7 +179,7 @@
             })($videoObj.find('.transcript'));
             
             var _this = this;
-            // TODO: add youtube Integration here
+            
             vidObjDlogCol[videoCode] = $(this.templateHelper.buildModalDialog({
               dialogTitle: "",
               dialogID: videoCode,
