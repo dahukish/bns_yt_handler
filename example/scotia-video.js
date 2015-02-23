@@ -5,7 +5,14 @@
 (function($, window){
     'use strict';
 
+    // setup an instance of QuickCache for use withing this scope -SH
     var _quickCache = new QuickCache();
+
+    // config to store out paths etc -SH
+    var _config = {
+      transcript_path: '../transcripts',
+      transcript_ext: '.html'
+    };
 
     function parseVideoHrefSrc(hrefUrl) {
       var index = hrefUrl.indexOf('watch?v=');
@@ -82,10 +89,75 @@
       jqObj.live('click', (onClick && (typeof onClick === 'function')? onClick : function(){}) );
     }
 
-    function buildDialog(videoCode, templateHelper, contentModelObj) { // TODO: This sucks and needs to be refactored -SH
+    function loadTranscripts(transPaths, callback, fallback) {
       
-      return _quickCache.getItem(videoCode, function(){
-            var $videoDialog = $(templateHelper.buildModalDialog({
+      var deferreds = [];
+
+      for (var transPath in transPaths) {
+          deferreds.push($.get(transPaths[transPath]));
+      }
+
+      $.when.apply($, deferreds)
+      .done(callback)
+      .fail(fallback);
+
+    }
+
+    function applyTranscriptData(dialogObj, linkDataObj, transOpts) {
+      
+      if(!('vidCode' in transOpts)) return false;
+
+      var transcripts = linkDataObj.transcripts.split(',');
+      var transPaths = [];
+      for (var transCode in transcripts) {
+          var trans = transcripts[transCode];
+          if(('transcript-'+trans) in linkDataObj) {
+            // TODO: Allow overides from data obj -SH
+          } else {
+            
+            var transObj = {};
+            transObj.langCode = trans;
+            var langFull = '';
+            
+            // set some default language codes
+            switch(trans){
+              case 'en':
+                langFull = 'English';
+              break;
+              case 'fr':
+                langFull = 'French';
+              break;
+              case 'es':
+                langFull = 'Spanish';
+              break;
+            }
+
+            transObj.langFull = langFull;
+            var href = _config.transcript_path+'/'+transOpts.vidCode+'_'+trans+_config.transcript_ext;
+            transPaths.push(href);
+            transObj.href = href;
+          }
+      }
+        
+      if(transPaths.length) {
+        loadTranscripts(transPaths, 
+        function(data) {
+          // transcriptsList: transListObj
+          console.log('success: ', arguments);
+          console.log(dialogObj);
+        }, 
+        function(err) {
+          console.log('error: ',err);
+        });
+      }
+
+
+
+    }
+
+    function buildDialog(videoCode, linkDataObj, templateHelper, contentModelObj) { // TODO: This sucks and needs to be refactored -SH
+      
+      var dialogObj = {
                 dialogTitle: "",
                 dialogID: videoCode,
                 iFrameObj: {
@@ -98,11 +170,19 @@
                       body: contentModelObj.getItemPart(videoCode, 'description', '')
                 },
                 duration: contentModelObj.getItemPart(videoCode, 'duration', '')
-              }))
+              };
+
+      return _quickCache.getItem(videoCode, function(){
+            var $videoDialog = $(templateHelper.buildModalDialog(dialogObj))
             .attr('id', videoCode)
             .css('display', 'none');
 
             //TODO: possibly append this item to something else at this point. Currently no need. -SH
+
+            // see if we have any transcript data
+            if ('transcripts' in linkDataObj) {
+              applyTranscriptData(dialogObj, linkDataObj, {vidCode: videoCode, attachEle: $videoDialog});
+            }
 
             return $videoDialog;  
           });
@@ -123,10 +203,9 @@
         var clickEvent = function(e) {
               e.preventDefault();
             var $videoLink = $(this);
-            var $videoDialog = buildDialog(parseVideoHrefSrc($(this).attr('href')), scotiaTemplate, contentModelObj); 
+            var $videoDialog = buildDialog(parseVideoHrefSrc($(this).attr('href')), $(this).data(), scotiaTemplate, contentModelObj); 
               
               var onDialogOpen = function() {
-                      console.log('open');
                       var $videoOverlay = $(scotiaTemplate.buildModalOverlay());
                       $videoOverlay.on('click', closeDialogOverlay());
                       openDialogOverlay($videoOverlay);
@@ -134,7 +213,6 @@
               };
 
               var onDialogClose = function() { 
-                      console.log('close');
                       closeDialogOverlay();
                       $(this).remove();
                       
@@ -161,7 +239,6 @@
           $scotia_videos.scotiaVideo({contentModelObj: youTubeVideoList});
         });
 
-        // $scotia_videos.scotiaVideo();
     });
 
 })(jQuery, window);
