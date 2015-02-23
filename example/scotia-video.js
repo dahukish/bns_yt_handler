@@ -25,6 +25,35 @@
       return tempKeyList;
     }
 
+    function classHardReset(jqObj){
+      jqObj.removeClass('show-video');
+      jqObj.removeClass('show-transcript-en');
+      jqObj.removeClass('show-transcript-fr');
+      jqObj.removeClass('show-transcript-es');
+      jqObj.removeClass('show-transcript-cn');
+    }
+
+    function showCurrentDialogSection(jqObj, prntObj) {
+      var viewDataObj = (function(viewData){
+        var match = /show-transcript-(\w{2})/i.exec(viewData);
+        if (match) {
+          return {
+            selector: '.youtube-overlay',
+            class: match[0]
+          };
+        } 
+
+        return {
+          selector: '.youtube-overlay',
+          class: 'show-video'
+        };
+      })((jqObj && jqObj.data('view')) || null);
+
+      //nuke all the styles
+      classHardReset(prntObj.find(viewDataObj.selector));
+      prntObj.find(viewDataObj.selector).addClass(viewDataObj.class);
+    }
+
     function closeDialogFactory (prntObj) {
       return function(e) {
         e.preventDefault();
@@ -48,7 +77,7 @@
                     .find('#main_video_overlay')
                     .show()
                     .on('click', closeDialogFactory($vidObj));
-                    // showCurrentDialogSection(jqClickObj, $vidObj);
+                    showCurrentDialogSection(jqClickObj, $vidObj);
                     // initClickHandler(hrefSelector, $vidObj, templateHelper);
                   },
                   close: function() { 
