@@ -77,12 +77,13 @@
                                     href: '../custom/css/player-theme.css'
                                   }];
 
-              loaderFiles.js  = [{
-                                  src: '../core/javascript/swfobject/swfobject.js' 
-                                },
-                                {
-                                  src: '../core/javascript/jquery.player.min.js'
-                                },
+              loaderFiles.js  = [
+                                // {
+                                //   src: '../core/javascript/swfobject/swfobject.js' 
+                                // },
+                                // {
+                                //   src: '../core/javascript/jquery.player.min.js'
+                                // },
                                 {
                                   src: 'scotia-video-util.js'
                                 },
