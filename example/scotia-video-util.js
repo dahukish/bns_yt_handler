@@ -5,6 +5,25 @@
 (function(window, $){
     'use strict';
     
+    function QuickCache(){}
+
+    QuickCache.prototype = {
+      constructor: QuickCache,
+      _items: [],
+      getItem: function(key, fallback){
+        
+        if(this._items && this._items[key]) return this._items[key];
+
+        if(fallback && typeof fallback === 'function') {
+          var retVal = fallback();
+          this._items[key] = retVal;
+          return retVal;
+        }
+        
+        return false; 
+      }
+    };
+
     function YouTubeVideoInfoCollection (videoItemsArray) {
       this.videoItems = videoItemsArray || [];
       this.cachedList = {};
@@ -386,6 +405,7 @@
           // window.YouTubeVideoInfoCollection = YouTubeVideoInfoCollection;
           window.ScotiaVideoTemplate = ScotiaVideoTemplate;
           window.processVideoItem = processVideoItem;
+          window.QuickCache = QuickCache;
       }
 
 })(window, jQuery);

@@ -5,6 +5,8 @@
 (function($, window){
     'use strict';
 
+    var _quickCache = new QuickCache();
+
     function parseVideoHrefSrc(hrefUrl) {
       var index = hrefUrl.indexOf('watch?v=');
       var indexShift = 8;
@@ -25,81 +27,85 @@
       return tempKeyList;
     }
 
-    function closeDialogFactory (prntObj) {
-      return function(e) {
-        e.preventDefault();
-        $(prntObj).find('.youtube-overlay').removeClass('show-video');
-        $('#main_video_overlay').remove();
-        $(prntObj).dialog('close');  
-      };
+    function classHardReset($jqObj){
+      $jqObj.removeClass('show-video');
+      $jqObj.removeClass('show-transcript-en');
+      $jqObj.removeClass('show-transcript-fr');
+      $jqObj.removeClass('show-transcript-es');
+      $jqObj.removeClass('show-transcript-cn');
     }
 
-    function dialogObjFactory (jqClickObj, templateHelper, contentModelObj, dialogOpts) {
+    function showCurrentDialogSection($jqObj, $prntObj) {
+      var viewDataObj = (function(viewData){
+        var match = /show-transcript-(\w{2})/i.exec(viewData);
+        if (match) {
+          return {
+            selector: '.youtube-overlay',
+            class: match[0]
+          };
+        } 
+
+        return {
+          selector: '.youtube-overlay',
+          class: 'show-video'
+        };
+      })(($jqObj && $jqObj.data('view')) || null);
+
+      //nuke all the styles
+      classHardReset($prntObj.find(viewDataObj.selector));
+      $prntObj.find(viewDataObj.selector).addClass(viewDataObj.class);
+    }
+
+    function openDialogOverlay($htmlOverlay) {
+      $('body').append($htmlOverlay)
+      .find('#main_video_overlay')
+      .show();
+    }
+
+    function closeDialogOverlay() {
+        $('#main_video_overlay').remove();
+    }
+
+    function dialogObjFactory(onOpen, onClose, dialogOpts) {
       
       var opts = dialogOpts || {};
       return {
                   resizable: opts.resizable || false,
                   modal: opts.modal || true,
                   width: opts.width || 980,
-                  open: function() {
-                    console.log('open');
-                    var $vidObj = $(this);
-                    $('body').append(templateHelper.buildModalOverlay())
-                    .find('#main_video_overlay')
-                    .show()
-                    .on('click', closeDialogFactory($vidObj));
-                    // showCurrentDialogSection(jqClickObj, $vidObj);
-                    // initClickHandler(hrefSelector, $vidObj, templateHelper);
-                  },
-                  close: function() { 
-                    console.log('close');
-                    $('#main_video_overlay').remove();
-                    $(this).remove();
-                    // kill the old and remake anew
-                    $('body').append(this);
-                    initDialog(jqClickObj, templateHelper, contentModelObj)
-                  }
+                  open: (onOpen && (typeof onOpen === 'function')? onOpen : function(){}),
+                  close: (onClose && (typeof onClose === 'function')? onClose : function(){})
             };
     }
 
-    function initClick(jqObj, dialogObj, templateHelper, contentModelObj) {
-      jqObj.live('click',function(e) {
-                dialogObj.dialog(dialogObjFactory(jqObj, templateHelper, contentModelObj, {}));
-                return false;
-                // e.preventDefault();
-                // dialogObj.dialog('open');
-      });
+    function initClick(jqObj, onClick, dialogObj) {
+      jqObj.live('click', (onClick && (typeof onClick === 'function')? onClick : function(){}) );
     }
 
-    function buildDialog(jqObj, templateHelper, contentModelObj) {
+    function buildDialog(videoCode, templateHelper, contentModelObj) { // TODO: This sucks and needs to be refactored -SH
       
-      var videoCode = parseVideoHrefSrc(jqObj.attr('href'));
+      return _quickCache.getItem(videoCode, function(){
+            var $videoDialog = $(templateHelper.buildModalDialog({
+                dialogTitle: "",
+                dialogID: videoCode,
+                iFrameObj: {
+                  width: 640,
+                  height: 385,
+                  src: 'http://www.youtube.com/embed/'+videoCode
+                },
+                copy: {
+                      title: contentModelObj.getItemPart(videoCode, 'title', ''),
+                      body: contentModelObj.getItemPart(videoCode, 'description', '')
+                },
+                duration: contentModelObj.getItemPart(videoCode, 'duration', '')
+              }))
+            .attr('id', videoCode)
+            .css('display', 'none');
 
-      var $videoDialog = $(templateHelper.buildModalDialog({
-          dialogTitle: "",
-          dialogID: videoCode,
-          iFrameObj: {
-            width: 640,
-            height: 385,
-            src: 'http://www.youtube.com/embed/'+videoCode
-          },
-          copy: {
-                title: contentModelObj.getItemPart(videoCode, 'title', ''),
-                body: contentModelObj.getItemPart(videoCode, 'description', '')
-          },
-          duration: contentModelObj.getItemPart(videoCode, 'duration', '')
-        }))
-      .attr('id', videoCode)
-      .css('display', 'none');
+            //TODO: possibly append this item to something else at this point. Currently no need. -SH
 
-      $('body').append($videoDialog);
-
-      return $videoDialog;
-    }
-
-    function initDialog(jqObj, templateHelper, contentModelObj) {
-      var $videoDialog = buildDialog(jqObj, templateHelper, contentModelObj); 
-      initClick(jqObj, $videoDialog, templateHelper, contentModelObj);
+            return $videoDialog;  
+          });
     }
 
     $.fn.scotiaVideo = function(options) {
@@ -110,16 +116,39 @@
         
         var opts = $.extend(true, {}, defaults, options);
 
-        // setup template helper
         var contentModelObj = (opts.contentModelObj)? opts.contentModelObj : null;
 
-        //setup our template handler
         var scotiaTemplate = new ScotiaVideoTemplate();
-        // if we have items add the modal overlay markup to the body
-        // $('body').append(scotiaTemplate.buildModalOverlay());
 
+        var clickEvent = function(e) {
+              e.preventDefault();
+            var $videoLink = $(this);
+            var $videoDialog = buildDialog(parseVideoHrefSrc($(this).attr('href')), scotiaTemplate, contentModelObj); 
+              
+              var onDialogOpen = function() {
+                      console.log('open');
+                      var $videoOverlay = $(scotiaTemplate.buildModalOverlay());
+                      $videoOverlay.on('click', closeDialogOverlay());
+                      openDialogOverlay($videoOverlay);
+                      showCurrentDialogSection($videoLink, $videoDialog);
+              };
+
+              var onDialogClose = function() { 
+                      console.log('close');
+                      closeDialogOverlay();
+                      $(this).remove();
+                      
+                      // kill the old and remake anew
+                      initClick($videoLink, clickEvent);
+              };
+
+              $videoDialog.dialog(dialogObjFactory(onDialogOpen, onDialogClose, {}));
+
+              return false;
+        };
+        
         for (var sVideo = 0; sVideo < this.length; sVideo++) {   
-          initDialog($(this[sVideo]), scotiaTemplate, contentModelObj);    
+            initClick($(this[sVideo]), clickEvent);
         }
 
         return this;

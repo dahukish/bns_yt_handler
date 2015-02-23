@@ -1,4 +1,4 @@
-\/*!
+/*!
  * jQuery ScotiaVideo Plugin For Backwards compatibility
  * TODO
  */
