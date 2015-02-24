@@ -93,9 +93,9 @@
       
       var deferreds = [];
 
-      for (var transPath in transPaths) {
-          deferreds.push($.get(transPaths[transPath]));
-      }
+      for (var i = transPaths.length - 1; i >= 0; i--) {
+        deferreds.push($.get(transPaths[i].href));
+      };
 
       $.when.apply($, deferreds)
       .done(callback)
@@ -103,12 +103,11 @@
 
     }
 
-    function applyTranscriptData(dialogObj, linkDataObj, transOpts) {
+    function applyTranscriptData(dialogObj, linkDataObj, videoCode) {
       
-      if(!('vidCode' in transOpts)) return false;
-
       var transcripts = linkDataObj.transcripts.split(',');
-      var transPaths = [];
+      var transcriptsList = [];
+
       for (var transCode in transcripts) {
           var trans = transcripts[transCode];
           if(('transcript-'+trans) in linkDataObj) {
@@ -133,26 +132,34 @@
             }
 
             transObj.langFull = langFull;
-            var href = _config.transcript_path+'/'+transOpts.vidCode+'_'+trans+_config.transcript_ext;
-            transPaths.push(href);
-            transObj.href = href;
+            transObj.href = _config.transcript_path+'/'+videoCode+'_'+trans+_config.transcript_ext;;
+            transcriptsList.push(transObj);
+
           }
       }
-        
-      if(transPaths.length) {
-        loadTranscripts(transPaths, 
-        function(data) {
-          // transcriptsList: transListObj
-          console.log('success: ', arguments);
-          console.log(dialogObj);
-        }, 
-        function(err) {
-          console.log('error: ',err);
-        });
+
+      if(transcriptsList.length) {
+        dialogObj.transcriptsList = transcriptsList;
       }
+        
+    }
 
+    function _parseTrans(item){
+      return item[0];
+    }
 
+    function _parseTransClass(item){
+      var itemClass = $(item).attr('class');
+      return itemClass.replace(' ', '.');
+    }
 
+    function _parseTransHtml(item){
+      return $(item).html();
+    }
+
+    function applyTransHtml(item, $parentObj) {
+      var transItem = _parseTrans(item);
+      $parentObj.find('.career-video-transcript .'+_parseTransClass(transItem)).html(_parseTransHtml(transItem));
     }
 
     function buildDialog(videoCode, linkDataObj, templateHelper, contentModelObj) { // TODO: This sucks and needs to be refactored -SH
@@ -173,17 +180,37 @@
               };
 
       return _quickCache.getItem(videoCode, function(){
+            
+            // see if we have any transcript data
+            if ('transcripts' in linkDataObj) {
+              applyTranscriptData(dialogObj, linkDataObj, videoCode);
+            }
+            
             var $videoDialog = $(templateHelper.buildModalDialog(dialogObj))
             .attr('id', videoCode)
             .css('display', 'none');
 
             //TODO: possibly append this item to something else at this point. Currently no need. -SH
+            
+            if(dialogObj.transcriptsList) {
+              loadTranscripts(dialogObj.transcriptsList, 
+              function(success) {
+                
+                if(arguments[1] === 'success') { // this is a one dimentional array vs multi -sh
+                  applyTransHtml(arguments, $videoDialog);
+                  return;
+                }
+                
+                for (var i = arguments.length - 1; i >= 0; i--) {
+                  applyTransHtml(arguments[i], $videoDialog);
+                };
+                
+              }, 
+              function(err) {
+                console.log('error: ',err);
+              }); 
 
-            // see if we have any transcript data
-            if ('transcripts' in linkDataObj) {
-              applyTranscriptData(dialogObj, linkDataObj, {vidCode: videoCode, attachEle: $videoDialog});
             }
-
             return $videoDialog;  
           });
     }
@@ -228,6 +255,19 @@
         for (var sVideo = 0; sVideo < this.length; sVideo++) {   
             initClick($(this[sVideo]), clickEvent);
         }
+
+        var transClick = function(e){
+            e.preventDefault();
+            var $linkObj  = $(this);
+            var href = $linkObj.attr('href');
+            var $parentObj = $(this).parents('div[id='+href.substring(1)+']');
+            showCurrentDialogSection($linkObj, $parentObj);
+            return false;
+        };
+
+        // setup transcript clicks 
+        $('.transcripts a.youtube').live('click', transClick);
+        $('.career-video-transcript a.red-btn.youtube').live('click', transClick);
 
         return this;
     };
