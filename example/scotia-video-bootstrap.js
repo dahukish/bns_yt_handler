@@ -67,24 +67,19 @@
             var $youTubeLinks = $('div.video');
             var $ccVideoPopup = $('.credit-card-video-popup');
 
-            var loaderFiles = {};
+            var loaderFilesCSS = [];
+            var loaderFilesJS = [];
 
             if($scotiaVideos.length) {
-              loaderFiles.css  = [{
-                                    href: '../core/css/player-core.css'
-                                  },
-                                  {
-                                    href: '../custom/css/player-theme.css'
-                                  }];
+             // loaderFilesCSS  = [{
+             //                        href: '../core/css/player-core.css'
+             //                      },
+             //                      {
+             //                        href: '../custom/css/player-theme.css'
+             //                      }];
 
-              loaderFiles.js  = [
-                                // {
-                                //   src: '../core/javascript/swfobject/swfobject.js' 
-                                // },
-                                // {
-                                //   src: '../core/javascript/jquery.player.min.js'
-                                // },
-                                {
+              loaderFilesCSS  = [];
+              loaderFilesJS  = [{
                                   src: 'scotia-video-util.js'
                                 },
                                 {
@@ -102,8 +97,8 @@
                 };
               } 
 
-              loaderFiles.css = {};
-              loaderFiles.js = [{
+              loaderFilesCSS = [];
+              loaderFilesJS = [{
                                   src: 'scotia-video-util.js'
                                 },
                                 {
@@ -113,7 +108,10 @@
               loaderFiles = null;
             }
 
-            return loaderFiles;
+            return {
+              css: loaderFilesCSS,
+              js: loaderFilesJS
+            };
 
         })(); 
 
