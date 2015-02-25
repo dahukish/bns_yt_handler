@@ -202,10 +202,11 @@
         html += listObject.title+':';
 
         if(listObject.postTitle) html += listObject.postTitle;
-
+        
         for (var listItem in listObject.transcripts) {
+          
           var trans = listObject.transcripts[listItem];
-          html += '<a href="#'+listObject.href+'" class="youtube" data-view="show-transcript-'+trans.langCode+'">'+trans.langFull+'</a>';
+          html += '<a href="#'+listObject.href+'" class="youtube" data-view="show-transcript-'+trans.langCode+'" tabindex="-1">'+trans.langFull+'</a>';
 
         }
         html += '</'+listObject.prntTag+'>';
@@ -231,14 +232,14 @@
       buildModalDialog: function(contObj){
         var html = "";
         html += '<div id="'+contObj.dialogID+'" class="ui-dialog ui-widget ui-widget-content ui-corner-all" tabindex="-1" role="dialog" aria-labelledby="ui-dialog-title-meet_henri_video" style="display: none; z-index: 10000; outline: 0px;">';
-        html += '<div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">';
-        if(contObj.dialogTitle) {
-          html += '<span class="ui-dialog-title" id="ui-dialog-video-title">'+contObj.dialogTitle+'</span>';
-        }
-        html += '<a href="#" class="ui-dialog-titlebar-close ui-corner-all" role="button">';
-        html += '<span class="ui-icon ui-icon-closethick">Close dialog</span>';
-        html += '</a>';
-        html += '</div>';
+        // html += '<div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">';
+        // if(contObj.dialogTitle) {
+        //   html += '<span class="ui-dialog-title" id="ui-dialog-video-title">'+contObj.dialogTitle+'</span>';
+        // }
+        // html += '<a href="#" class="ui-dialog-titlebar-close ui-corner-all" role="button">';
+        // html += '<span class="ui-icon ui-icon-closethick">Close dialog</span>';
+        // html += '</a>';
+        // html += '</div>';
         // html += '<div id="'+contObj.dialogID+'" class="youtube-overlay ui-dialog-content ui-widget-content">';
         html += '<div class="youtube-overlay ui-dialog-content ui-widget-content">';
         html += '<img src="http://www.scotiabank.com/ca/common/icons/logo-scotiabank-lrg.png" alt="Scotiabank®">';
