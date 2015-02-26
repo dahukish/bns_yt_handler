@@ -5,6 +5,12 @@
     
     'use strict';
 
+    var _isMobileUserAgent = function(){
+      return /Mobile Safari|Android|webOS|iPhone|iPad|iPod|BlackBerry|BB10|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    };
+
+    /***************************************/
+
 
     function DynaLoader (scriptItems, jQueryInst, useCaching) {
       this.scriptItems = scriptItems || [];
@@ -57,6 +63,10 @@
       if(newElement) $('head')[0].appendChild(newElement);
 
     };
+
+
+    // turn off plugin for mobile
+    if(_isMobileUserAgent()) return;
 
     (function (Loader) {
         

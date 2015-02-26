@@ -61,6 +61,7 @@
       //nuke all the styles
       classHardReset($prntObj.find(viewDataObj.selector));
       $prntObj.find(viewDataObj.selector).addClass(viewDataObj.class);
+      focusTranscripts($prntObj, ['trans-panel']);
     }
 
     function openDialogOverlay($htmlOverlay) {
@@ -71,6 +72,11 @@
 
     function closeDialogOverlay() {
         $('#main_video_overlay').remove();
+    }
+
+    function _getDialogAsParent($jqObj) {
+      return $jqObj.parents('.ui-dialog.ui-widget.ui-widget-content.ui-corner-all.ui-draggable')
+              .find('.ui-dialog.ui-widget.ui-widget-content.ui-corner-all.ui-dialog-content');
     }
 
     function dialogObjFactory(onOpen, onClose, dialogOpts) {
@@ -144,16 +150,21 @@
         
     }
 
-    function _parseTrans(item){
+    function focusTranscripts($videoDialog, classAdd) {
+      var classAdditions = (classAdd && classAdd.length)? ('.'+classAdd.join(' ')) : "";
+      console.log($videoDialog.find('.transcripts'+classAdditions+' a.youtube:eq(0)').focus());
+    }
+
+    function _parseTrans(item) {
       return item[0];
     }
 
-    function _parseTransClass(item){
+    function _parseTransClass(item) {
       var itemClass = $(item).attr('class');
       return itemClass.replace(' ', '.');
     }
 
-    function _parseTransHtml(item){
+    function _parseTransHtml(item) {
       return $(item).html();
     }
 
@@ -268,6 +279,18 @@
         // setup transcript clicks 
         $('.transcripts a.youtube').live('click', transClick);
         $('.career-video-transcript a.red-btn.youtube').live('click', transClick);
+        $('.ui-dialog-titlebar-close.ui-corner-all').live('keydown', function(e){
+            e.preventDefault();
+            console.log(e);
+            switch(e.which){
+              case 13:
+                _getDialogAsParent($(this)).dialog('close');
+              break;
+            }
+            return false;
+        });
+
+
 
         return this;
     };
