@@ -2,7 +2,7 @@
  * jQuery ScotiaVideo Plugin
  * TODO
  */
-(function($, window){
+(function($, window, document){
     'use strict';
 
     // setup an instance of QuickCache for use withing this scope -SH
@@ -42,7 +42,7 @@
       $jqObj.removeClass('show-transcript-cn');
     }
 
-    function showCurrentDialogSection($jqObj, $prntObj) {
+    function showCurrentDialogSection($jqObj, $prntObj, callback) {
       var viewDataObj = (function(viewData){
         var match = /show-transcript-(\w{2})/i.exec(viewData);
         if (match) {
@@ -61,7 +61,7 @@
       //nuke all the styles
       classHardReset($prntObj.find(viewDataObj.selector));
       $prntObj.find(viewDataObj.selector).addClass(viewDataObj.class);
-      focusTranscripts($prntObj, ['trans-panel']);
+      if(callback && (typeof callback === 'function')) callback();
     }
 
     function openDialogOverlay($htmlOverlay) {
@@ -150,7 +150,12 @@
         
     }
 
-    function focusTranscripts($videoDialog, classAdd) {
+    function _getTransViewState($jqDialog){
+      var $ytOverlay = $jqDialog.find('.youtube-overlay');
+      console.log($ytOverlay.attr('class').indexOf('show-'));
+    }
+
+    function _focusTranscripts($videoDialog, classAdd) {
       var classAdditions = (classAdd && classAdd.length)? ('.'+classAdd.join(' ')) : "";
       console.log($videoDialog.find('.transcripts'+classAdditions+' a.youtube:eq(0)').focus());
     }
@@ -247,7 +252,9 @@
                       var $videoOverlay = $(scotiaTemplate.buildModalOverlay());
                       $videoOverlay.on('click', closeDialogOverlay());
                       openDialogOverlay($videoOverlay);
-                      showCurrentDialogSection($videoLink, $videoDialog);
+                      showCurrentDialogSection($videoLink, $videoDialog, function(){
+                        _focusTranscripts($videoDialog);
+                      });
               };
 
               var onDialogClose = function() { 
@@ -272,7 +279,9 @@
             var $linkObj  = $(this);
             var href = $linkObj.attr('href');
             var $parentObj = $(this).parents('div[id='+href.substring(1)+']');
-            showCurrentDialogSection($linkObj, $parentObj);
+            showCurrentDialogSection($linkObj, $parentObj, function(){
+              _getTransViewState($parentObj)
+            });
             return false;
         };
 
@@ -290,18 +299,17 @@
             return false;
         });
 
-
-
         return this;
     };
 
     // start
     $(function() {
-        var $scotia_videos = $(".scotia-video");
-        youTubeVideoListFactory(parseScotiaVideoKeys($scotia_videos), function(youTubeVideoList){
-          $scotia_videos.scotiaVideo({contentModelObj: youTubeVideoList});
+        $(document).ready(function(){
+          var $scotia_videos = $(".scotia-video");
+          youTubeVideoListFactory(parseScotiaVideoKeys($scotia_videos), function(youTubeVideoList){
+            $scotia_videos.scotiaVideo({contentModelObj: youTubeVideoList});
+          });
         });
-
     });
 
-})(jQuery, window);
+})(jQuery, window, document);
