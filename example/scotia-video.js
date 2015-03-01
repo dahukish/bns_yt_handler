@@ -152,7 +152,15 @@
 
     function _getTransViewState($jqDialog){
       var $ytOverlay = $jqDialog.find('.youtube-overlay');
-      console.log($ytOverlay.attr('class').indexOf('show-'));
+      var classAttr = $ytOverlay.attr('class');
+      var ytIndex = classAttr.indexOf('show-');
+      
+      if( ytIndex >= 0) {
+        console.log(classAttr.substring(ytIndex, classAttr.length));
+        return classAttr.substring(ytIndex, classAttr.length);
+      }
+
+      return false;
     }
 
     function _focusTranscripts($videoDialog, classAdd) {
@@ -280,7 +288,11 @@
             var href = $linkObj.attr('href');
             var $parentObj = $(this).parents('div[id='+href.substring(1)+']');
             showCurrentDialogSection($linkObj, $parentObj, function(){
-              _getTransViewState($parentObj)
+              if(_getTransViewState($parentObj) === 'show-video') {
+                _focusTranscripts($parentObj);
+              } else {
+                _focusTranscripts($parentObj, ['trans-panel']);
+              }
             });
             return false;
         };
