@@ -1,7 +1,7 @@
 /*!
  * bootstrap for jQuery Scotia Video Plugin
  */
-(function($, window, document, undefined){
+(function($, window, document, _config, undefined){
     
     'use strict';
 
@@ -90,10 +90,10 @@
 
               loaderFilesCSS  = [];
               loaderFilesJS  = [{
-                                  src: 'scotia-video-util.js'
+                                  src: _config.js_path+'scotia-video-util.js'
                                 },
                                 {
-                                  src: 'scotia-video.js'
+                                  src: _config.js_path+'scotia-video.js'
                                 }];
 
             } else if($careerVideos.length || $youTubeLinks.length || $ccVideoPopup.length) {
@@ -109,10 +109,10 @@
 
               loaderFilesCSS = [];
               loaderFilesJS = [{
-                                  src: 'scotia-video-util.js'
+                                  src: _config.js_path+'scotia-video-util.js'
                                 },
                                 {
-                                  src: 'scotia-video-backcomp.js'
+                                  src: _config.js_path+'scotia-video-backcomp.js'
                                 }];
             } else {
               loaderFiles = null;
@@ -138,4 +138,4 @@
     })(DynaLoader);
 
 
-})(jQuery, window, document);
+})(jQuery, window, document, videoConfig);

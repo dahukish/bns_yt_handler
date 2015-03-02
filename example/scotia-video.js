@@ -2,17 +2,11 @@
  * jQuery ScotiaVideo Plugin
  * TODO
  */
-(function($, window, document){
+(function($, window, document, _config){
     'use strict';
 
     // setup an instance of QuickCache for use withing this scope -SH
     var _quickCache = new QuickCache();
-
-    // config to store out paths etc -SH
-    var _config = {
-      transcript_path: '../transcripts',
-      transcript_ext: '.html'
-    };
 
     function parseVideoHrefSrc(hrefUrl) {
       var index = hrefUrl.indexOf('watch?v=');
@@ -324,4 +318,4 @@
         });
     });
 
-})(jQuery, window, document);
+})(jQuery, window, document, videoConfig);
