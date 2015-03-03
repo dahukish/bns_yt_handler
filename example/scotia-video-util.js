@@ -285,16 +285,18 @@
         
         if(contObj.transcriptsList) {
           html += '<div class="career-video-transcript">';
-          html += this.buildTranscripts({
-            prntTag: 'span',
-            classAdd: ['trans-panel'],
-            title: 'Video Transcript',
-            href: contObj.dialogID,
-            transcripts: contObj.transcriptsList
-          }); 
+          // html += this.buildTranscripts({
+          //   prntTag: 'span',
+          //   classAdd: ['trans-panel'],
+          //   title: 'Video Transcript',
+          //   href: contObj.dialogID,
+          //   transcripts: contObj.transcriptsList
+          // });
+          
+          html += '<a class="copy-box-link" href="#'+contObj.dialogID+'-copy-box"></a>';
           
           for (var trans in contObj.transcriptsList) {
-            html += '<div class="copy '+contObj.transcriptsList[trans].langCode+'">';
+            html += '<div id="'+contObj.dialogID+'-copy-box" class="copy '+contObj.transcriptsList[trans].langCode+'">';
             if(trans.body) html += trans.body;
             html += '</div>';
           }

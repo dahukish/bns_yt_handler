@@ -158,9 +158,9 @@
       return false;
     }
 
-    function _focusTranscripts($videoDialog, classAdd) {
+    function _focusTranscripts($videoDialog, classAdd, markupOverride) {
       var classAdditions = (classAdd && classAdd.length)? ('.'+classAdd.join(' ')) : "";
-      console.log($videoDialog.find('.transcripts'+classAdditions+' a.youtube:eq(0)').focus());
+      console.log($videoDialog.find('.transcripts'+classAdditions+' '+(markupOverride ? markupOverride : 'a.youtube:eq(0)')).focus());
     }
 
     function _parseTrans(item) {
@@ -189,7 +189,7 @@
                 iFrameObj: {
                   width: 640,
                   height: 385,
-                  src: 'http://www.youtube.com/embed/'+videoCode
+                  src: '//www.youtube.com/embed/'+videoCode
                 },
                 copy: {
                       title: contentModelObj.getItemPart(videoCode, 'title', ''),
@@ -286,7 +286,9 @@
               if(_getTransViewState($parentObj) === 'show-video') {
                 _focusTranscripts($parentObj);
               } else {
-                _focusTranscripts($parentObj, ['trans-panel']);
+                // _focusTranscripts($parentObj, ['trans-panel']);
+                _focusTranscripts($parentObj, [], 'a.copy-box-link');
+                // TODO: MAke this focus on content-copy-box you can also use the first transcript link to add focus
               }
             });
             return false;

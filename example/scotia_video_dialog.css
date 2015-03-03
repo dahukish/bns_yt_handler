@@ -45,6 +45,7 @@
     text-indent: -999em;
 }
 
+.scotia-video-dialog .ui-dialog-titlebar-close:hover,
 .scotia-video-dialog .ui-dialog-titlebar-close:focus {
     background: url('/rd/gfx/btn-overlay-close.png') no-repeat 0px 0px;
 }
@@ -54,6 +55,7 @@
     top: 0;
 }
 
+.scotia-video-dialog .ui-dialog-titlebar-close:hover, .ui-dialog-titlebar-close:hover,
 .scotia-video-dialog .ui-dialog-titlebar-close:hover, .ui-dialog-titlebar-close:focus {
      background: url('/rd/gfx/btn-overlay-close.png') no-repeat center center;
 }

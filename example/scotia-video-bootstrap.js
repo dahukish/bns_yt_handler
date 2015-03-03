@@ -1,9 +1,13 @@
 /*!
  * bootstrap for jQuery Scotia Video Plugin
  */
-(function($, window, document, _config, undefined){
+(function($, window, document, undefined){
     
     'use strict';
+
+    var _configPath = (window.location.host.indexOf('localhost') >= 0)? './bns_config.js': "/ca/common/js/bns_config.js";
+
+    console.log(_configPath);
 
     var _isMobileUserAgent = function(){
       return /Mobile Safari|Android|webOS|iPhone|iPad|iPod|BlackBerry|BB10|IEMobile|Opera Mini/i.test(navigator.userAgent);
@@ -68,73 +72,76 @@
     // turn off plugin for mobile
     if(_isMobileUserAgent()) return;
 
-    (function (Loader) {
-        
-        var loadFiles = (function(){
+    $.getScript(_configPath, function(data, textStatus, jqxhr){ // dynamically load config file
+
+          (function (Loader, _config) {
             
-            var $scotiaVideos = $('.scotia-video');
-            var $careerVideos = $('.career-video');
-            var $youTubeLinks = $('div.video');
-            var $ccVideoPopup = $('.credit-card-video-popup');
+            var loadFiles = (function(){
+                
+                var $scotiaVideos = $('.scotia-video');
+                var $careerVideos = $('.career-video');
+                var $youTubeLinks = $('div.video');
+                var $ccVideoPopup = $('.credit-card-video-popup');
 
-            var loaderFilesCSS = [];
-            var loaderFilesJS = [];
+                var loaderFilesCSS = [];
+                var loaderFilesJS = [];
 
-            if($scotiaVideos.length) {
-             loaderFilesCSS  = [{
-                                    href: _config.css_path+'scotia_video_dialog.css'
-                                }];
+                if($scotiaVideos.length) {
+                 loaderFilesCSS  = [{
+                                        href: _config.css_path+'scotia_video_dialog.css'
+                                    }];
 
-              loaderFilesJS  = [{
-                                  src: _config.js_path+'scotia-video-util.js'
-                                },
-                                {
-                                  src: _config.js_path+'scotia-video.js'
-                                }];
+                  loaderFilesJS  = [{
+                                      src: _config.js_path+'scotia-video-util.js'
+                                    },
+                                    {
+                                      src: _config.js_path+'scotia-video.js'
+                                    }];
 
-            } else if($careerVideos.length || $youTubeLinks.length || $ccVideoPopup.length) {
-              
-              // store these is a global variable
-              if(! window.videoLengthObj) {
-                window.videoLengthObj = {
-                  "career-video": $careerVideos.length, // career vids
-                  "video": $youTubeLinks.length, // youTube vids
-                  "credit-card-video-popup": $ccVideoPopup.length // credit card vids
+                } else if($careerVideos.length || $youTubeLinks.length || $ccVideoPopup.length) {
+                  
+                  // store these is a global variable
+                  if(! window.videoLengthObj) {
+                    window.videoLengthObj = {
+                      "career-video": $careerVideos.length, // career vids
+                      "video": $youTubeLinks.length, // youTube vids
+                      "credit-card-video-popup": $ccVideoPopup.length // credit card vids
+                    };
+                  } 
+
+                  loaderFilesCSS  = [{
+                                        href: _config.css_path+'scotia_video_dialog.css'
+                                    }];
+
+                  loaderFilesJS = [{
+                                      src: _config.js_path+'scotia-video-util.js'
+                                    },
+                                    {
+                                      src: _config.js_path+'scotia-video-backcomp.js'
+                                    }];
+                } else {
+                  loaderFiles = null;
+                }
+
+                return {
+                  css: loaderFilesCSS,
+                  js: loaderFilesJS
                 };
-              } 
 
-              loaderFilesCSS  = [{
-                                    href: _config.css_path+'scotia_video_dialog.css'
-                                }];
+            })(); 
 
-              loaderFilesJS = [{
-                                  src: _config.js_path+'scotia-video-util.js'
-                                },
-                                {
-                                  src: _config.js_path+'scotia-video-backcomp.js'
-                                }];
-            } else {
-              loaderFiles = null;
+            if(loadFiles) {
+              for (var cssFile in loadFiles.css) {
+                  dynamicLoadCSS(loadFiles.css[cssFile]);
+              }
+              
+              var jsLoader = new Loader(loadFiles.js, $);
+              jsLoader.loadScripts();
+
             }
 
-            return {
-              css: loaderFilesCSS,
-              js: loaderFilesJS
-            };
+        })(DynaLoader, videoConfig);
 
-        })(); 
-
-        if(loadFiles) {
-          for (var cssFile in loadFiles.css) {
-              dynamicLoadCSS(loadFiles.css[cssFile]);
-          }
-          
-          var jsLoader = new Loader(loadFiles.js, $);
-          jsLoader.loadScripts();
-
-        }
-
-    })(DynaLoader);
-
-
-})(jQuery, window, document, videoConfig);
+    });
+    
+})(jQuery, window, document);
