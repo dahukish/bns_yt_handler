@@ -81,14 +81,10 @@
             var loaderFilesJS = [];
 
             if($scotiaVideos.length) {
-             // loaderFilesCSS  = [{
-             //                        href: '../core/css/player-core.css'
-             //                      },
-             //                      {
-             //                        href: '../custom/css/player-theme.css'
-             //                      }];
+             loaderFilesCSS  = [{
+                                    href: _config.css_path+'scotia_video_dialog.css'
+                                }];
 
-              loaderFilesCSS  = [];
               loaderFilesJS  = [{
                                   src: _config.js_path+'scotia-video-util.js'
                                 },
@@ -107,7 +103,10 @@
                 };
               } 
 
-              loaderFilesCSS = [];
+              loaderFilesCSS  = [{
+                                    href: _config.css_path+'scotia_video_dialog.css'
+                                }];
+
               loaderFilesJS = [{
                                   src: _config.js_path+'scotia-video-util.js'
                                 },
