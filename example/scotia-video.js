@@ -80,6 +80,7 @@
                   resizable: opts.resizable || false,
                   modal: opts.modal || true,
                   width: opts.width || 980,
+                  dialogClass: 'scotia-video-dialog',
                   open: (onOpen && (typeof onOpen === 'function')? onOpen : function(){}),
                   close: (onClose && (typeof onClose === 'function')? onClose : function(){})
             };
