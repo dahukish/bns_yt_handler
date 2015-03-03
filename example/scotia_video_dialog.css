@@ -16,7 +16,8 @@
     box-shadow: none;
 }
 .scotia-video-dialog .ui-dialog-titlebar {
-    background: transparent;
+    background: #f1f1f1;
+    height: 38px;
 }
 .scotia-video-dialog .ui-dialog-titlebar .ui-dialog-title {
     line-height: 55px;
@@ -35,21 +36,26 @@
     z-index: 30;
     display; block;
     overflow:hidden;
-    background: url('./example_assets/youtube-overlay-close.png') no-repeat center center;
+    background: url('/rd/gfx/btn-overlay-close.png') no-repeat 0px 0px;
     width: 30px;
     height: 30px;
-    right: 0;
-    top: 20px;
+    right: 5px;
+    top: 5px;
     margin: 0;
     text-indent: -999em;
 }
+
+.scotia-video-dialog .ui-dialog-titlebar-close:focus {
+    background: url('/rd/gfx/btn-overlay-close.png') no-repeat 0px 0px;
+}
+
 #ie7 .scotia-video-dialog .ui-dialog-titlebar-close {
     margin-top:0;
     top: 0;
 }
 
 .scotia-video-dialog .ui-dialog-titlebar-close:hover, .ui-dialog-titlebar-close:focus {
-     background: url('./example_assets/youtube-overlay-close.png') no-repeat center center;
+     background: url('/rd/gfx/btn-overlay-close.png') no-repeat center center;
 }
 
 /*  overlay styles  ------------------------------------------------------------ */
@@ -177,6 +183,11 @@
     font-weight:bold;
     margin-top: 17px;
 }
+
+.scotia-video-dialog .youtube-overlay .career-video-transcript .red-btn:focus {
+    top: auto;
+}
+
 .scotia-video-dialog .youtube-overlay .career-video-transcript .addthis_button {
     position: absolute;
     bottom: -30px;
