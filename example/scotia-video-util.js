@@ -206,7 +206,7 @@
         var tabIndex = 1;
         for (var listItem in listObject.transcripts) {
           var trans = listObject.transcripts[listItem];
-          html += '<a href="#'+listObject.href+'" class="youtube" data-view="show-transcript-'+trans.langCode+'" tabindex="'+tabIndex+'">'+trans.langFull+'</a>';
+          html += '<a href="#'+listObject.dialogID+'-trans-box" class="youtube" data-parent="'+listObject.dialogID+'" data-view="show-transcript-'+trans.langCode+'" tabindex="'+tabIndex+'">'+trans.langFull+'</a>';
           tabIndex++;
         }
         html += '</'+listObject.prntTag+'>';
@@ -232,15 +232,6 @@
       buildModalDialog: function(contObj){
         var html = "";
         html += '<div id="'+contObj.dialogID+'" class="ui-dialog ui-widget ui-widget-content ui-corner-all" tabindex="-1" role="dialog" aria-labelledby="ui-dialog-title-'+contObj.dialogID+'" style="display: none; z-index: 10000; outline: 0px;">';
-        // html += '<div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">';
-        // if(contObj.dialogTitle) {
-        //   html += '<span class="ui-dialog-title" id="ui-dialog-title-'+contObj.dialogID+'">'+contObj.dialogTitle+'</span>';
-        // }
-        // html += '<a href="#" class="ui-dialog-titlebar-close ui-corner-all" role="button">';
-        // html += '<span class="ui-icon ui-icon-closethick">Close dialog</span>';
-        // html += '</a>';
-        // html += '</div>';
-        // html += '<div id="'+contObj.dialogID+'" class="youtube-overlay ui-dialog-content ui-widget-content">';
         html += '<div class="youtube-overlay ui-dialog-content ui-widget-content">';
         html += '<img src="http://www.scotiabank.com/ca/common/icons/logo-scotiabank-lrg.png" alt="Scotiabank®">';
         
@@ -265,18 +256,13 @@
               
           html += '</div>'; // copy
         }
-        /*<div class="job-centre"> DO WE NEED JOB CENTRE? -SH
-          <p><b>Featured Job:</b> <a href="#">Personal Banking Officer</a></p>
-          <a href="http://jobs.scotiabank.com/careers/retail-banking-jobs" role="button" class="red-btn">Search Retail Banking Jobs</a> 
-        </div>*/
-        
         if(contObj.transcriptsList) {
           html += this.buildTranscripts({
             prntTag: 'div',
             preTitle: '<b>',
             title: 'View the transcript',
             postTitle: '</b><br>',
-            href: contObj.dialogID,
+            dialogID: contObj.dialogID,
             transcripts: contObj.transcriptsList
           }); 
         }
@@ -285,23 +271,14 @@
         
         if(contObj.transcriptsList) {
           html += '<div class="career-video-transcript">';
-          // html += this.buildTranscripts({
-          //   prntTag: 'span',
-          //   classAdd: ['trans-panel'],
-          //   title: 'Video Transcript',
-          //   href: contObj.dialogID,
-          //   transcripts: contObj.transcriptsList
-          // });
-          
-          html += '<a class="copy-box-link" href="#'+contObj.dialogID+'-copy-box"></a>';
-          
+         
           for (var trans in contObj.transcriptsList) {
-            html += '<div id="'+contObj.dialogID+'-copy-box" class="copy '+contObj.transcriptsList[trans].langCode+'">';
+            html += '<div class="copy '+contObj.transcriptsList[trans].langCode+'">';
             if(trans.body) html += trans.body;
             html += '</div>';
           }
           
-          html += '<a href="#'+contObj.dialogID+'" class="red-btn youtube" tabindex="'+(contObj.transcriptsList.length+1)+'">';
+          html += '<a href="#'+contObj.dialogID+'" class="red-btn youtube" data-parent="'+contObj.dialogID+'" tabindex="'+(contObj.transcriptsList.length+1)+'" tabindex="2">';
           html += 'Watch<span class="hidden"> the '+(contObj.copy ? contObj.copy.title : '')+'</span> Video';
           html += '</a>';
           

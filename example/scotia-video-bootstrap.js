@@ -7,8 +7,6 @@
 
     var _configPath = (window.location.host.indexOf('localhost') >= 0)? './bns_config.js': "/ca/common/js/bns_config.js";
 
-    console.log(_configPath);
-
     var _isMobileUserAgent = function(){
       return /Mobile Safari|Android|webOS|iPhone|iPad|iPod|BlackBerry|BB10|IEMobile|Opera Mini/i.test(navigator.userAgent);
     };

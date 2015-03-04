@@ -77,7 +77,7 @@
     font-weight: normal;
     margin-bottom: 10px;
 }
-.youtube-overlay .career-video,
+.scotia-video-dialog .youtube-overlay .career-video,
 .scotia-video-dialog .youtube-overlay .career-video-transcript {
     display: none;
     visibility: hidden;
@@ -85,10 +85,11 @@
 .scotia-video-dialog #ie8 .youtube-overlay .career-video-transcript {
     visibility: visible;
 }
-.youtube-overlay.show-video .career-video,
-.youtube-overlay.show-transcript-en .career-video-transcript,
-.youtube-overlay.show-transcript-fr .career-video-transcript,
-.youtube-overlay.show-transcript-es .career-video-transcript,
+
+.scotia-video-dialog .youtube-overlay.show-video .career-video,
+.scotia-video-dialog .youtube-overlay.show-transcript-en .career-video-transcript,
+.scotia-video-dialog .youtube-overlay.show-transcript-fr .career-video-transcript,
+.scotia-video-dialog .youtube-overlay.show-transcript-es .career-video-transcript,
 .scotia-video-dialog .youtube-overlay.show-transcript-cn .career-video-transcript {
     display: block;
     visibility: visible;
@@ -169,9 +170,20 @@
     overflow-y: auto;
     padding-right: 5px;
 }
-.youtube-overlay.show-transcript-en .career-video-transcript .copy.en,
-.youtube-overlay.show-transcript-fr .career-video-transcript .copy.fr,
-.youtube-overlay.show-transcript-es .career-video-transcript .copy.es,
+
+.scotia-video-dialog .youtube-overlay .career-video-transcript .copy .transcript-anchor-wrap {
+      display: block;
+      height: 255px;
+      width: 880px;
+      border: none;
+      padding: 1em;
+      overflow-y: auto;
+      margin: 10px 0px 0px 3px;
+}
+
+.scotia-video-dialog .youtube-overlay.show-transcript-en .career-video-transcript .copy.en,
+.scotia-video-dialog .youtube-overlay.show-transcript-fr .career-video-transcript .copy.fr,
+.scotia-video-dialog .youtube-overlay.show-transcript-es .career-video-transcript .copy.es,
 .scotia-video-dialog .youtube-overlay.show-transcript-cn .career-video-transcript .copy.cn {
     display: block;
 }

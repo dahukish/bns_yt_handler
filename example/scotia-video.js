@@ -151,7 +151,6 @@
       var ytIndex = classAttr.indexOf('show-');
       
       if( ytIndex >= 0) {
-        console.log(classAttr.substring(ytIndex, classAttr.length));
         return classAttr.substring(ytIndex, classAttr.length);
       }
 
@@ -160,7 +159,7 @@
 
     function _focusTranscripts($videoDialog, classAdd, markupOverride) {
       var classAdditions = (classAdd && classAdd.length)? ('.'+classAdd.join(' ')) : "";
-      console.log($videoDialog.find('.transcripts'+classAdditions+' '+(markupOverride ? markupOverride : 'a.youtube:eq(0)')).focus());
+      $videoDialog.find('.transcripts'+classAdditions+' '+(markupOverride ? markupOverride : 'a.youtube:eq(0)')).focus();
     }
 
     function _parseTrans(item) {
@@ -176,9 +175,12 @@
       return $(item).html();
     }
 
-    function applyTransHtml(item, $parentObj) {
+    function applyTransHtml(item, $parentObj, beforeHtml, afterHtml) {
       var transItem = _parseTrans(item);
-      $parentObj.find('.career-video-transcript .'+_parseTransClass(transItem)).html(_parseTransHtml(transItem));
+      var bHtml = beforeHtml ? beforeHtml : '';
+      var aHtml = afterHtml ? afterHtml : '';
+      var html = bHtml+_parseTransHtml(transItem)+aHtml;
+      $parentObj.find('.career-video-transcript .'+_parseTransClass(transItem)).html(html);
     }
 
     function buildDialog(videoCode, linkDataObj, templateHelper, contentModelObj) { // TODO: This sucks and needs to be refactored -SH
@@ -215,18 +217,21 @@
               loadTranscripts(dialogObj.transcriptsList, 
               function(success) {
                 
+                var beforeHtml = '<a name="'+dialogObj.dialogID+'-trans-box" tabindex="1" class="transcript-anchor-wrap">';
+                var afterHtml = '</a>';
+                
                 if(arguments[1] === 'success') { // this is a one dimentional array vs multi -sh
-                  applyTransHtml(arguments, $videoDialog);
+                  applyTransHtml(arguments, $videoDialog, beforeHtml, afterHtml);
                   return;
                 }
                 
                 for (var i = arguments.length - 1; i >= 0; i--) {
-                  applyTransHtml(arguments[i], $videoDialog);
+                  applyTransHtml(arguments[i], $videoDialog, beforeHtml, afterHtml);
                 };
                 
               }, 
               function(err) {
-                console.log('error: ',err);
+                // console.log('error: ',err);
               }); 
 
             }
@@ -266,6 +271,7 @@
                       
                       // kill the old and remake anew
                       initClick($videoLink, clickEvent);
+                      $videoLink.focus();
               };
 
               $videoDialog.dialog(dialogObjFactory(onDialogOpen, onDialogClose, {}));
@@ -278,20 +284,17 @@
         }
 
         var transClick = function(e){
-            e.preventDefault();
             var $linkObj  = $(this);
-            var href = $linkObj.attr('href');
-            var $parentObj = $(this).parents('div[id='+href.substring(1)+']');
+            var parentID = $linkObj.data('parent');
+            var $parentObj = $(this).parents('div[id='+parentID+']');
             showCurrentDialogSection($linkObj, $parentObj, function(){
               if(_getTransViewState($parentObj) === 'show-video') {
+                e.preventDefault();
                 _focusTranscripts($parentObj);
-              } else {
-                // _focusTranscripts($parentObj, ['trans-panel']);
-                _focusTranscripts($parentObj, [], 'a.copy-box-link');
-                // TODO: MAke this focus on content-copy-box you can also use the first transcript link to add focus
-              }
+                return false;
+              } 
             });
-            return false;
+            
         };
 
         // setup transcript clicks 
@@ -299,7 +302,6 @@
         $('.career-video-transcript a.red-btn.youtube').live('click', transClick);
         $('.ui-dialog-titlebar-close.ui-corner-all').live('keydown', function(e){
             e.preventDefault();
-            console.log(e);
             switch(e.which){
               case 13:
                 _getDialogAsParent($(this)).dialog('close');

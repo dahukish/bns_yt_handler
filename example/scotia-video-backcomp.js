@@ -272,7 +272,6 @@
       switch(selector) {
         case "career-video":
           $('iframe').each(function(index, ele){
-            console.log(index, ele);
             var match = /www\.youtube\.com\/embed\/(\w+)/i.exec($(ele).attr('src'));
             if(match) tempKeyList.push(match[1]);
           });
