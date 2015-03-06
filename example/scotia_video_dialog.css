@@ -55,9 +55,9 @@
     top: 0;
 }
 
-.scotia-video-dialog .ui-dialog-titlebar-close:hover, .ui-dialog-titlebar-close:hover,
-.scotia-video-dialog .ui-dialog-titlebar-close:hover, .ui-dialog-titlebar-close:focus {
-     background: url('/rd/gfx/btn-overlay-close.png') no-repeat center center;
+.scotia-video-dialog .ui-dialog-titlebar-close:hover, .scotia-video-dialog .ui-dialog-titlebar-close:hover,
+.scotia-video-dialog .ui-dialog-titlebar-close:hover, .scotia-video-dialog .ui-dialog-titlebar-close:focus {
+     background: url('/rd/gfx/btn-overlay-close.png') no-repeat 0px -30px;
 }
 
 /*  overlay styles  ------------------------------------------------------------ */
@@ -191,6 +191,7 @@
     position: absolute;
     bottom: -45px;
     left: 0;
+    top: initial;
     display: inline-block;
     padding: 0em 1em;
     font-size: 1.1em;
