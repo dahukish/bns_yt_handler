@@ -292,7 +292,15 @@
                 e.preventDefault();
                 _focusTranscripts($parentObj);
                 return false;
-              } 
+              } else {
+                // Firefox has issue focusing on elements that are not visible when focus is shifted -SH
+                if(/Firefox/i.test(navigator.userAgent)){
+                  setTimeout(function(){
+                    var eleName = $linkObj.attr('href').substring(1);
+                    $('a[name='+eleName+']').focus();  
+                  },500);
+                }
+              }
             });
             
         };
