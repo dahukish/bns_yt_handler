@@ -2,17 +2,11 @@
  * jQuery ScotiaVideo Plugin
  * TODO
  */
-(function($, window, document){
+(function($, window, document, _config){
     'use strict';
 
     // setup an instance of QuickCache for use withing this scope -SH
     var _quickCache = new QuickCache();
-
-    // config to store out paths etc -SH
-    var _config = {
-      transcript_path: '../transcripts',
-      transcript_ext: '.html'
-    };
 
     function parseVideoHrefSrc(hrefUrl) {
       var index = hrefUrl.indexOf('watch?v=');
@@ -48,19 +42,19 @@
         if (match) {
           return {
             selector: '.youtube-overlay',
-            class: match[0]
+            classAttr: match[0]
           };
         } 
 
         return {
           selector: '.youtube-overlay',
-          class: 'show-video'
+          classAttr: 'show-video'
         };
       })(($jqObj && $jqObj.data('view')) || null);
 
       //nuke all the styles
       classHardReset($prntObj.find(viewDataObj.selector));
-      $prntObj.find(viewDataObj.selector).addClass(viewDataObj.class);
+      $prntObj.find(viewDataObj.selector).addClass(viewDataObj.classAttr);
       if(callback && (typeof callback === 'function')) callback();
     }
 
@@ -86,6 +80,7 @@
                   resizable: opts.resizable || false,
                   modal: opts.modal || true,
                   width: opts.width || 980,
+                  dialogClass: 'scotia-video-dialog',
                   open: (onOpen && (typeof onOpen === 'function')? onOpen : function(){}),
                   close: (onClose && (typeof onClose === 'function')? onClose : function(){})
             };
@@ -156,16 +151,15 @@
       var ytIndex = classAttr.indexOf('show-');
       
       if( ytIndex >= 0) {
-        console.log(classAttr.substring(ytIndex, classAttr.length));
         return classAttr.substring(ytIndex, classAttr.length);
       }
 
       return false;
     }
 
-    function _focusTranscripts($videoDialog, classAdd) {
+    function _focusTranscripts($videoDialog, classAdd, markupOverride) {
       var classAdditions = (classAdd && classAdd.length)? ('.'+classAdd.join(' ')) : "";
-      console.log($videoDialog.find('.transcripts'+classAdditions+' a.youtube:eq(0)').focus());
+      $videoDialog.find('.transcripts'+classAdditions+' '+(markupOverride ? markupOverride : 'a.youtube:eq(0)')).focus();
     }
 
     function _parseTrans(item) {
@@ -181,9 +175,12 @@
       return $(item).html();
     }
 
-    function applyTransHtml(item, $parentObj) {
+    function applyTransHtml(item, $parentObj, beforeHtml, afterHtml) {
       var transItem = _parseTrans(item);
-      $parentObj.find('.career-video-transcript .'+_parseTransClass(transItem)).html(_parseTransHtml(transItem));
+      var bHtml = beforeHtml ? beforeHtml : '';
+      var aHtml = afterHtml ? afterHtml : '';
+      var html = bHtml+_parseTransHtml(transItem)+aHtml;
+      $parentObj.find('.career-video-transcript .'+_parseTransClass(transItem)).html(html);
     }
 
     function buildDialog(videoCode, linkDataObj, templateHelper, contentModelObj) { // TODO: This sucks and needs to be refactored -SH
@@ -194,7 +191,7 @@
                 iFrameObj: {
                   width: 640,
                   height: 385,
-                  src: 'http://www.youtube.com/embed/'+videoCode
+                  src: '//www.youtube.com/embed/'+videoCode
                 },
                 copy: {
                       title: contentModelObj.getItemPart(videoCode, 'title', ''),
@@ -220,18 +217,21 @@
               loadTranscripts(dialogObj.transcriptsList, 
               function(success) {
                 
+                var beforeHtml = '<a name="'+dialogObj.dialogID+'-trans-box" tabindex="1" class="transcript-anchor-wrap">';
+                var afterHtml = '</a>';
+                
                 if(arguments[1] === 'success') { // this is a one dimentional array vs multi -sh
-                  applyTransHtml(arguments, $videoDialog);
+                  applyTransHtml(arguments, $videoDialog, beforeHtml, afterHtml);
                   return;
                 }
                 
                 for (var i = arguments.length - 1; i >= 0; i--) {
-                  applyTransHtml(arguments[i], $videoDialog);
+                  applyTransHtml(arguments[i], $videoDialog, beforeHtml, afterHtml);
                 };
                 
               }, 
               function(err) {
-                console.log('error: ',err);
+                // console.log('error: ',err);
               }); 
 
             }
@@ -271,6 +271,7 @@
                       
                       // kill the old and remake anew
                       initClick($videoLink, clickEvent);
+                      $videoLink.focus();
               };
 
               $videoDialog.dialog(dialogObjFactory(onDialogOpen, onDialogClose, {}));
@@ -283,18 +284,25 @@
         }
 
         var transClick = function(e){
-            e.preventDefault();
             var $linkObj  = $(this);
-            var href = $linkObj.attr('href');
-            var $parentObj = $(this).parents('div[id='+href.substring(1)+']');
+            var parentID = $linkObj.data('parent');
+            var $parentObj = $(this).parents('div[id='+parentID+']');
             showCurrentDialogSection($linkObj, $parentObj, function(){
               if(_getTransViewState($parentObj) === 'show-video') {
+                e.preventDefault();
                 _focusTranscripts($parentObj);
+                return false;
               } else {
-                _focusTranscripts($parentObj, ['trans-panel']);
+                // Firefox has issue focusing on elements that are not visible when focus is shifted -SH
+                if(/Firefox/i.test(navigator.userAgent)){
+                  setTimeout(function(){
+                    var eleName = $linkObj.attr('href').substring(1);
+                    $('a[name='+eleName+']').focus();  
+                  },500);
+                }
               }
             });
-            return false;
+            
         };
 
         // setup transcript clicks 
@@ -302,7 +310,6 @@
         $('.career-video-transcript a.red-btn.youtube').live('click', transClick);
         $('.ui-dialog-titlebar-close.ui-corner-all').live('keydown', function(e){
             e.preventDefault();
-            console.log(e);
             switch(e.which){
               case 13:
                 _getDialogAsParent($(this)).dialog('close');
@@ -324,4 +331,4 @@
         });
     });
 
-})(jQuery, window, document);
+})(jQuery, window, document, videoConfig);
