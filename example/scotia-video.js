@@ -2,7 +2,7 @@
  * jQuery ScotiaVideo Plugin
  * TODO
  */
-(function($, window, document, _config){
+(function($, window, document, playerObj, _config){
     'use strict';
 
     // setup an instance of QuickCache for use withing this scope -SH
@@ -243,18 +243,20 @@
     
         if (! this.length) return this;
 
-        var defaults = {};
+        var defaults = {
+          postInit: null,
+          contentModelObj: null
+        };
         
         var opts = $.extend(true, {}, defaults, options);
-
-        var contentModelObj = (opts.contentModelObj)? opts.contentModelObj : null;
 
         var scotiaTemplate = new ScotiaVideoTemplate();
 
         var clickEvent = function(e) {
               e.preventDefault();
             var $videoLink = $(this);
-            var $videoDialog = buildDialog(parseVideoHrefSrc($(this).attr('href')), $(this).data(), scotiaTemplate, contentModelObj); 
+            var videoSrc = parseVideoHrefSrc($(this).attr('href'));
+            var $videoDialog = buildDialog(videoSrc, $videoLink.data(), scotiaTemplate, opts.contentModelObj); 
               
               var onDialogOpen = function() {
                       var $videoOverlay = $(scotiaTemplate.buildModalOverlay());
@@ -263,6 +265,11 @@
                       showCurrentDialogSection($videoLink, $videoDialog, function(){
                         _focusTranscripts($videoDialog);
                       });
+
+                      if(opts.onDialogOpen && (typeof opts.onDialogOpen === 'function')) {
+                        opts.onDialogOpen($videoLink, $videoDialog);
+                      }
+
               };
 
               var onDialogClose = function() { 
@@ -310,6 +317,10 @@
             return false;
         });
 
+        if(opts.postInit && (typeof opts.postInit === 'function')) {
+          opts.postInit($(this));
+        }
+
         return this;
     };
 
@@ -318,9 +329,11 @@
         $(document).ready(function(){
           var $scotia_videos = $(".scotia-video");
           youTubeVideoListFactory(parseScotiaVideoKeys($scotia_videos), function(youTubeVideoList){
-            $scotia_videos.scotiaVideo({contentModelObj: youTubeVideoList});
+            $scotia_videos.scotiaVideo({contentModelObj: youTubeVideoList, onDialogOpen: function($link, $dialog){
+              console.log('playerObj: ',playerObj);
+            }});
           });
         });
     });
 
-})(jQuery, window, document, videoConfig);
+})(jQuery, window, document, YT, videoConfig);

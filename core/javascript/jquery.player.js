@@ -866,8 +866,13 @@ var html5_methods = {
 		function mediaplayer(index){
 			// Merge our config into our object
 			this.config = config;
+			
+			console.log(methods, functions);
+
 			// Add our methods to the mediaplayer instance
 			$.extend(true, this, methods, functions);
+
+			console.log(this);
 			// By default we will set is_html5 to false
 			// This is a simple switch for merging the correct 
 			// Player manager into the player object (in the main player function loop)
@@ -893,7 +898,7 @@ var html5_methods = {
 		
 		/* MAIN FUNCTION LOOP */
 		return this.each(function(i) {
-			
+			console.log('working-'+i);
 			var $self = $(this);
 			// Create a new media player object
 			var player = new mediaplayer(i);

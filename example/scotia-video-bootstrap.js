@@ -90,6 +90,9 @@
                                     }];
 
                   loaderFilesJS  = [{
+                                      src: 'https://www.youtube.com/iframe_api'
+                                    },
+                                    {
                                       src: _config.js_path+'scotia-video-util.js'
                                     },
                                     {
