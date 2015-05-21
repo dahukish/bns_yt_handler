@@ -141,7 +141,10 @@
               if (typeof callback === 'function') callback();
             }
           },
-          dataType: 'json'
+          error: function(jqXHR, textStatus, errorThrown) {
+            alert(errorThrown);
+          },
+          dataType: 'jsonp'
         });
       },
       getVideoItems: function() {

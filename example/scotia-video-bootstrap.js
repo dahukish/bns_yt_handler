@@ -41,7 +41,7 @@
         var tempUrl = (scriptItem.src)? scriptItem.src: scriptItem.href;
         var that = this;
         this.jQuery.getScript( tempUrl, function( data, textStatus, jqxhr ) {
-          console.log(tempUrl, jqxhr.status);
+          // console.log(tempUrl, jqxhr.status);
           if(jqxhr.status === 200) {
             that.recurrsiveLoad(that.getNextScript());
           }

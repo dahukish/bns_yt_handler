@@ -42,19 +42,19 @@
         if (match) {
           return {
             selector: '.youtube-overlay',
-            class: match[0]
+            classAttr: match[0]
           };
         } 
 
         return {
           selector: '.youtube-overlay',
-          class: 'show-video'
+          classAttr: 'show-video'
         };
       })(($jqObj && $jqObj.data('view')) || null);
 
       //nuke all the styles
       classHardReset($prntObj.find(viewDataObj.selector));
-      $prntObj.find(viewDataObj.selector).addClass(viewDataObj.class);
+      $prntObj.find(viewDataObj.selector).addClass(viewDataObj.classAttr);
       if(callback && (typeof callback === 'function')) callback();
     }
 
@@ -299,7 +299,15 @@
                 e.preventDefault();
                 _focusTranscripts($parentObj);
                 return false;
-              } 
+              } else {
+                // Firefox has issue focusing on elements that are not visible when focus is shifted -SH
+                if(/Firefox/i.test(navigator.userAgent)){
+                  setTimeout(function(){
+                    var eleName = $linkObj.attr('href').substring(1);
+                    $('a[name='+eleName+']').focus();  
+                  },500);
+                }
+              }
             });
             
         };
