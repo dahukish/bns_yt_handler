@@ -2,11 +2,13 @@
  * jQuery ScotiaVideo Plugin
  * TODO
  */
-(function($, window, document, playerObj, _config){
+(function($, window, document, _config){
     'use strict';
 
     // setup an instance of QuickCache for use withing this scope -SH
     var _quickCache = new QuickCache();
+    var _playerInstances = new QuickCache();
+    var _youTubeIframeRdy = false;
 
     function parseVideoHrefSrc(hrefUrl) {
       var index = hrefUrl.indexOf('watch?v=');
@@ -191,7 +193,7 @@
                 iFrameObj: {
                   width: 640,
                   height: 385,
-                  src: '//www.youtube.com/embed/'+videoCode
+                  src: '//www.youtube.com/embed/'+videoCode+'?enablejsapi=1'
                 },
                 copy: {
                       title: contentModelObj.getItemPart(videoCode, 'title', ''),
@@ -210,6 +212,8 @@
             var $videoDialog = $(templateHelper.buildModalDialog(dialogObj))
             .attr('id', videoCode)
             .css('display', 'none');
+
+            $('body').append($videoDialog);
 
             //TODO: possibly append this item to something else at this point. Currently no need. -SH
             
@@ -237,6 +241,45 @@
             }
             return $videoDialog;  
           });
+    }
+
+    function _ytIframeApiLoader(){ //TODO Break this out into a generic dirver loader call -SH
+        var tag = document.createElement('script');
+
+      tag.src = "https://www.youtube.com/iframe_api";
+      var firstScriptTag = document.getElementsByTagName('script')[0];
+      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+      
+      window.onYouTubeIframeAPIReady = function() {
+          _youTubeIframeRdy = true;
+          console.log(_youTubeIframeRdy);
+      }
+
+    }
+
+    function _ytIframeApiFactory(options, $dialog){ //TODO Break this out into a generic dirver loader call -SH
+      var player;  
+      // The API will call this function when the video player is ready.
+      var onPlayerReady = function(event) {
+        $('#btn_play_'+options.videoId).click(function(){
+          event.target.playVideo();
+          return false;
+        });
+        $('#btn_stop_'+options.videoId).click(function(){
+          event.target.stopVideo();
+          return false;
+        });
+      }
+      var onPlayerStateChange = function(event) {
+      }
+      player = new YT.Player(options.selector, {
+          videoId: options.videoId,
+          events: {
+            'onReady': onPlayerReady,
+            'onStateChange': onPlayerStateChange
+          }
+        });
+      return player;
     }
 
     $.fn.scotiaVideo = function(options) {
@@ -337,11 +380,29 @@
         $(document).ready(function(){
           var $scotia_videos = $(".scotia-video");
           youTubeVideoListFactory(parseScotiaVideoKeys($scotia_videos), function(youTubeVideoList){
-            $scotia_videos.scotiaVideo({contentModelObj: youTubeVideoList, onDialogOpen: function($link, $dialog){
-              console.log('playerObj: ',playerObj);
-            }});
+            $scotia_videos.scotiaVideo({contentModelObj: youTubeVideoList, 
+              onDialogOpen: function($link, $dialog){
+                var videoCode = parseVideoHrefSrc($link.attr('href'));
+                
+                var ytPlayer = _playerInstances.getItem('player_'+videoCode, function(){
+                  return _ytIframeApiFactory({
+                      selector: 'player_'+videoCode,
+                      width: '640',
+                      height: '385',
+                      videoId: videoCode
+                  }, $dialog);
+                });
+                for(var item in ytPlayer){
+                  console.log(item, ytPlayer[item]);
+                }
+              },
+              postInit: function($video){
+                  _ytIframeApiLoader();
+              }
+            });
           });
         });
     });
 
-})(jQuery, window, document, YT, videoConfig);
+})(jQuery, window, document, videoConfig);
+  

@@ -5,13 +5,13 @@
 (function(window, $){
     'use strict';
     
+    /*---------------------------------------------*/
     function QuickCache(){}
 
     QuickCache.prototype = {
       constructor: QuickCache,
       _items: [],
       getItem: function(key, fallback){
-        
         if(this._items && this._items[key]) return this._items[key];
 
         if(fallback && typeof fallback === 'function') {
@@ -23,6 +23,8 @@
         return false; 
       }
     };
+
+    /*---------------------------------------------*/
 
     function YouTubeVideoInfoCollection (videoItemsArray) {
       this.videoItems = videoItemsArray || [];
@@ -91,6 +93,7 @@
       }
 
     };
+    /*---------------------------------------------*/
 
     /*****************************/
     function YouTubeAPI (apiKey) { 
@@ -240,8 +243,10 @@
         
         html += '<div class="career-video">';
         var ifrm = contObj.iFrameObj;
-        html += '<iframe class="youtube-player" type="text/html" tabindex="-1" width="'+ifrm.width+'" height="'+ifrm.height+'" src="'+ifrm.src+'" data-video-src="'+ifrm.src+'" frameborder="0"></iframe>';
-        
+        // html += '<div id="player_'+contObj.dialogID+'"></div>';
+        html += '<iframe id="player_'+contObj.dialogID+'" class="youtube-player" type="text/html" tabindex="-1" width="'+ifrm.width+'" height="'+ifrm.height+'" src="'+ifrm.src+'" data-video-src="'+ifrm.src+'" frameborder="0"></iframe>';
+        html += '<a href="#" id="btn_play_'+contObj.dialogID+'" role="button" class="red-btn" style="float:right;">play</a>';
+        html += '<a href="#" id="btn_stop_'+contObj.dialogID+'" role="button" class="red-btn" style="float:right;">stop</a>';
         if(contObj.copy) {
           html += '<div class="copy">';
           html += '<h2 class="frutiger">'+contObj.copy.title+'</h2>';
