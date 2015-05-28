@@ -212,7 +212,8 @@
         var tabIndex = 1;
         for (var listItem in listObject.transcripts) {
           var trans = listObject.transcripts[listItem];
-          html += '<a href="#'+listObject.dialogID+'-trans-box" class="youtube" data-parent="'+listObject.dialogID+'" data-view="show-transcript-'+trans.langCode+'" tabindex="'+tabIndex+'">'+trans.langFull+'</a>';
+          html += '<a href="#'+listObject.dialogID+'-trans-box" class="youtube" data-parent="'+listObject.dialogID+'" data-view="show-transcript-'+trans.langCode+'">'+trans.langFull+'</a>';
+          // html += '<a href="#'+listObject.dialogID+'-trans-box" class="youtube" data-parent="'+listObject.dialogID+'" data-view="show-transcript-'+trans.langCode+'" tabindex="'+tabIndex+'">'+trans.langFull+'</a>';
           tabIndex++;
         }
         html += '</'+listObject.prntTag+'>';
@@ -237,8 +238,8 @@
       },
       buildModalDialog: function(contObj){
         var html = "";
-        html += '<div id="'+contObj.dialogID+'" class="ui-dialog ui-widget ui-widget-content ui-corner-all" tabindex="-1" role="dialog" aria-labelledby="ui-dialog-title-'+contObj.dialogID+'" style="display: none; z-index: 10000; outline: 0px;">';
-        html += '<div class="youtube-overlay ui-dialog-content ui-widget-content">';
+        html += '<div id="'+contObj.dialogID+'" class="youtube-overlay">';
+        // html += '<div class="youtube-overlay ui-dialog-content ui-widget-content">';
         html += '<img src="http://www.scotiabank.com/ca/common/icons/logo-scotiabank-lrg.png" alt="Scotiabank®">';
         
         html += '<div class="career-video">';
@@ -307,7 +308,7 @@
           html += '</div>';
         }
       
-        html += '</div>'; // youtube-overlay
+        // html += '</div>'; // youtube-overlay
         html += '</div>'; // ui-dialog
 
         return html;

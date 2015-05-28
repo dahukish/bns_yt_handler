@@ -39,6 +39,7 @@
     }
 
     function showCurrentDialogSection($jqObj, $prntObj, callback) {
+      console.log(arguments);
       var viewDataObj = (function(viewData){
         var match = /show-transcript-(\w{2})/i.exec(viewData);
         if (match) {
@@ -55,8 +56,8 @@
       })(($jqObj && $jqObj.data('view')) || null);
 
       //nuke all the styles
-      classHardReset($prntObj.find(viewDataObj.selector));
-      $prntObj.find(viewDataObj.selector).addClass(viewDataObj.classAttr);
+      classHardReset($prntObj);
+      $prntObj.addClass(viewDataObj.classAttr);
       if(callback && (typeof callback === 'function')) callback();
     }
 
@@ -71,8 +72,12 @@
     }
 
     function _getDialogAsParent($jqObj) {
-      return $jqObj.parents('.ui-dialog.ui-widget.ui-widget-content.ui-corner-all.ui-draggable')
-              .find('.ui-dialog.ui-widget.ui-widget-content.ui-corner-all.ui-dialog-content');
+      // return $jqObj.parents('.ui-dialog.ui-widget.ui-widget-content.ui-corner-all.ui-draggable')
+      //         .find('.ui-dialog.ui-widget.ui-widget-content.ui-corner-all.ui-dialog-content');
+
+      return $jqObj
+              .parents('.ui-dialog.ui-widget.ui-widget-content.ui-corner-all.ui-draggable')
+              .find('.youtube-overlay');
     }
 
     function dialogObjFactory(onOpen, onClose, dialogOpts) {
@@ -149,9 +154,12 @@
 
     function _getTransViewState($jqDialog){
       var $ytOverlay = $jqDialog.find('.youtube-overlay');
+      console.log($ytOverlay); 
       var classAttr = $ytOverlay.attr('class');
       var ytIndex = classAttr.indexOf('show-');
       
+
+
       if( ytIndex >= 0) {
         return classAttr.substring(ytIndex, classAttr.length);
       }
@@ -358,7 +366,7 @@
                       $videoOverlay.on('click', closeDialogOverlay());
                       openDialogOverlay($videoOverlay);
                       showCurrentDialogSection($videoLink, $videoDialog, function(){
-                        _focusTranscripts($videoDialog);
+                        // _focusTranscripts($videoDialog);
                       });
 
                       if(opts.onDialogOpen && (typeof opts.onDialogOpen === 'function')) {
@@ -392,9 +400,11 @@
             showCurrentDialogSection($linkObj, $parentObj, function(){
               if(_getTransViewState($parentObj) === 'show-video') {
                 e.preventDefault();
-                _focusTranscripts($parentObj);
+                // _focusTranscripts($parentObj);
+                console.log('hello1');
                 return false;
               } else {
+                console.log('hello2');
                 // Firefox has issue focusing on elements that are not visible when focus is shifted -SH
                 if(/Firefox/i.test(navigator.userAgent)){
                   setTimeout(function(){
@@ -412,9 +422,13 @@
         $('.career-video-transcript a.red-btn.youtube').live('click', transClick);
         $('.ui-dialog-titlebar-close.ui-corner-all').live('keydown', function(e){
             e.preventDefault();
+            console.log(e.which);
             switch(e.which){
               case 13:
                 _getDialogAsParent($(this)).dialog('close');
+              break;
+              case 9:
+                _getDialogAsParent($(this)).find('.video-button.play').focus();
               break;
             }
             return false;

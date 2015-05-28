@@ -77,7 +77,7 @@
     font-weight: normal;
     margin-bottom: 10px;
 }
-.scotia-video-dialog .youtube-overlay .career-video,
+/*.scotia-video-dialog .youtube-overlay .career-video,*/
 .scotia-video-dialog .youtube-overlay .career-video-transcript {
     display: none;
     visibility: hidden;
@@ -93,6 +93,14 @@
 .scotia-video-dialog .youtube-overlay.show-transcript-cn .career-video-transcript {
     display: block;
     visibility: visible;
+}
+
+.scotia-video-dialog .youtube-overlay.show-transcript-en .career-video,
+.scotia-video-dialog .youtube-overlay.show-transcript-fr .career-video,
+.scotia-video-dialog .youtube-overlay.show-transcript-es .career-video,
+.scotia-video-dialog .youtube-overlay.show-transcript-cn .career-video {
+    display: none;
+    visibility: hidden;
 }
 .scotia-video-dialog .youtube-overlay .career-video .duration {
     display: block;
