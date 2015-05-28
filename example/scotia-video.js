@@ -2,6 +2,11 @@
  * jQuery ScotiaVideo Plugin
  * TODO
  */
+// IE fix for origin
+if (!window.location.origin) {
+       window.location.origin = window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port: '');
+}
+
 (function($, window, document, _config){
     'use strict';
 
@@ -39,7 +44,6 @@
     }
 
     function showCurrentDialogSection($jqObj, $prntObj, callback) {
-      console.log(arguments);
       var viewDataObj = (function(viewData){
         var match = /show-transcript-(\w{2})/i.exec(viewData);
         if (match) {
@@ -153,8 +157,7 @@
     }
 
     function _getTransViewState($jqDialog){
-      var $ytOverlay = $jqDialog.find('.youtube-overlay');
-      console.log($ytOverlay); 
+      var $ytOverlay = $jqDialog;
       var classAttr = $ytOverlay.attr('class');
       var ytIndex = classAttr.indexOf('show-');
       
@@ -194,14 +197,13 @@
     }
 
     function buildDialog(videoCode, linkDataObj, templateHelper, contentModelObj) { // TODO: This sucks and needs to be refactored -SH
-      
       var dialogObj = {
                 dialogTitle: "",
                 dialogID: videoCode,
                 iFrameObj: {
                   width: 640,
                   height: 385,
-                  src: '//www.youtube.com/embed/'+videoCode+'?enablejsapi=1'
+                  src: '//www.youtube.com/embed/'+videoCode+'?enablejsapi=1&origin='+window.location.origin
                 },
                 copy: {
                       title: contentModelObj.getItemPart(videoCode, 'title', ''),
@@ -209,7 +211,6 @@
                 },
                 duration: contentModelObj.getItemPart(videoCode, 'duration', '')
               };
-
       return _quickCache.getItem(videoCode, function(){
             
             // see if we have any transcript data
@@ -261,7 +262,6 @@
       
       window.onYouTubeIframeAPIReady = function() {
           _youTubeIframeRdy = true;
-          console.log(_youTubeIframeRdy);
       }
 
     }
@@ -365,9 +365,7 @@
                       var $videoOverlay = $(scotiaTemplate.buildModalOverlay());
                       $videoOverlay.on('click', closeDialogOverlay());
                       openDialogOverlay($videoOverlay);
-                      showCurrentDialogSection($videoLink, $videoDialog, function(){
-                        // _focusTranscripts($videoDialog);
-                      });
+                      showCurrentDialogSection($videoLink, $videoDialog);
 
                       if(opts.onDialogOpen && (typeof opts.onDialogOpen === 'function')) {
                         opts.onDialogOpen($videoLink, $videoDialog);
@@ -400,11 +398,9 @@
             showCurrentDialogSection($linkObj, $parentObj, function(){
               if(_getTransViewState($parentObj) === 'show-video') {
                 e.preventDefault();
-                // _focusTranscripts($parentObj);
-                console.log('hello1');
+                $parentObj.find('.video-button.play').focus();
                 return false;
               } else {
-                console.log('hello2');
                 // Firefox has issue focusing on elements that are not visible when focus is shifted -SH
                 if(/Firefox/i.test(navigator.userAgent)){
                   setTimeout(function(){
@@ -422,7 +418,6 @@
         $('.career-video-transcript a.red-btn.youtube').live('click', transClick);
         $('.ui-dialog-titlebar-close.ui-corner-all').live('keydown', function(e){
             e.preventDefault();
-            console.log(e.which);
             switch(e.which){
               case 13:
                 _getDialogAsParent($(this)).dialog('close');

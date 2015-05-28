@@ -263,14 +263,14 @@
           html += '</div>'; // copy
         }
         html += '<div class="player-controls">';
-        html += '<a href="#" id="btn_play_'+contObj.dialogID+'" role="button" class="red-btn video-button play" title="play video"><i class="fa fa-play"></i></a>';
-        html += '<a href="#" id="btn_pause_'+contObj.dialogID+'" role="button" class="red-btn video-button pause" title="pause video"><i class="fa fa-pause"></i></a>';
-        html += '<a href="#" id="btn_stop_'+contObj.dialogID+'" role="button" class="red-btn video-button stop" title="stop video"><i class="fa fa-stop"></i></a>';
-        html += '<a href="#" id="btn_volDown_'+contObj.dialogID+'" role="button" class="red-btn video-button volDown" title="volume down"><i class="fa fa-minus"></i></a>';
-        html += '<a href="#" id="btn_volUp_'+contObj.dialogID+'" role="button" class="red-btn video-button volUp" title="volume up"><i class="fa fa-plus"></i></a>';
-        html += '<a href="#" id="btn_volMute_'+contObj.dialogID+'" role="button" class="red-btn video-button volMute" title="mute"><i class="fa fa-volume-off"></i></a>';
-        html += '<a href="#" id="btn_seekReverse_'+contObj.dialogID+'" role="button" class="red-btn video-button reverse" title="reverse video"><i class="fa fa-backward"></i></a>';
-        html += '<a href="#" id="btn_seekForward_'+contObj.dialogID+'" role="button" class="red-btn video-button forward" title="forward video"><i class="fa fa-forward"></i></a>';
+        html += '<a href="#" id="btn_play_'+contObj.dialogID+'" role="button" class="red-btn video-button play" title="play video"><i class="fa fa-play"></i><span class="visually-hidden">play video</span></a>';
+        html += '<a href="#" id="btn_pause_'+contObj.dialogID+'" role="button" class="red-btn video-button pause" title="pause video"><i class="fa fa-pause"></i><span class="visually-hidden">pause video</span></a>';
+        html += '<a href="#" id="btn_stop_'+contObj.dialogID+'" role="button" class="red-btn video-button stop" title="stop video"><i class="fa fa-stop"></i><span class="visually-hidden">stop video</span></a>';
+        html += '<a href="#" id="btn_volDown_'+contObj.dialogID+'" role="button" class="red-btn video-button volDown" title="volume down"><i class="fa fa-minus"></i><span class="visually-hidden">volume up</span></a>';
+        html += '<a href="#" id="btn_volUp_'+contObj.dialogID+'" role="button" class="red-btn video-button volUp" title="volume up"><i class="fa fa-plus"></i><span class="visually-hidden">volume down</span></a>';
+        html += '<a href="#" id="btn_volMute_'+contObj.dialogID+'" role="button" class="red-btn video-button volMute" title="mute"><i class="fa fa-volume-off"></i><span class="visually-hidden">mute/unmute</span></a>';
+        html += '<a href="#" id="btn_seekReverse_'+contObj.dialogID+'" role="button" class="red-btn video-button reverse" title="reverse video"><i class="fa fa-backward"></i><span class="visually-hidden">reverse video</span></a>';
+        html += '<a href="#" id="btn_seekForward_'+contObj.dialogID+'" role="button" class="red-btn video-button forward" title="forward video"><i class="fa fa-forward"></i><span class="visually-hidden">forward video</span></a>';
         html += '</div>'; // player-controls
         if(contObj.transcriptsList) {
           html += this.buildTranscripts({

@@ -235,4 +235,8 @@
     text-decoration: none;
 }
 
+.player-controls .video-button .visually-hidden {
+    display: none;
+}
+
 
