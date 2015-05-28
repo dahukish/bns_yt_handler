@@ -213,7 +213,7 @@
             .attr('id', videoCode)
             .css('display', 'none');
 
-            $('body').append($videoDialog);
+            // $('body').append($videoDialog);
 
             //TODO: possibly append this item to something else at this point. Currently no need. -SH
             
@@ -243,6 +243,7 @@
           });
     }
 
+    
     function _ytIframeApiLoader(){ //TODO Break this out into a generic dirver loader call -SH
         var tag = document.createElement('script');
 
@@ -261,12 +262,63 @@
       var player;  
       // The API will call this function when the video player is ready.
       var onPlayerReady = function(event) {
+        var videoPlayer = event.target;
+        var maxDuration = videoPlayer.getDuration();
+        var minDuration = 0;
+        
         $('#btn_play_'+options.videoId).click(function(){
-          event.target.playVideo();
+          videoPlayer.playVideo();
           return false;
         });
         $('#btn_stop_'+options.videoId).click(function(){
-          event.target.stopVideo();
+          videoPlayer.stopVideo();
+          return false;
+        });
+        $('#btn_pause_'+options.videoId).click(function(){
+          videoPlayer.pauseVideo();
+          return false;
+        });
+        $('#btn_volUp_'+options.videoId).click(function(){
+          var maxVolume = 100;
+          var currentVolume = videoPlayer.getVolume();
+          currentVolume += 10;
+          if(currentVolume >= maxVolume) currentVolume = maxVolume;
+          videoPlayer.setVolume(currentVolume);
+          return false;
+        });
+        $('#btn_volDown_'+options.videoId).click(function(){
+          var minVolume = 0;
+          var currentVolume = videoPlayer.getVolume();
+          currentVolume -= 10;
+          if(currentVolume <= minVolume) currentVolume = minVolume;
+          videoPlayer.setVolume(currentVolume);
+          return false;
+        });
+        $('#btn_volMute_'+options.videoId).click(function(){
+          if(videoPlayer.isMuted()){
+            videoPlayer.unMute();
+          }
+          else{
+            videoPlayer.mute();
+          }
+          return false;
+        });
+
+        $('#btn_seekForward_'+options.videoId).click(function(){
+          var currentSeek = videoPlayer.getCurrentTime();
+          var incrementLength = (maxDuration*0.10);  
+          currentSeek += incrementLength;
+          if(currentSeek >= maxDuration) currentSeek = maxDuration;
+          videoPlayer.seekTo(currentSeek, true);
+          return false;
+        });
+
+        $('#btn_seekReverse_'+options.videoId).click(function(){
+          var currentSeek = videoPlayer.getCurrentTime();
+          var decrementLength = (maxDuration*0.10); 
+          currentSeek -= decrementLength;
+          if(currentSeek <= minDuration) currentSeek = minDuration;
+          videoPlayer.seekTo(currentSeek, true); 
           return false;
         });
       }
@@ -383,18 +435,12 @@
             $scotia_videos.scotiaVideo({contentModelObj: youTubeVideoList, 
               onDialogOpen: function($link, $dialog){
                 var videoCode = parseVideoHrefSrc($link.attr('href'));
-                
                 var ytPlayer = _playerInstances.getItem('player_'+videoCode, function(){
                   return _ytIframeApiFactory({
                       selector: 'player_'+videoCode,
-                      width: '640',
-                      height: '385',
                       videoId: videoCode
                   }, $dialog);
                 });
-                for(var item in ytPlayer){
-                  console.log(item, ytPlayer[item]);
-                }
               },
               postInit: function($video){
                   _ytIframeApiLoader();

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		
+	    <meta charset="utf-8" />
+	    
+	    <title>Accessible Media Player Example - YouTube</title>
+		<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+		<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+		<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+		<link rel="stylesheet" href="scotia_video_dialog.css" />
+
+		<!-- Include styles for media player -->
+	    <!--<link type="text/css" href="../core/css/player-core.css" rel="stylesheet" >
+	    <link type="text/css" href="../custom/css/player-theme.css" rel="stylesheet" >-->
+	    <!--<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/themes/smoothness/jquery-ui.css" />-->
+	<!--     <link rel="stylesheet" href="careers.css" /> -->
+	    
+
+			<!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+			<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js"></script> -->
+			<!--<script type="text/javascript" src="../core/javascript/swfobject/swfobject.js"></script>-->
+	    <!-- Include the accessible media player script -->
+	    <!-- <script type="text/javascript" src="../core/javascript/jquery.player.min.js"></script>-->
+	    <!-- Custom script for generating the youtube player -->
+	</head>
+	<body>
+
+	<div class="overlay" id="jGQlDDylyCE">
+<img src="http://www.scotiabank.com/ca/common/icons/logo-scotiabank-lrg.png" alt="Scotiabank®">
+<div class="career-video">
+<iframe id="player_jGQlDDylyCE" class="youtube-player" type="text/html" tabindex="-1" width="640" height="385" src="//www.youtube.com/embed/jGQlDDylyCE?enablejsapi=1" data-video-src="//www.youtube.com/embed/jGQlDDylyCE?enablejsapi=1" frameborder="0"></iframe>
+
+<div class="copy">
+<h2 class="frutiger">Save automatically</h2>
+<p>Talk to a Scotia advisor and find out how you can save $1,500 or more a year - without the "big lecture". We've made it easy to save more every year in three simple ways.</p><span class="duration">54 sec</span>
+</div>
+<div class="player-controls"><a href="#" id="btn_play_jGQlDDylyCE" role="button" class="red-btn video-button play" title="play video"><i class="fa fa-play"></i></a><a href="#" id="btn_pause_jGQlDDylyCE" role="button" class="red-btn video-button pause" title="pause video"><i class="fa fa-pause"></i></a><a href="#" id="btn_stop_jGQlDDylyCE" role="button" class="red-btn video-button stop" title="stop video"><i class="fa fa-stop"></i></a><a href="#" id="btn_volDown_jGQlDDylyCE" role="button" class="red-btn video-button volDown" title="volume down"><i class="fa fa-minus"></i></a><a href="#" id="btn_volUp_jGQlDDylyCE" role="button" class="red-btn video-button volUp" title="volume up"><i class="fa fa-plus"></i></a><a href="#" id="btn_volMute_jGQlDDylyCE" role="button" class="red-btn video-button volMute" title="mute"><i class="fa fa-volume-off"></i></a><a href="#" id="btn_seekReverse_jGQlDDylyCE" role="button" class="red-btn video-button reverse" title="reverse video"><i class="fa fa-backward"></i></a><a href="#" id="btn_seekForward_jGQlDDylyCE" role="button" class="red-btn video-button forward" title="forward video"><i class="fa fa-forward"></i></a></div>
+<div class="transcripts "><b>View the transcript:</b><br>
+<a href="#jGQlDDylyCE-trans-box" class="youtube" data-parent="jGQlDDylyCE" data-view="show-transcript-en" tabindex="1">English</a>
+</div>
+</div>
+
+<div class="career-video-transcript">
+<div class="copy en">
+<a name="jGQlDDylyCE-trans-box" tabindex="1" class="transcript-anchor-wrap">
+<h2 class="frutiger">Meet Natalie</h2>
+<p>My name is Natalie and I'm a Senior Financial Advisor.</p>
+<p>I've been with Scotiabank for two years now and my favourite part of the job is that no two days are the same. Every day is really a different learning opportunity, or an opportunity to do something different.</p>
+<p>I really enjoy the client interactions. I love talking to people about their lives, finding out about their stories, and helping them become financially better off.</p>
+<p>That's one of the reasons I wanted to be a Financial Advisor - really getting to delve deeper and have more of a relationship with clients, getting to know them and see them regularly. We go over their portfolios and try and help them reach their goals.</p>
+<p>When I was looking for a place to work, I was really looking for a company that was international - a company that allowed you to move up, and I found Scotiabank.</p>
+<p>Scotiabank has been great at providing me with the training and resources that I need to do well as a Financial Advisor. They have great online learning opportunities, as well as one-on-one training. They really, really support you in moving up and doing well in your career.</p>
+<p>I would definitely recommend Scotiabank as a employer of choice when you're looking, just because the benefits are great, as well as it's an international company and really the possibilities are endless.</p>
+<p>I mean you could come into the bank for one position, but you've got room to move throughout the whole company. And, basically even throughout North or South America and the world because they're so expansive.</p>
+<p>They also have so many departments that you never have to feel that you're trapped in one situation. So if I was referring a friend of mine, I'd let them know that they're not locked into one area. They could really go and progress as their aspirations or their dreams change.</p>
+</a>
+</div>
+<a href="#jGQlDDylyCE" class="red-btn youtube" data-parent="jGQlDDylyCE" tabindex="2">
+Watch<span class="hidden"> the Save automatically</span> Video
+</a>
+</div>
+</div>
+	<!-- <script src="./example_assets/jquery.min.js"></script>
+			<script src="./example_assets/jquery-ui.min.js"></script> -->
+			<!-- <script>
+			$('#jGQlDDylyCE').dialog();
+			</script> -->			
+	<script>
+		$(function() {
+    $( "#jGQlDDylyCE" ).dialog({
+    	resizable: false,
+    	width: 980,
+	    modal: true,
+	    dialogClass: 'scotia_video_dialog'
+	    // buttons: {
+	    //     Ok: function() {
+	    //       $( this ).dialog( "close" );
+	    //     }
+     //  	}
+    });
+  });
+
+/*
+
+{
+                  resizable: opts.resizable || false,
+                  modal: opts.modal || true,
+                  width: opts.width || 980,
+                  dialogClass: 'scotia-video-dialog',
+                  open: (onOpen && (typeof onOpen === 'function')? onOpen : function(){}),
+                  close: (onClose && (typeof onClose === 'function')? onClose : function(){})
+            };
+
+*/
+
+	</script>
+	</body>
+</html>

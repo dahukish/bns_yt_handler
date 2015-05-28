@@ -3,3 +3,6 @@
 .settings
 bns_config.js
 */bns_config.js
+.DS_Store
+*DS_Store
+

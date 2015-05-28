@@ -208,3 +208,23 @@
     bottom: -30px;
     right: 0;
 }
+
+/*----------------------------------------------------------------------------------------*/
+
+.player-controls {
+    float: right;
+    width:270px;
+}
+.player-controls .video-button:hover,
+.player-controls .video-button:focus {
+    color: #971504;
+}
+
+.player-controls .video-button {
+    float: left;
+    margin-left: 1em;
+    color: #D81E05;
+    text-decoration: none;
+}
+
+
