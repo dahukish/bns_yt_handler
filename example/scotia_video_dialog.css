@@ -230,13 +230,97 @@
 
 .player-controls .video-button {
     float: left;
-    margin-left: 1em;
+    margin-left: 0.5em;
     color: #D81E05;
     text-decoration: none;
+    display: block;
+    width: 20px;
+    height: 20px;
+    /*local version*/
+    /*background-image: url(./accessible-video-icons-sprite.png); */ 
+    background-image: url(/ca/common/icons/accessible-video-icons-sprite.png); 
+    background-repeat: no-repeat; 
+    text-indent: -9999px;
+    overflow: hidden;   
 }
 
-.player-controls .video-button .visually-hidden {
-    display: none;
+.player-controls .video-button.play {
+    background-position: 0px -2px;
 }
 
+.player-controls .video-button.play:focus,
+.player-controls .video-button.play:hover {
+    background-position: 0px -27px;
+}
 
+.player-controls .video-button.pause {
+    background-position: -26px -2px;
+}
+
+.player-controls .video-button.pause:focus,
+.player-controls .video-button.pause:hover {
+    background-position: -26px -27px;
+}
+
+.player-controls .video-button.stop {
+    background-position: -50px -2px;
+}
+
+.player-controls .video-button.stop:focus,
+.player-controls .video-button.stop:hover {
+    background-position: -50px -27px;
+}
+
+.player-controls .video-button.volDown {
+    background-position: -122px -2px;
+}
+
+.player-controls .video-button.volDown:focus,
+.player-controls .video-button.volDown:hover {
+    background-position: -122px -27px;
+}
+
+.player-controls .video-button.volUp {
+    background-position: -148px -2px;
+}   
+
+.player-controls .video-button.volUp:focus,
+.player-controls .video-button.volUp:hover {
+    background-position: -148px -27px;
+}   
+
+.player-controls .video-button.volMute {
+    background-position: -177px -2px;
+}
+
+.player-controls .video-button.volMute:focus,
+.player-controls .video-button.volMute:hover {
+    background-position: -177px -27px;
+}
+
+.player-controls .video-button.volMute.muted {
+    background-position: -177px -52px;
+}
+
+.player-controls .video-button.volMute.muted:focus,
+.player-controls .video-button.volMute.muted:hover {
+    background-position: -177px -77px;
+}
+
+.player-controls .video-button.reverse {
+    background-position: -74px -2px;
+}
+
+.player-controls .video-button.reverse:focus,
+.player-controls .video-button.reverse:hover {
+    background-position: -74px -27px;
+}
+
+.player-controls .video-button.forward {
+    background-position: -100px -2px;
+}
+
+.player-controls .video-button.forward:focus,
+.player-controls .video-button.forward:hover {
+    background-position: -100px -27px;
+}

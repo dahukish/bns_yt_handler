@@ -245,6 +245,7 @@
         html += '<div class="career-video">';
         var ifrm = contObj.iFrameObj;
         html += '<iframe id="player_'+contObj.dialogID+'" class="youtube-player" type="text/html" tabindex="-1" width="'+ifrm.width+'" height="'+ifrm.height+'" src="'+ifrm.src+'" data-video-src="'+ifrm.src+'" frameborder="0"></iframe>';
+        // html += '<iframe id="player_'+contObj.dialogID+'" class="youtube-player" type="text/html" width="'+ifrm.width+'" height="'+ifrm.height+'" src="'+ifrm.src+'" data-video-src="'+ifrm.src+'" frameborder="0"></iframe>';
         if(contObj.copy) {
           html += '<div class="copy">';
           html += '<h2 class="frutiger">'+contObj.copy.title+'</h2>';
@@ -263,14 +264,14 @@
           html += '</div>'; // copy
         }
         html += '<div class="player-controls">';
-        html += '<a href="#" id="btn_play_'+contObj.dialogID+'" role="button" class="red-btn video-button play" title="play video"><i class="fa fa-play"></i><span class="visually-hidden">play video</span></a>';
-        html += '<a href="#" id="btn_pause_'+contObj.dialogID+'" role="button" class="red-btn video-button pause" title="pause video"><i class="fa fa-pause"></i><span class="visually-hidden">pause video</span></a>';
-        html += '<a href="#" id="btn_stop_'+contObj.dialogID+'" role="button" class="red-btn video-button stop" title="stop video"><i class="fa fa-stop"></i><span class="visually-hidden">stop video</span></a>';
-        html += '<a href="#" id="btn_volDown_'+contObj.dialogID+'" role="button" class="red-btn video-button volDown" title="volume down"><i class="fa fa-minus"></i><span class="visually-hidden">volume up</span></a>';
-        html += '<a href="#" id="btn_volUp_'+contObj.dialogID+'" role="button" class="red-btn video-button volUp" title="volume up"><i class="fa fa-plus"></i><span class="visually-hidden">volume down</span></a>';
-        html += '<a href="#" id="btn_volMute_'+contObj.dialogID+'" role="button" class="red-btn video-button volMute" title="mute"><i class="fa fa-volume-off"></i><span class="visually-hidden">mute/unmute</span></a>';
-        html += '<a href="#" id="btn_seekReverse_'+contObj.dialogID+'" role="button" class="red-btn video-button reverse" title="reverse video"><i class="fa fa-backward"></i><span class="visually-hidden">reverse video</span></a>';
-        html += '<a href="#" id="btn_seekForward_'+contObj.dialogID+'" role="button" class="red-btn video-button forward" title="forward video"><i class="fa fa-forward"></i><span class="visually-hidden">forward video</span></a>';
+        html += '<a href="#" id="btn_play_'+contObj.dialogID+'" role="button" class="video-button play" title="play video">play video</a>';
+        html += '<a href="#" id="btn_pause_'+contObj.dialogID+'" role="button" class="video-button pause" title="pause video">pause video</a>';
+        html += '<a href="#" id="btn_stop_'+contObj.dialogID+'" role="button" class="video-button stop" title="stop video">stop video</a>';
+        html += '<a href="#" id="btn_volDown_'+contObj.dialogID+'" role="button" class="video-button volDown" title="volume down">volume up</a>';
+        html += '<a href="#" id="btn_volUp_'+contObj.dialogID+'" role="button" class="video-button volUp" title="volume up">volume down</a>';
+        html += '<a href="#" id="btn_volMute_'+contObj.dialogID+'" role="button" class="video-button volMute" title="mute/unmute">mute/unmute</a>';
+        html += '<a href="#" id="btn_seekReverse_'+contObj.dialogID+'" role="button" class="video-button reverse" title="reverse video">reverse video</a>';
+        html += '<a href="#" id="btn_seekForward_'+contObj.dialogID+'" role="button" class="video-button forward" title="forward video">forward video</a>';
         html += '</div>'; // player-controls
         if(contObj.transcriptsList) {
           html += this.buildTranscripts({

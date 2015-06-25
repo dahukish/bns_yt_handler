@@ -203,7 +203,7 @@ if (!window.location.origin) {
                 iFrameObj: {
                   width: 640,
                   height: 385,
-                  src: '//www.youtube.com/embed/'+videoCode+'?enablejsapi=1&origin='+window.location.origin
+                  src: '//www.youtube.com/embed/'+videoCode+'?enablejsapi=1&controls=1&cc_load_policy=1&origin='+window.location.origin
                 },
                 copy: {
                       title: contentModelObj.getItemPart(videoCode, 'title', ''),
@@ -273,7 +273,7 @@ if (!window.location.origin) {
         var videoPlayer = event.target;
         var maxDuration = videoPlayer.getDuration();
         var minDuration = 0;
-        
+
         $('#btn_play_'+options.videoId).click(function(){
           videoPlayer.playVideo();
           return false;
@@ -305,9 +305,11 @@ if (!window.location.origin) {
         $('#btn_volMute_'+options.videoId).click(function(){
           if(videoPlayer.isMuted()){
             videoPlayer.unMute();
+            $(this).removeClass('muted');
           }
           else{
             videoPlayer.mute();
+            $(this).addClass('muted');
           }
           return false;
         });
@@ -329,6 +331,7 @@ if (!window.location.origin) {
           videoPlayer.seekTo(currentSeek, true); 
           return false;
         });
+
       }
       var onPlayerStateChange = function(event) {
       }

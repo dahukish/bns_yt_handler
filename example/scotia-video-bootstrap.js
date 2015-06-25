@@ -86,9 +86,6 @@
 
                 if($scotiaVideos.length) {
                  loaderFilesCSS  = [{
-                                        href: '../font-awesome-4.3.0/css/font-awesome.min.css'
-                                    },
-                                    {
                                         href: _config.css_path+'scotia_video_dialog.css'
                                     }];
 
