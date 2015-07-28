@@ -5,6 +5,7 @@
 	    <meta charset="utf-8" />
 	    
 	    <title>Accessible Media Player Example - YouTube</title>
+	    <!-- <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css"> -->
 	</head>
 	<body>
 
@@ -20,9 +21,22 @@
 			<a href="//www.youtube.com/watch?v=NB5xzWvPI5k" class="scotia-video" data-transcripts="en">Watch Video 2</a>
 		</p>
 	</div>
+
+	<div id="video-scrubber"></div>
 			<script src="./example_assets/jquery.min.js"></script>
 			<script src="./example_assets/jquery-ui.min.js"></script>
 			<script src="./scotia-video-bootstrap.js"></script>
+			<script>
+  $(function() {
+    $( "#video-scrubber" ).slider({
+    	min: 0,
+    	max: 31,
+    	change: function(event, ui){
+    		console.log("value: ", ui.value);
+    	}
+	});
+  });
+  </script>
 			<!-- <script src="./scotia-video-util.js"></script>
 			<script src="./scotia-video.js"></script> -->
 			

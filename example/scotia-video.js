@@ -273,9 +273,35 @@ if (!window.location.origin) {
         var videoPlayer = event.target;
         var maxDuration = videoPlayer.getDuration();
         var minDuration = 0;
-
-        $('#btn_play_'+options.videoId).click(function(){
-          videoPlayer.playVideo();
+        // TODO: Refactor the snot of out this -SH
+        $('#btn_play_pause_'+options.videoId).click(function(){
+          var aria_pressed = $(this).attr('aria-pressed');
+          var $img = $(this).find('img');
+          var src = $img.attr('src');
+          var srcParsed = src.split('/');
+          if(aria_pressed && (aria_pressed === 'true')){
+            $(this).attr('aria-pressed',false);
+            $(this).removeClass('pause');
+            $(this).addClass('play');    
+            if(srcParsed) {
+              srcParsed.pop();
+              srcParsed.push('button-play.png');
+              $img.attr('src', srcParsed.join('/'));
+              $img.attr('alt', 'Play');
+            }
+            videoPlayer.pauseVideo();
+          } else {
+            $(this).attr('aria-pressed', true);
+            $(this).removeClass('play');
+            $(this).addClass('pause');
+            if(srcParsed) {
+              srcParsed.pop();
+              srcParsed.push('button-pause.png');
+              $img.attr('src', srcParsed.join('/'));
+              $img.attr('alt', 'Pause');
+            }    
+            videoPlayer.playVideo();
+          }
           return false;
         });
         $('#btn_stop_'+options.videoId).click(function(){
@@ -431,6 +457,14 @@ if (!window.location.origin) {
             }
             return false;
         });
+
+        // $('.video-button.aural.volUp').live('keydown', function(e){
+        //   switch(e.which){
+        //       case 9:
+        //         if(!e.shiftKey) _getDialogAsParent($(this)).find('.supp-player-controls select:eq(1)').focus();
+        //       break;
+        //     }
+        // });
 
         if(opts.postInit && (typeof opts.postInit === 'function')) {
           opts.postInit($(this));

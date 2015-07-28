@@ -76,6 +76,7 @@
     font-size: 22px;
     font-weight: normal;
     margin-bottom: 10px;
+    margin-top: 0;
 }
 /*.scotia-video-dialog .youtube-overlay .career-video,*/
 .scotia-video-dialog .youtube-overlay .career-video-transcript {
@@ -115,7 +116,7 @@
     width: 255px;
     border-bottom: 1px solid #c6c6c6;
     margin-left: 665px;
-    margin-bottom: 50px;
+    margin-bottom: 20px;
     padding-bottom: 10px;
     font-size: 10px;
 }
@@ -222,6 +223,7 @@
 .player-controls {
     float: right;
     width:270px;
+    margin-right: 8px;
 }
 .player-controls .video-button:hover,
 .player-controls .video-button:focus {
@@ -230,97 +232,57 @@
 
 .player-controls .video-button {
     float: left;
-    margin-left: 0.5em;
+    margin-left: 20px;
     color: #D81E05;
     text-decoration: none;
     display: block;
     width: 20px;
     height: 20px;
-    /*local version*/
-    /*background-image: url(./accessible-video-icons-sprite.png); */ 
-    background-image: url(/ca/common/icons/accessible-video-icons-sprite.png); 
-    background-repeat: no-repeat; 
-    text-indent: -9999px;
     overflow: hidden;   
 }
-
-.player-controls .video-button.play {
-    background-position: 0px -2px;
+.player-controls .video-button.aural.volMute {
+    margin-left: 2.9em;
 }
 
-.player-controls .video-button.play:focus,
-.player-controls .video-button.play:hover {
-    background-position: 0px -27px;
+.player-controls select:focus{
+    outline: -webkit-focus-ring-color auto 5px;
+    box-shadow: 0 0 5px rgba(81, 203, 238, 1);
+    border: 1px solid rgba(81, 203, 238, 1);
 }
 
-.player-controls .video-button.pause {
-    background-position: -26px -2px;
+.player-controls .control.fieldset {
+    width: 35%;
+    display: inline-block;
+    float: left;
+    margin-left: 20px;
+    margin-top: 1em;
 }
 
-.player-controls .video-button.pause:focus,
-.player-controls .video-button.pause:hover {
-    background-position: -26px -27px;
+.player-controls .video-control {}
+
+.player-controls .video-control.label {
+    margin-left: 0;
+    clear: left;
+    font-size: 0.8em;
+    font-family: sans-serif;
 }
 
-.player-controls .video-button.stop {
-    background-position: -50px -2px;
+.player-controls .video-control.select {
+    margin-top: 0.5em;
 }
 
-.player-controls .video-button.stop:focus,
-.player-controls .video-button.stop:hover {
-    background-position: -50px -27px;
-}
-
-.player-controls .video-button.volDown {
-    background-position: -122px -2px;
-}
-
-.player-controls .video-button.volDown:focus,
-.player-controls .video-button.volDown:hover {
-    background-position: -122px -27px;
-}
-
-.player-controls .video-button.volUp {
-    background-position: -148px -2px;
-}   
-
-.player-controls .video-button.volUp:focus,
-.player-controls .video-button.volUp:hover {
-    background-position: -148px -27px;
-}   
-
-.player-controls .video-button.volMute {
-    background-position: -177px -2px;
-}
-
-.player-controls .video-button.volMute:focus,
-.player-controls .video-button.volMute:hover {
-    background-position: -177px -27px;
-}
-
-.player-controls .video-button.volMute.muted {
-    background-position: -177px -52px;
-}
-
-.player-controls .video-button.volMute.muted:focus,
-.player-controls .video-button.volMute.muted:hover {
-    background-position: -177px -77px;
-}
-
-.player-controls .video-button.reverse {
-    background-position: -74px -2px;
-}
-
-.player-controls .video-button.reverse:focus,
-.player-controls .video-button.reverse:hover {
-    background-position: -74px -27px;
-}
-
-.player-controls .video-button.forward {
-    background-position: -100px -2px;
-}
-
-.player-controls .video-button.forward:focus,
-.player-controls .video-button.forward:hover {
-    background-position: -100px -27px;
+.player-controls .youtube.watch {
+    display: inline-block;
+    float: left;
+    background: no-repeat url(//s.ytimg.com/yts/imgbin/player-common-2x-vflv5Fpjq.webp) right -1277px;
+    background-size: 55px 3036px;
+    width: 8.5em;
+    height: 27px;
+    margin-left: 20px;
+    margin-top: 17px;
+    font-size: 0.8em;
+    text-decoration: none;
+    line-height: 2.2em;
+    color: #333;
+    font-family: sans-serif;    
 }

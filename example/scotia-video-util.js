@@ -5,6 +5,8 @@
 (function(window, $){
     'use strict';
     
+    var _config = window._BnsVideoConfig;
+
     /*---------------------------------------------*/
     function QuickCache(){}
 
@@ -264,15 +266,31 @@
           html += '</div>'; // copy
         }
         html += '<div class="player-controls">';
-        html += '<a href="#" id="btn_play_'+contObj.dialogID+'" role="button" class="video-button play" title="play video">play video</a>';
-        html += '<a href="#" id="btn_pause_'+contObj.dialogID+'" role="button" class="video-button pause" title="pause video">pause video</a>';
-        html += '<a href="#" id="btn_stop_'+contObj.dialogID+'" role="button" class="video-button stop" title="stop video">stop video</a>';
-        html += '<a href="#" id="btn_volDown_'+contObj.dialogID+'" role="button" class="video-button volDown" title="volume down">volume up</a>';
-        html += '<a href="#" id="btn_volUp_'+contObj.dialogID+'" role="button" class="video-button volUp" title="volume up">volume down</a>';
-        html += '<a href="#" id="btn_volMute_'+contObj.dialogID+'" role="button" class="video-button volMute" title="mute/unmute">mute/unmute</a>';
-        html += '<a href="#" id="btn_seekReverse_'+contObj.dialogID+'" role="button" class="video-button reverse" title="reverse video">reverse video</a>';
-        html += '<a href="#" id="btn_seekForward_'+contObj.dialogID+'" role="button" class="video-button forward" title="forward video">forward video</a>';
+        html += '<a href="#" id="btn_play_pause_'+contObj.dialogID+'" role="button" class="video-button visual play" aria-pressed="false" title="play/pause video"><img src="'+_config.img_path+'button-play.png" alt="Play"/></a>';
+        html += '<a href="#" id="btn_seekReverse_'+contObj.dialogID+'" role="button" class="video-button visual reverse" title="reverse video"><img src="'+_config.img_path+'button-rewind.png" alt="Reverse"/></a>';
+        html += '<a href="#" id="btn_seekForward_'+contObj.dialogID+'" role="button" class="video-button visual forward" title="forward video"><img src="'+_config.img_path+'button-forward.png" alt="Fast Forward"/></a>';
+        html += '<a href="#" id="btn_volMute_'+contObj.dialogID+'" role="button" class="video-button aural volMute" aria-pressed="false" title="mute/unmute"><img src="'+_config.img_path+'button-mute.png" alt="Mute Volume"/></a>';
+        html += '<a href="#" id="btn_volDown_'+contObj.dialogID+'" role="button" class="video-button aural volDown" title="volume down"><img src="'+_config.img_path+'button-volume-minus.png" alt="Volume Up"/></a>';
+        html += '<a href="#" id="btn_volUp_'+contObj.dialogID+'" role="button" class="video-button aural volUp" title="volume up"><img src="'+_config.img_path+'button-volume-plus.png" alt="Volume Down"/></a>';
+        html += '<div class="control fieldset"><label for="videoQuality_'+contObj.dialogID+'" class="video-control label quality">Video Quality</label>';
+        html += '<select name="videoQuality_'+contObj.dialogID+'" class="video-control select quality" id="videoQuality_'+contObj.dialogID+'">';
+        html += '<option value="auto">auto</option>';
+        html += '<option value="low">low</option>';
+        html += '<option value="med">med</option>';
+        html += '<option value="high">high</option>';
+        html += '</select></div>';
+        html += '<div class="control fieldset"><label for="playbackRate_'+contObj.dialogID+'" class="video-control label playbackrate">Playback Rate</label>';
+        html += '<select name="playbackRate_'+contObj.dialogID+'" class="video-control select playbackrate" id="playbackRate_'+contObj.dialogID+'">';
+        html += '<option value="0.25">0.25</option>';
+        html += '<option value="0.50">0.50</option>';
+        html += '<option value="1">Normal</option>';
+        html += '<option value="1.25">1.25</option>';
+        html += '<option value="1.50">1.50</option>';
+        html += '<option value="2">2</option>';
+        html += '</select></div>';
+        html += '<a href="https://www.youtube.com/watch?v='+contObj.dialogID+'" class="youtube watch">Watch on: </a>'; 
         html += '</div>'; // player-controls
+
         if(contObj.transcriptsList) {
           html += this.buildTranscripts({
             prntTag: 'div',

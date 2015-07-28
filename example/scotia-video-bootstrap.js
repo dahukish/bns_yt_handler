@@ -72,7 +72,7 @@
 
     $.getScript(_configPath, function(data, textStatus, jqxhr){ // dynamically load config file
 
-          (function (Loader, _config) {
+          (function (Loader, _config, window) {
             
             var loadFiles = (function(){
                 
@@ -138,8 +138,11 @@
 
             }
 
-        })(DynaLoader, videoConfig);
+            //add the config to the global space for later
+            if(typeof window._BnsVideoConfig === 'undefined') window._BnsVideoConfig = _config;
+
+        })(DynaLoader, videoConfig, window);
 
     });
-    
+
 })(jQuery, window, document);
