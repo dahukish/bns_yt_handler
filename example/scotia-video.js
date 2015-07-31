@@ -14,7 +14,7 @@ if (!window.location.origin) {
     var _quickCache = new QuickCache();
     var _playerInstances = new QuickCache();
     var _youTubeIframeRdy = false;
-
+    
     function parseVideoHrefSrc(hrefUrl) {
       var index = hrefUrl.indexOf('watch?v=');
       var indexShift = 8;
@@ -203,7 +203,7 @@ if (!window.location.origin) {
                 iFrameObj: {
                   width: 640,
                   height: 385,
-                  src: '//www.youtube.com/embed/'+videoCode+'?enablejsapi=1&controls=1&cc_load_policy=1&origin='+window.location.origin
+                  src: '//www.youtube.com/embed/'+videoCode+'?enablejsapi=1&controls=0&cc_load_policy=1&origin='+window.location.origin
                 },
                 copy: {
                       title: contentModelObj.getItemPart(videoCode, 'title', ''),
@@ -266,6 +266,17 @@ if (!window.location.origin) {
 
     }
 
+    function _getAvialableRates(videoPlayerObj){
+      // return videoPlayerObj.B.availablePlaybackRates;
+      return videoPlayerObj.getAvailablePlaybackRates();
+    }
+
+    function _getAvialableQuality(videoPlayerObj){
+      return videoPlayerObj.getAvailableQualityLevels();
+      // return videoPlayerObj.B.availableQualityLevels;
+    }
+
+
     function _ytIframeApiFactory(options, $dialog){ //TODO Break this out into a generic dirver loader call -SH
       var player;  
       // The API will call this function when the video player is ready.
@@ -273,6 +284,9 @@ if (!window.location.origin) {
         var videoPlayer = event.target;
         var maxDuration = videoPlayer.getDuration();
         var minDuration = 0;
+        var playbackRates = _getAvialableRates(videoPlayer);
+        var qualityValues = _getAvialableQuality(videoPlayer);
+        
         // TODO: Refactor the snot of out this -SH
         $('#btn_play_pause_'+options.videoId).click(function(){
           var aria_pressed = $(this).attr('aria-pressed');
@@ -358,14 +372,70 @@ if (!window.location.origin) {
           return false;
         });
 
-      }
+        var $pbRateSelect = $("#playbackRate_"+options.videoId);
+        var pbRates = videoPlayer.getAvailablePlaybackRates();
+        for (var i = 0; i < pbRates.length; i++) {
+          $pbRateSelect.append('<option value="'+pbRates[i]+'" '+((pbRates[i] === 1)? ' selected="selected" ' : '')+'>'+((pbRates[i] === 1)? 'normal' : pbRates[i]+'x')+'</option>');
+        };
+        $pbRateSelect.on('change', function(e){
+          e.preventDefault();
+          var newRate = parseFloat($(this).val());
+          if(newRate) videoPlayer.setPlaybackRate(newRate);
+        });
+
+        //scrubber 
+        $( "#video_scrubber_"+options.videoId ).slider({
+          min: minDuration,
+          max: maxDuration,
+          change: function(event, ui){
+            console.log("value: ", ui.value);
+          }
+        });
+
+        //autoplay
+        $('#btn_play_pause_'+options.videoId).trigger('click');
+      };
       var onPlayerStateChange = function(event) {
-      }
+        var videoPlayer = event.target;
+        var $pbQualitySelect = $("#videoQuality_"+options.videoId);
+        //Intial load for the video dialog -SH
+        if($pbQualitySelect.find('option').length === 1 && (videoPlayer.getPlayerState() === YT.PlayerState.PLAYING)){
+          var qualities = videoPlayer.getAvailableQualityLevels();
+          for (var i = 0; i < qualities.length; i++) {
+            $pbQualitySelect.append('<option value="'+qualities[i]+'">'+qualities[i]+'</option>');
+          };
+          $pbQualitySelect.change(function(e){
+            e.preventDefault();
+            var newQuality = $(this).val();
+            if(newQuality){
+              videoPlayer.setPlaybackQuality(newQuality);
+            } 
+          }); 
+          videoPlayer.setPlaybackQuality('default');
+        }
+        
+        if(videoPlayer.getPlayerState() === YT.PlayerState.PLAYING) {
+          player.interval = setInterval(function () {
+            console.log('playing: ', videoPlayer.getCurrentTime());
+            $( "#video_scrubber_"+options.videoId ).slider("value", parseInt(videoPlayer.getCurrentTime()));
+          }, 1000);
+        }
+
+        if(videoPlayer.getPlayerState() === YT.PlayerState.PAUSED) {
+          console.log('stopped');
+          if(player.interval) clearInterval(player.interval);
+        }
+
+      };
+
+      var onPlaybackQualityChange = function(event){};
+
       player = new YT.Player(options.selector, {
           videoId: options.videoId,
           events: {
             'onReady': onPlayerReady,
-            'onStateChange': onPlayerStateChange
+            'onStateChange': onPlayerStateChange,
+            'onPlaybackQualityChange': onPlaybackQualityChange
           }
         });
       return player;

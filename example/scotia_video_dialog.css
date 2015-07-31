@@ -64,7 +64,7 @@
 .scotia-video-dialog .youtube-overlay {
     background: #fff;
     height: 440px !important;
-    padding: 25px;
+    padding: 25px 25px 50px 25px;
     border: 5px solid #f1f1f1;
 }
 .scotia-video-dialog .youtube-overlay .position {
@@ -286,3 +286,57 @@
     color: #333;
     font-family: sans-serif;    
 }
+
+.video-control.scrubber {
+    height: 25%;
+    position: relative;
+    text-align: left;
+    width: 90%;
+    margin: 0 auto;
+    top: 11px;
+    border: 1px solid rgb(170, 170, 170);
+}
+
+.video-control.scrubber .buffer-bar {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    background: #ccc;
+}
+
+.video-control.scrubber a {
+    background-position: 50% 50%;
+    color: rgb(85, 85, 85);
+    cursor: default;
+    display: block;
+    height: 21.109375px;
+    left: 786.765625px;
+    position: absolute;
+    text-align: left;
+    top: -5.28000020980835px;
+    touch-action: none;
+    width: 21.109375px;
+    z-index: 2;
+    align-self: stretch;
+    perspective-origin: 11.546875px 11.546875px;
+    transform-origin: 11.546875px 11.546875px;
+    background: rgb(230, 230, 230) url(http://code.jquery.com/ui/1.11.4/themes/smoothness/images/ui-bg_glass_75_e6e6e6_1x400.png) repeat-x scroll 50% 50% / auto padding-box border-box;
+    border: 1px solid rgb(211, 211, 211);
+    border-radius: 4px 4px 4px 4px;
+    font: normal normal normal normal 17.6000003814697px/normal Verdana, Arial, sans-serif;
+    margin: 0px 0px 0px -10.5600004196167px;
+    outline: rgb(85, 85, 85) none 0px;
+}
+
+.video-control.scrubber a:focus {
+    box-shadow: 0 0 5px rgba(81, 203, 238, 1);
+  /*padding: 3px 0px 3px 3px;
+  margin: 5px 1px 3px 0px;*/
+  border: 1px solid rgba(81, 203, 238, 1);
+}
+ .video-control.tool-box {
+    background: #333;
+    position: relative;
+    height: 40px;
+ }

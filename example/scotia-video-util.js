@@ -247,6 +247,7 @@
         html += '<div class="career-video">';
         var ifrm = contObj.iFrameObj;
         html += '<iframe id="player_'+contObj.dialogID+'" class="youtube-player" type="text/html" tabindex="-1" width="'+ifrm.width+'" height="'+ifrm.height+'" src="'+ifrm.src+'" data-video-src="'+ifrm.src+'" frameborder="0"></iframe>';
+        html += '<div class="video-control tool-box" style="width: '+ifrm.width+'px; top: '+ifrm.height+'px;"><div id="video_scrubber_'+contObj.dialogID+'" class="video-control scrubber"><div class="buffer-bar"></div></div></div>';
         // html += '<iframe id="player_'+contObj.dialogID+'" class="youtube-player" type="text/html" width="'+ifrm.width+'" height="'+ifrm.height+'" src="'+ifrm.src+'" data-video-src="'+ifrm.src+'" frameborder="0"></iframe>';
         if(contObj.copy) {
           html += '<div class="copy">';
@@ -274,19 +275,10 @@
         html += '<a href="#" id="btn_volUp_'+contObj.dialogID+'" role="button" class="video-button aural volUp" title="volume up"><img src="'+_config.img_path+'button-volume-plus.png" alt="Volume Down"/></a>';
         html += '<div class="control fieldset"><label for="videoQuality_'+contObj.dialogID+'" class="video-control label quality">Video Quality</label>';
         html += '<select name="videoQuality_'+contObj.dialogID+'" class="video-control select quality" id="videoQuality_'+contObj.dialogID+'">';
-        html += '<option value="auto">auto</option>';
-        html += '<option value="low">low</option>';
-        html += '<option value="med">med</option>';
-        html += '<option value="high">high</option>';
+        html += '<option value="default" selected="selected">default</option>';
         html += '</select></div>';
         html += '<div class="control fieldset"><label for="playbackRate_'+contObj.dialogID+'" class="video-control label playbackrate">Playback Rate</label>';
         html += '<select name="playbackRate_'+contObj.dialogID+'" class="video-control select playbackrate" id="playbackRate_'+contObj.dialogID+'">';
-        html += '<option value="0.25">0.25</option>';
-        html += '<option value="0.50">0.50</option>';
-        html += '<option value="1">Normal</option>';
-        html += '<option value="1.25">1.25</option>';
-        html += '<option value="1.50">1.50</option>';
-        html += '<option value="2">2</option>';
         html += '</select></div>';
         html += '<a href="https://www.youtube.com/watch?v='+contObj.dialogID+'" class="youtube watch">Watch on: </a>'; 
         html += '</div>'; // player-controls
