@@ -14,6 +14,8 @@ if (!window.location.origin) {
     var _quickCache = new QuickCache();
     var _playerInstances = new QuickCache();
     var _youTubeIframeRdy = false;
+    var _eventLoopInterval = null, _playerSliderInterval = null;
+
     
     function parseVideoHrefSrc(hrefUrl) {
       var index = hrefUrl.indexOf('watch?v=');
@@ -45,7 +47,7 @@ if (!window.location.origin) {
 
     function showCurrentDialogSection($jqObj, $prntObj, callback) {
       var viewDataObj = (function(viewData){
-        var match = /show-transcript-(\w{2})/i.exec(viewData);
+        var match = _getTranLangCode(viewData);
         if (match) {
           return {
             selector: '.youtube-overlay',
@@ -62,6 +64,16 @@ if (!window.location.origin) {
       //nuke all the styles
       classHardReset($prntObj);
       $prntObj.addClass(viewDataObj.classAttr);
+      
+      //swap aria-hidden attr -SH
+      if(viewDataObj.classAttr === 'show-video') {
+        $prntObj.find('.career-video-transcript').attr('aria-hidden', true);
+        $prntObj.find('.career-video').attr('aria-hidden', false);
+      } else {
+        $prntObj.find('.career-video').attr('aria-hidden', true);
+        $prntObj.find('.career-video-transcript').attr('aria-hidden', false);
+      }
+
       if(callback && (typeof callback === 'function')) callback();
     }
 
@@ -76,15 +88,12 @@ if (!window.location.origin) {
     }
 
     function _getDialogAsParent($jqObj) {
-      // return $jqObj.parents('.ui-dialog.ui-widget.ui-widget-content.ui-corner-all.ui-draggable')
-      //         .find('.ui-dialog.ui-widget.ui-widget-content.ui-corner-all.ui-dialog-content');
-
       return $jqObj
               .parents('.ui-dialog.ui-widget.ui-widget-content.ui-corner-all.ui-draggable')
               .find('.youtube-overlay');
     }
 
-    function dialogObjFactory(onOpen, onClose, dialogOpts) {
+    function dialogObjFactory(onOpen, onClose, dialogOpts, onCleanUp) {
       
       var opts = dialogOpts || {};
       return {
@@ -93,7 +102,8 @@ if (!window.location.origin) {
                   width: opts.width || 980,
                   dialogClass: 'scotia-video-dialog',
                   open: (onOpen && (typeof onOpen === 'function')? onOpen : function(){}),
-                  close: (onClose && (typeof onClose === 'function')? onClose : function(){})
+                  close: (onClose && (typeof onClose === 'function')? onClose : function(){}),
+                  beforeClose: (onCleanUp && (typeof onCleanUp === 'function')? onCleanUp : function(){})
             };
     }
 
@@ -188,12 +198,25 @@ if (!window.location.origin) {
       return $(item).html();
     }
 
+    function _parseLangCode(htmlString) {
+      var startAt = 17;
+      return htmlString[0].substr(startAt, 2);
+    }
+
+    function _getTranLangCode(string) {
+      return /show-transcript-(\w{2})/i.exec(string);
+    }
+
     function applyTransHtml(item, $parentObj, beforeHtml, afterHtml) {
       var transItem = _parseTrans(item);
       var bHtml = beforeHtml ? beforeHtml : '';
       var aHtml = afterHtml ? afterHtml : '';
       var html = bHtml+_parseTransHtml(transItem)+aHtml;
       $parentObj.find('.career-video-transcript .'+_parseTransClass(transItem)).html(html);
+    }
+
+    function _isDialogVideoHidden($parentObj) {
+      return $parentObj.find('.career-video').attr('aria-hidden');
     }
 
     function buildDialog(videoCode, linkDataObj, templateHelper, contentModelObj) { // TODO: This sucks and needs to be refactored -SH
@@ -228,18 +251,15 @@ if (!window.location.origin) {
             
             if(dialogObj.transcriptsList) {
               loadTranscripts(dialogObj.transcriptsList, 
-              function(success) {
+              function() {
                 
-                var beforeHtml = '<a name="'+dialogObj.dialogID+'-trans-box" tabindex="1" class="transcript-anchor-wrap">';
-                var afterHtml = '</a>';
-                
-                if(arguments[1] === 'success') { // this is a one dimentional array vs multi -sh
-                  applyTransHtml(arguments, $videoDialog, beforeHtml, afterHtml);
-                  return;
-                }
-                
+                var langTabindex = 1;
                 for (var i = arguments.length - 1; i >= 0; i--) {
+                  var langCode = _parseLangCode(arguments[i]);
+                  var beforeHtml = '<a id="'+dialogObj.dialogID+'-trans-box-'+langCode+'" tabindex="'+langTabindex+'" class="transcript-anchor-wrap">';
+                  var afterHtml = '</a>';
                   applyTransHtml(arguments[i], $videoDialog, beforeHtml, afterHtml);
+                  langTabindex++;
                 };
                 
               }, 
@@ -318,14 +338,14 @@ if (!window.location.origin) {
           }
           return false;
         });
-        $('#btn_stop_'+options.videoId).click(function(){
-          videoPlayer.stopVideo();
-          return false;
-        });
-        $('#btn_pause_'+options.videoId).click(function(){
-          videoPlayer.pauseVideo();
-          return false;
-        });
+        // $('#btn_stop_'+options.videoId).click(function(){
+        //   videoPlayer.stopVideo();
+        //   return false;
+        // });
+        // $('#btn_pause_'+options.videoId).click(function(){
+        //   videoPlayer.pauseVideo();
+        //   return false;
+        // });
         $('#btn_volUp_'+options.videoId).click(function(){
           var maxVolume = 100;
           var currentVolume = videoPlayer.getVolume();
@@ -373,10 +393,13 @@ if (!window.location.origin) {
         });
 
         var $pbRateSelect = $("#playbackRate_"+options.videoId);
-        var pbRates = videoPlayer.getAvailablePlaybackRates();
-        for (var i = 0; i < pbRates.length; i++) {
-          $pbRateSelect.append('<option value="'+pbRates[i]+'" '+((pbRates[i] === 1)? ' selected="selected" ' : '')+'>'+((pbRates[i] === 1)? 'normal' : pbRates[i]+'x')+'</option>');
-        };
+        if($pbRateSelect.find('option').length <= 1){
+          var pbRates = videoPlayer.getAvailablePlaybackRates();
+          for (var i = 0; i < pbRates.length; i++) {
+            $pbRateSelect.append('<option value="'+pbRates[i]+'" '+((pbRates[i] === 1)? ' selected="selected" ' : '')+'>'+((pbRates[i] === 1)? 'normal' : pbRates[i]+'x')+'</option>');
+          };
+          
+        }
         $pbRateSelect.on('change', function(e){
           e.preventDefault();
           var newRate = parseFloat($(this).val());
@@ -387,44 +410,93 @@ if (!window.location.origin) {
         $( "#video_scrubber_"+options.videoId ).slider({
           min: minDuration,
           max: maxDuration,
-          change: function(event, ui){
-            console.log("value: ", ui.value);
-          }
+          change: function(event, ui) {},
+          slide: function(event, ui) {
+            var originalState = videoPlayer.getPlayerState();
+            if(originalState === YT.PlayerState.PLAYING) videoPlayer.pauseVideo();
+            videoPlayer.seekTo(ui.value, true);
+            if(originalState === YT.PlayerState.PLAYING) videoPlayer.playVideo();
+          },
+          start: function(event, ui) {},
+          stop: function(event, ui) {}
         });
 
-        //autoplay
-        $('#btn_play_pause_'+options.videoId).trigger('click');
+        // Check for Ready state (This is a work around) -SH
+        _eventLoopInterval = setInterval(function () {
+            if(videoPlayer.getPlayerState) {
+              if(videoPlayer.getPlayerState() === YT.PlayerState.PLAYING) {
+                if(!_playerSliderInterval) {
+                  _playerSliderInterval = setInterval(function () {
+                    $( "#video_scrubber_"+options.videoId ).slider("value", parseInt(videoPlayer.getCurrentTime()));
+                    //self cleaning for when the dialog closes
+                    // if(!$( "div#"+options.videoId).length) {}
+                  }, 500);
+                }
+              } 
+              
+              if(videoPlayer.getPlayerState() === YT.PlayerState.CUED) {
+                $('#btn_play_pause_'+options.videoId).trigger('click'); 
+                var $pbQualitySelect = $("#videoQuality_"+options.videoId);
+                if($pbQualitySelect.find('option').length <= 1) {
+                  var qualities = videoPlayer.getAvailableQualityLevels();
+                  for (var i = 0; i < qualities.length; i++) {
+                    $pbQualitySelect.append('<option value="'+qualities[i]+'">'+qualities[i]+'</option>');
+                  };
+                  
+                }
+                $pbQualitySelect.change(function(e){
+                  e.preventDefault();
+                  var newQuality = $(this).val();
+                  if(newQuality){
+                    videoPlayer.setPlaybackQuality(newQuality);
+                  } 
+                }); 
+                videoPlayer.setPlaybackQuality('default');
+              }
+
+              if(videoPlayer.getPlayerState() !== YT.PlayerState.PLAYING) {
+                clearInterval(_playerSliderInterval);
+                _playerSliderInterval = null;
+              }
+            }
+        }, 500);
+
       };
       var onPlayerStateChange = function(event) {
-        var videoPlayer = event.target;
-        var $pbQualitySelect = $("#videoQuality_"+options.videoId);
-        //Intial load for the video dialog -SH
-        if($pbQualitySelect.find('option').length === 1 && (videoPlayer.getPlayerState() === YT.PlayerState.PLAYING)){
-          var qualities = videoPlayer.getAvailableQualityLevels();
-          for (var i = 0; i < qualities.length; i++) {
-            $pbQualitySelect.append('<option value="'+qualities[i]+'">'+qualities[i]+'</option>');
-          };
-          $pbQualitySelect.change(function(e){
-            e.preventDefault();
-            var newQuality = $(this).val();
-            if(newQuality){
-              videoPlayer.setPlaybackQuality(newQuality);
-            } 
-          }); 
-          videoPlayer.setPlaybackQuality('default');
-        }
+        // var videoPlayer = event.target;
+        // var $pbQualitySelect = $("#videoQuality_"+options.videoId);
+        // console.log($pbQualitySelect.find('option').length);
+        // //Intial load for the video dialog -SH
+        // if($pbQualitySelect.find('option').length === 1 && (videoPlayer.getPlayerState() === YT.PlayerState.PLAYING)){
+        //   var qualities = videoPlayer.getAvailableQualityLevels();
+        //   for (var i = 0; i < qualities.length; i++) {
+        //     $pbQualitySelect.append('<option value="'+qualities[i]+'">'+qualities[i]+'</option>');
+        //   };
+        //   $pbQualitySelect.change(function(e){
+        //     e.preventDefault();
+        //     var newQuality = $(this).val();
+        //     if(newQuality){
+        //       videoPlayer.setPlaybackQuality(newQuality);
+        //     } 
+        //   }); 
+        //   videoPlayer.setPlaybackQuality('default');
+        // }
         
-        if(videoPlayer.getPlayerState() === YT.PlayerState.PLAYING) {
-          player.interval = setInterval(function () {
-            console.log('playing: ', videoPlayer.getCurrentTime());
-            $( "#video_scrubber_"+options.videoId ).slider("value", parseInt(videoPlayer.getCurrentTime()));
-          }, 1000);
-        }
+        // 
 
-        if(videoPlayer.getPlayerState() === YT.PlayerState.PAUSED) {
-          console.log('stopped');
-          if(player.interval) clearInterval(player.interval);
-        }
+
+        // if(videoPlayer.getPlayerState() === YT.PlayerState.PLAYING) {
+        //   player.interval = setInterval(function () {
+        //     $( "#video_scrubber_"+options.videoId ).slider("value", parseInt(videoPlayer.getCurrentTime()));
+            
+        //     //self cleaning for when the dialog closes
+        //     if(!$( "div#"+options.videoId).length) {}
+        //   }, 500);
+        // }
+
+        // if(videoPlayer.getPlayerState() === YT.PlayerState.PAUSED || videoPlayer.getPlayerState() === YT.PlayerState.ENDED) {
+        //   if(player.interval) clearInterval(player.interval);
+        // }
 
       };
 
@@ -481,7 +553,21 @@ if (!window.location.origin) {
                       $videoLink.focus();
               };
 
-              $videoDialog.dialog(dialogObjFactory(onDialogOpen, onDialogClose, {}));
+              var onCleanUp = function() {
+                var dialogCode = $videoDialog.attr('id');
+                var playerInstance = _playerInstances.getItem('player_'+dialogCode);
+                if($('#btn_play_pause_'+dialogCode).attr('aria-pressed') === 'true') {
+                  $('#btn_play_pause_'+dialogCode).trigger('click');
+                } 
+                
+                if(playerInstance && playerInstance.stopVideo()) playerInstance.stopVideo();
+                clearInterval(_playerSliderInterval);
+                clearInterval(_eventLoopInterval);
+                _eventLoopInterval = null; 
+                _playerSliderInterval = null;
+              };
+
+              $videoDialog.dialog(dialogObjFactory(onDialogOpen, onDialogClose, {}, onCleanUp));
 
               return false;
         };
@@ -491,15 +577,20 @@ if (!window.location.origin) {
         }
 
         var transClick = function(e){
+            e.preventDefault();
+            
             var $linkObj  = $(this);
             var parentID = $linkObj.data('parent');
             var $parentObj = $(this).parents('div[id='+parentID+']');
+            
             showCurrentDialogSection($linkObj, $parentObj, function(){
               if(_getTransViewState($parentObj) === 'show-video') {
                 e.preventDefault();
                 $parentObj.find('.video-button.play').focus();
-                return false;
               } else {
+                
+                $($linkObj.attr('href')).focus(); //manually set focus to avoid screen jump browser behaviour -SH
+                
                 // Firefox has issue focusing on elements that are not visible when focus is shifted -SH
                 if(/Firefox/i.test(navigator.userAgent)){
                   setTimeout(function(){
@@ -509,32 +600,54 @@ if (!window.location.origin) {
                 }
               }
             });
-            
+          return false;  
         };
 
         // setup transcript clicks 
         $('.transcripts a.youtube').live('click', transClick);
         $('.career-video-transcript a.red-btn.youtube').live('click', transClick);
         $('.ui-dialog-titlebar-close.ui-corner-all').live('keydown', function(e){
-            e.preventDefault();
             switch(e.which){
-              case 13:
+              case 13: // hit enter on the close button
                 _getDialogAsParent($(this)).dialog('close');
               break;
-              case 9:
-                _getDialogAsParent($(this)).find('.video-button.play').focus();
+              
+              case 9: // tab off the close button
+                var $parentDialogObj = _getDialogAsParent($(this));
+                if(_isDialogVideoHidden($parentDialogObj) === "true") {
+                  var langCode = _getTranLangCode($parentDialogObj.attr('class'));
+                  $parentDialogObj.find('.career-video-transcript .copy.'+langCode[1]+' .transcript-anchor-wrap').focus();
+                } else {
+                  $parentDialogObj.find('.video-button.visual.first').focus();
+                }
               break;
             }
-            return false;
         });
 
-        // $('.video-button.aural.volUp').live('keydown', function(e){
-        //   switch(e.which){
-        //       case 9:
-        //         if(!e.shiftKey) _getDialogAsParent($(this)).find('.supp-player-controls select:eq(1)').focus();
-        //       break;
-        //     }
-        // });
+        $('a.ui-slider-handle.ui-state-default.ui-corner-all').live('keydown', function(e){
+            var $parentDialogObj = _getDialogAsParent($(this));
+            switch(e.which){
+              case 9:
+                if(e.shiftKey) {
+                  $parentDialogObj.find('.transcripts a.youtube.last').focus();
+                } else {
+                  $(this).parent().parent().parent().prev().find('a.ui-dialog-titlebar-close').focus();
+                  return false;
+                }
+              break;
+            }
+        });
+
+        $('.career-video-transcript .copy .transcript-anchor-wrap').live('keydown', function(e){
+          switch(e.which){
+              case 9: // tab off
+              if(e.shiftKey) {
+                $(this).parent().parent().parent().prev().find('a.ui-dialog-titlebar-close').focus();
+                return false; 
+              }
+              break;
+          }
+        });
 
         if(opts.postInit && (typeof opts.postInit === 'function')) {
           opts.postInit($(this));

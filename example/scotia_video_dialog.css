@@ -64,7 +64,7 @@
 .scotia-video-dialog .youtube-overlay {
     background: #fff;
     height: 440px !important;
-    padding: 25px 25px 50px 25px;
+    padding: 25px 25px 65px 25px;
     border: 5px solid #f1f1f1;
 }
 .scotia-video-dialog .youtube-overlay .position {
@@ -78,6 +78,11 @@
     margin-bottom: 10px;
     margin-top: 0;
 }
+
+.scotia-video-dialog .youtube-overlay .career-video {
+    position: relative;
+}
+
 /*.scotia-video-dialog .youtube-overlay .career-video,*/
 .scotia-video-dialog .youtube-overlay .career-video-transcript {
     display: none;
@@ -109,16 +114,18 @@
 }
 .scotia-video-dialog .youtube-overlay .career-video .youtube-player {
     position: absolute;
-    left: 25px;
-    top: 80px;
+    left: 0px;
+    top: 6px;
 }
 .scotia-video-dialog .youtube-overlay .career-video .copy {
     width: 255px;
+    height: 260px;
     border-bottom: 1px solid #c6c6c6;
     margin-left: 665px;
     margin-bottom: 20px;
     padding-bottom: 10px;
     font-size: 10px;
+    float: right;
 }
 .scotia-video-dialog .youtube-overlay .career-video .job-centre {
     width: 255px;
@@ -133,16 +140,16 @@
     margin-top: 17px;
 }
 .scotia-video-dialog .youtube-overlay .copy p {
+    height: 190px;
     font-size: 1.4em;
     color: #666;
     margin-bottom: 1em;
+    overflow: auto;
 }
 .scotia-video-dialog .youtube-overlay .transcripts {
     font-size: 12px;
-    width: 255px;
-    position: absolute;
-    right: 25px;
-    bottom: 25px;
+    float: left;
+    margin: 1.75em 0 0 0.5em;
 }
 .scotia-video-dialog .youtube-overlay .transcripts a {
     display: inline-block;
@@ -337,6 +344,7 @@
 }
  .video-control.tool-box {
     background: #333;
-    position: relative;
+    position: absolute;
+    bottom: 0px;
     height: 40px;
- }
+}
