@@ -14,7 +14,7 @@ if (!window.location.origin) {
     var _quickCache = new QuickCache();
     var _playerInstances = new QuickCache();
     var _youTubeIframeRdy = false;
-    var _eventLoopInterval = null, _playerSliderInterval = null;
+    var _eventLoopInterval = null, _playerSliderInterval = null, _firstLoad = null;
 
     
     function parseVideoHrefSrc(hrefUrl) {
@@ -434,7 +434,12 @@ if (!window.location.origin) {
                 }
               } 
               
-              if(videoPlayer.getPlayerState() === YT.PlayerState.CUED) {
+              
+              if((videoPlayer.getPlayerState() === YT.PlayerState.CUED 
+                || (navigator.userAgent.indexOf('MSIE') > 0 && videoPlayer.getPlayerState() === -1))
+                && !_firstLoad ) {
+                _firstLoad = true;
+                console.log('made-it', videoPlayer.getPlayerState());
                 $('#btn_play_pause_'+options.videoId).trigger('click'); 
                 var $pbQualitySelect = $("#videoQuality_"+options.videoId);
                 if($pbQualitySelect.find('option').length <= 1) {
@@ -462,43 +467,7 @@ if (!window.location.origin) {
         }, 500);
 
       };
-      var onPlayerStateChange = function(event) {
-        // var videoPlayer = event.target;
-        // var $pbQualitySelect = $("#videoQuality_"+options.videoId);
-        // console.log($pbQualitySelect.find('option').length);
-        // //Intial load for the video dialog -SH
-        // if($pbQualitySelect.find('option').length === 1 && (videoPlayer.getPlayerState() === YT.PlayerState.PLAYING)){
-        //   var qualities = videoPlayer.getAvailableQualityLevels();
-        //   for (var i = 0; i < qualities.length; i++) {
-        //     $pbQualitySelect.append('<option value="'+qualities[i]+'">'+qualities[i]+'</option>');
-        //   };
-        //   $pbQualitySelect.change(function(e){
-        //     e.preventDefault();
-        //     var newQuality = $(this).val();
-        //     if(newQuality){
-        //       videoPlayer.setPlaybackQuality(newQuality);
-        //     } 
-        //   }); 
-        //   videoPlayer.setPlaybackQuality('default');
-        // }
-        
-        // 
-
-
-        // if(videoPlayer.getPlayerState() === YT.PlayerState.PLAYING) {
-        //   player.interval = setInterval(function () {
-        //     $( "#video_scrubber_"+options.videoId ).slider("value", parseInt(videoPlayer.getCurrentTime()));
-            
-        //     //self cleaning for when the dialog closes
-        //     if(!$( "div#"+options.videoId).length) {}
-        //   }, 500);
-        // }
-
-        // if(videoPlayer.getPlayerState() === YT.PlayerState.PAUSED || videoPlayer.getPlayerState() === YT.PlayerState.ENDED) {
-        //   if(player.interval) clearInterval(player.interval);
-        // }
-
-      };
+      var onPlayerStateChange = function(event){};
 
       var onPlaybackQualityChange = function(event){};
 
@@ -565,6 +534,7 @@ if (!window.location.origin) {
                 clearInterval(_eventLoopInterval);
                 _eventLoopInterval = null; 
                 _playerSliderInterval = null;
+                _firstLoad = null;
               };
 
               $videoDialog.dialog(dialogObjFactory(onDialogOpen, onDialogClose, {}, onCleanUp));
