@@ -11,6 +11,8 @@
       return /Mobile Safari|Android|webOS|iPhone|iPad|iPod|BlackBerry|BB10|IEMobile|Opera Mini/i.test(navigator.userAgent);
     };
 
+    var _version_number = '1.0.0';
+
     /***************************************/
 
 
@@ -86,14 +88,14 @@
 
                 if($scotiaVideos.length) {
                  loaderFilesCSS  = [{
-                                        href: _config.css_path+'scotia_video_dialog.css'
+                                        href: _config.css_path+'scotia_video_dialog.'+_version_number+'.css'
                                     }];
 
                   loaderFilesJS  = [{
-                                      src: _config.js_path+'scotia-video-util.js'
+                                      src: _config.js_path+'scotia-video-util.'+_version_number+'.js'
                                     },
                                     {
-                                      src: _config.js_path+'scotia-video.js'
+                                      src: _config.js_path+'scotia-video.'+_version_number+'.js'
                                     }];
 
                 } else if($careerVideos.length || $youTubeLinks.length || $ccVideoPopup.length) {
