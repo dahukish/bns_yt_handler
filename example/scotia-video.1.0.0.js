@@ -439,7 +439,6 @@ if (!window.location.origin) {
                 || (navigator.userAgent.indexOf('MSIE') > 0 && videoPlayer.getPlayerState() === -1))
                 && !_firstLoad ) {
                 _firstLoad = true;
-                console.log('made-it', videoPlayer.getPlayerState());
                 $('#btn_play_pause_'+options.videoId).trigger('click'); 
                 var $pbQualitySelect = $("#videoQuality_"+options.videoId);
                 if($pbQualitySelect.find('option').length <= 1) {
