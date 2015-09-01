@@ -430,7 +430,7 @@ if (!window.location.origin) {
                     $( "#video_scrubber_"+options.videoId ).slider("value", parseInt(videoPlayer.getCurrentTime()));
                     //self cleaning for when the dialog closes
                     // if(!$( "div#"+options.videoId).length) {}
-                  }, 500);
+                  }, 100);
                 }
               } 
               
@@ -464,7 +464,7 @@ if (!window.location.origin) {
                 _playerSliderInterval = null;
               }
             }
-        }, 500);
+        }, 100);
 
       };
       var onPlayerStateChange = function(event){};

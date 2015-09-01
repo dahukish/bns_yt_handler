@@ -251,7 +251,7 @@
         var ifrm = contObj.iFrameObj;
         var videoContentHeight = ifrm.height+46;
         html += '<div class="career-video" aria-hidden="false" style="height: '+videoContentHeight+'px;">';
-        html += '<iframe id="player_'+contObj.dialogID+'" class="youtube-player" type="text/html" tabindex="-1" width="'+ifrm.width+'" height="'+ifrm.height+'" src="'+ifrm.src+'" data-video-src="'+ifrm.src+'" frameborder="0"></iframe>';
+        html += '<iframe id="player_'+contObj.dialogID+'" class="youtube-player" type="text/html" tabindex="-1" width="'+ifrm.width+'" height="'+ifrm.height+'" src="'+ifrm.src+'" title="(Embeded Video for -- '+(contObj.copy ? contObj.copy.title : 'Video-'+contObj.dialogID)+')" data-video-src="'+ifrm.src+'" frameborder="0"></iframe>';
         if(contObj.copy) {
           html += '<div class="copy">';
           html += '<h2 class="frutiger">'+contObj.copy.title+'</h2>';
@@ -276,14 +276,13 @@
         html += '<a href="#" id="btn_volMute_'+contObj.dialogID+'" role="button" class="video-button aural volMute" aria-pressed="false" title="mute/unmute"><img src="'+_config.img_path+'button-mute.png" alt="Mute Volume"/></a>';
         html += '<a href="#" id="btn_volDown_'+contObj.dialogID+'" role="button" class="video-button aural volDown" title="volume down"><img src="'+_config.img_path+'button-volume-minus.png" alt="Volume Up"/></a>';
         html += '<a href="#" id="btn_volUp_'+contObj.dialogID+'" role="button" class="video-button aural volUp" title="volume up"><img src="'+_config.img_path+'button-volume-plus.png" alt="Volume Down"/></a>';
-        html += '<div class="control fieldset"><label for="videoQuality_'+contObj.dialogID+'" class="video-control label quality">Video Quality</label>';
+        html += '<div class="control fieldset first"><label for="videoQuality_'+contObj.dialogID+'" class="video-control label quality">Video Quality</label>';
         html += '<select name="videoQuality_'+contObj.dialogID+'" class="video-control select quality" id="videoQuality_'+contObj.dialogID+'">';
         html += '<option value="default" selected="selected">default</option>';
         html += '</select></div>';
-        html += '<div class="control fieldset"><label for="playbackRate_'+contObj.dialogID+'" class="video-control label playbackrate">Playback Rate</label>';
+        html += '<div class="control fieldset last"><label for="playbackRate_'+contObj.dialogID+'" class="video-control label playbackrate">Playback Rate</label>';
         html += '<select name="playbackRate_'+contObj.dialogID+'" class="video-control select playbackrate" id="playbackRate_'+contObj.dialogID+'">';
         html += '</select></div>';
-        html += '<a href="https://www.youtube.com/watch?v='+contObj.dialogID+'" class="youtube watch">Watch on: </a>'; 
         
         //transcript links
         if(contObj.transcriptsList) {
@@ -297,6 +296,7 @@
           }); 
         }
 
+        html += '<a href="https://www.youtube.com/watch?v='+contObj.dialogID+'" class="youtube watch"><span>Watch on:</span><img src="'+_config.img_path+'watch_on_youtube.png" alt="Watch on YouTube"/></a>'; 
         html += '</div>'; // player-controls
 
         
