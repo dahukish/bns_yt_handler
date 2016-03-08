@@ -296,7 +296,7 @@
           }); 
         }
 
-        html += '<a href="https://www.youtube.com/watch?v='+contObj.dialogID+'" class="youtube watch"><span>Watch on:</span><img src="'+_config.img_path+'watch_on_youtube.png" alt="Watch on YouTube"/></a>'; 
+        html += '<a href="https://www.youtube.com/watch?v='+contObj.dialogID+'" class="youtube watch" title="Watch on YouTube"><span>Watch on:</span><img src="'+_config.img_path+'watch_on_youtube.png" alt="Watch on YouTube"/></a>'; 
         html += '</div>'; // player-controls
 
         

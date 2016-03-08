@@ -292,20 +292,20 @@
     position: relative;
     display: inline-block;
     float: left;
-    width: 120px;
+    width: 66px;
     height: 30px;
     font-size: 0.8em;
     text-decoration: none;
     line-height: 2.2em;
     color: #333;
-    font-family: sans-serif;    
+    font-family: sans-serif;
     border: none;
-    margin: 12px 0 0 21px;
+    margin: 21px 0 0 18px;
 }
 
 .player-controls .youtube.watch span {
     position: absolute;
-    display: inline-block;
+    display: none;
     width: 4em;
     white-space: nowrap;
     top: 0px;
