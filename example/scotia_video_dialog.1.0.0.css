@@ -315,9 +315,9 @@
 .player-controls .youtube.watch img {
     position: absolute;
     border: none;
-    width: 4em;
+    width: 5em;
     top: 1px;
-    left: 61px;
+    /* left: 61px; */
 }
 
 .video-control.scrubber {
