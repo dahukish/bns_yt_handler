@@ -593,12 +593,12 @@ if (!window.location.origin) {
             }
         });
 
-        $('a.ui-slider-handle.ui-state-default.ui-corner-all').live('keydown', function(e){
+        $('button.ui-slider-handle.ui-state-default.ui-corner-all').live('keydown', function(e){
             var $parentDialogObj = _getDialogAsParent($(this));
             switch(e.which){
               case 9:
                 if(e.shiftKey) {
-                  $parentDialogObj.find('.transcripts a.youtube.last').focus();
+                  $parentDialogObj.find('.youtube.watch').focus();  
                 } else {
                   $(this).parent().parent().parent().prev().find('a.ui-dialog-titlebar-close').focus();
                   return false;

@@ -301,7 +301,8 @@
 
         
         
-        html += '<div class="video-control tool-box" style="width: '+ifrm.width+'px;"><div id="video_scrubber_'+contObj.dialogID+'" class="video-control scrubber"><div class="buffer-bar"></div></div></div>';
+        html += '<div class="video-control tool-box" style="width: '+ifrm.width+'px;"><div id="video_scrubber_'+contObj.dialogID+'" class="video-control scrubber"><div class="buffer-bar"></div><button class="ui-slider-handle" role="slider"></button></div></div>';
+
 
         html += '</div>'; // career-video
         
