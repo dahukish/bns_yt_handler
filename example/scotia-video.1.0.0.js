@@ -428,6 +428,7 @@ if (!window.location.origin) {
           if(newQuality){
             videoPlayer.stopVideo();
             videoPlayer.setPlaybackQuality(newQuality);
+            console.log('switching');
             videoPlayer.playVideo();
           } 
         }); 
@@ -464,9 +465,8 @@ if (!window.location.origin) {
                 }
               } 
               
-              
               if((videoPlayer.getPlayerState() === YT.PlayerState.CUED 
-                || (navigator.userAgent.indexOf('MSIE') > 0 && videoPlayer.getPlayerState() === -1))
+                || (videoPlayer.getPlayerState() === -1))
                 && !_firstLoad ) {
                 _firstLoad = true;
                 $('#btn_play_pause_'+options.videoId).trigger('click'); 
