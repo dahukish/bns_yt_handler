@@ -425,8 +425,10 @@ if (!window.location.origin) {
         function bnsStopVideo(videoPlayerObj){
           if(navigator.userAgent.indexOf('Windows NT 6.1; WOW64; Trident/7.0;') >= 0){
             videoPlayerObj.pauseVideo();
+            console.log('IE11');
           } else {
             videoPlayerObj.stopVideo();
+            console.log('Awesome browser');
           }
         }
 
