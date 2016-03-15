@@ -421,12 +421,22 @@ if (!window.location.origin) {
           if(newRate) videoPlayer.setPlaybackRate(newRate);
         });
 
+        // need consistent way to stop videos
+        function bnsStopVideo(videoPlayerObj){
+          if(/\Trident\/7\.0/i.test(navigator.userAgent)){
+            videoPlayerObj.pauseVideo();
+          } else {
+            videoPlayerObj.stopVideo();
+          }
+          
+        }
+
         var $pbQualitySelect = $("#videoQuality_"+options.videoId);
         $pbQualitySelect.change(function(e){
           e.preventDefault();
           var newQuality = $(this).val();
           if(newQuality){
-            videoPlayer.stopVideo();
+            bnsStopVideo(videoPlayer);
             videoPlayer.setPlaybackQuality(newQuality);
             console.log('switching');
             videoPlayer.playVideo();

@@ -43,14 +43,23 @@
         });
       }
 
+      function bnsStopVideo(event){
+        if(/\Trident\/7\.0/i.test(navigator.userAgent)){
+          event.target.pauseVideo();
+        } else {
+          event.target.stopVideo();
+        }
+        
+      }
+
       // 4. The API will call this function when the video player is ready.
       function onPlayerReady(event) {
         event.target.playVideo();
 
         $('#quality').change(function(){
 			console.log($(this).val());
-			event.target.stopVideo();
-			event.target.setPlaybackQuality($(this).val());        	
+			bnsStopVideo(event);
+      event.target.setPlaybackQuality($(this).val());        	
 			event.target.playVideo();
         })
 
@@ -62,13 +71,16 @@
       //    the player should play for six seconds and then stop.
       var done = false;
       function onPlayerStateChange(event) {
+       console.log('stateChange');
         // if (event.data == YT.PlayerState.PLAYING && !done) {
         //   setTimeout(stopVideo, 6000);
         //   done = true;
         // }
         var qualityValues = event.target.getAvailableQualityLevels();
-        for (var i = 0; i < qualityValues.length; i++) {
-            $('#quality').append('<option value="'+qualityValues[i]+'">'+qualityValues[i]+'</option>');
+        if(!$('#quality').find('option').length){
+          for (var i = 0; i < qualityValues.length; i++) {
+              $('#quality').append('<option value="'+qualityValues[i]+'">'+qualityValues[i]+'</option>');
+          }
         }
 		console.log('stateChange', event.data);
       }
