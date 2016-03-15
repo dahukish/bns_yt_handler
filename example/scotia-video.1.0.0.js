@@ -423,12 +423,11 @@ if (!window.location.origin) {
 
         // need consistent way to stop videos
         function bnsStopVideo(videoPlayerObj){
-          if(/\Trident\/7\.0/i.test(navigator.userAgent)){
+          if(navigator.userAgent.indexOf('Windows NT 6.1; WOW64; Trident/7.0;') >= 0){
             videoPlayerObj.pauseVideo();
           } else {
             videoPlayerObj.stopVideo();
           }
-          
         }
 
         var $pbQualitySelect = $("#videoQuality_"+options.videoId);
