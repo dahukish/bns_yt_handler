@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		
+	    <meta charset="utf-8" />
+	    
+	    <title>Accessible Media Player Example - YouTube</title>
+	    <!-- <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css"> -->
+	    <script src="./example_assets/jquery.min.js"></script>
+	</head>
+	<body>
+
+
+	
+
+
+
+	
+			<div id="video"></div>
+			<select name="quality" id="quality"></select>
+
+    <script>
+          var tag = document.createElement('script');
+
+      tag.src = "https://www.youtube.com/iframe_api";
+      var firstScriptTag = document.getElementsByTagName('script')[0];
+      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+  var player;
+
+window.onYouTubeIframeAPIReady=function() {
+      player = new YT.Player('video', {
+      	height: '390',
+        width: '640',
+        videoId: 'O0-6bnWra2c',
+          events: {
+            'onReady': onPlayerReady,
+            'onStateChange': onPlayerStateChange
+
+          }
+        });
+
+
+
+
+}
+
+  function onPlayerReady(event) {
+
+    alert("onPlayerReady");
+
+  }
+   function onPlayerStateChange(event) {
+
+    alert("stateChanged");
+
+  }
+    </script>
+			<!-- <script src="./scotia-video-util.js"></script>
+			<script src="./scotia-video.js"></script> -->
+			
+	</body>
+</html>
