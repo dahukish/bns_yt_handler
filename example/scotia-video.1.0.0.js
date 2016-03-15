@@ -226,7 +226,7 @@ if (!window.location.origin) {
                 iFrameObj: {
                   width: 640,
                   height: 385,
-                  src: '//www.youtube.com/embed/'+videoCode+'?enablejsapi=1&controls=0&cc_load_policy=1&origin='+window.location.origin
+                  src: '//www.youtube.com/embed/'+videoCode+'?enablejsapi=1&version=3&controls=0&cc_load_policy=1&origin='+window.location.origin
                 },
                 copy: {
                       title: contentModelObj.getItemPart(videoCode, 'title', ''),
@@ -273,8 +273,8 @@ if (!window.location.origin) {
     }
 
     
-    function _ytIframeApiLoader(){ //TODO Break this out into a generic dirver loader call -SH
-        var tag = document.createElement('script');
+    function _ytIframeApiLoader(){ //TODO Break this out into a generic driver loader call -SH
+      var tag = document.createElement('script');
 
       tag.src = "https://www.youtube.com/iframe_api";
       var firstScriptTag = document.getElementsByTagName('script')[0];
@@ -299,13 +299,36 @@ if (!window.location.origin) {
 
     function _ytIframeApiFactory(options, $dialog){ //TODO Break this out into a generic dirver loader call -SH
       var player;  
+      
+
+       function onPlayerStateChange(event) {
+        //get the quality levels
+        var $pbQualitySelect = $("#videoQuality_"+options.videoId);
+        if(!$pbQualitySelect.find('option').length){
+          var qualityValues = _getAvialableQuality(event.target);
+          for (var i = 0; i < qualityValues.length; i++) {
+            $pbQualitySelect.append('<option value="'+qualityValues[i]+'">'+qualityValues[i]+'</option>');
+          }
+        }
+        //try and set the quality level to the highest setting
+        // if(typeof $pbQualitySelect.val() === 'string'){
+        //     event.target.setPlaybackQuality($pbQualitySelect.val());
+        // } 
+      };
+
+      function onPlaybackQualityChange (event) {
+        var $pbQualitySelect = $("#videoQuality_"+options.videoId);
+        var selectVal = $pbQualitySelect.val() || 'default';
+        event.target.setPlaybackQuality(selectVal);
+      };
+
+
       // The API will call this function when the video player is ready.
-      var onPlayerReady = function(event) {
+      function onPlayerReady(event) {
         var videoPlayer = event.target;
         var maxDuration = videoPlayer.getDuration();
         var minDuration = 0;
         var playbackRates = _getAvialableRates(videoPlayer);
-        var qualityValues = _getAvialableQuality(videoPlayer);
         
         // TODO: Refactor the snot of out this -SH
         $('#btn_play_pause_'+options.videoId).click(function(){
@@ -338,14 +361,6 @@ if (!window.location.origin) {
           }
           return false;
         });
-        // $('#btn_stop_'+options.videoId).click(function(){
-        //   videoPlayer.stopVideo();
-        //   return false;
-        // });
-        // $('#btn_pause_'+options.videoId).click(function(){
-        //   videoPlayer.pauseVideo();
-        //   return false;
-        // });
         $('#btn_volUp_'+options.videoId).click(function(){
           var maxVolume = 100;
           var currentVolume = videoPlayer.getVolume();
@@ -406,6 +421,17 @@ if (!window.location.origin) {
           if(newRate) videoPlayer.setPlaybackRate(newRate);
         });
 
+        var $pbQualitySelect = $("#videoQuality_"+options.videoId);
+        $pbQualitySelect.change(function(e){
+          e.preventDefault();
+          var newQuality = $(this).val();
+          if(newQuality){
+            videoPlayer.stopVideo();
+            videoPlayer.setPlaybackQuality(newQuality);
+            videoPlayer.playVideo();
+          } 
+        }); 
+
         //scrubber 
         $( "#video_scrubber_"+options.videoId ).slider({
           min: minDuration,
@@ -423,6 +449,10 @@ if (!window.location.origin) {
 
         // Check for Ready state (This is a work around) -SH
         _eventLoopInterval = setInterval(function () {
+            
+            //handle to buffer bar loading
+            $( "#video_scrubber_"+options.videoId ).find('.buffer-bar').css('right', (100-parseFloat(videoPlayer.getVideoLoadedFraction()*100).toFixed(0))+'%');
+
             if(videoPlayer.getPlayerState) {
               if(videoPlayer.getPlayerState() === YT.PlayerState.PLAYING) {
                 if(!_playerSliderInterval) {
@@ -440,22 +470,13 @@ if (!window.location.origin) {
                 && !_firstLoad ) {
                 _firstLoad = true;
                 $('#btn_play_pause_'+options.videoId).trigger('click'); 
-                var $pbQualitySelect = $("#videoQuality_"+options.videoId);
-                if($pbQualitySelect.find('option').length <= 1) {
-                  var qualities = videoPlayer.getAvailableQualityLevels();
-                  for (var i = 0; i < qualities.length; i++) {
-                    $pbQualitySelect.append('<option value="'+qualities[i]+'">'+qualities[i]+'</option>');
-                  };
+                // if($pbQualitySelect.find('option').length <= 1) {
+                //   var qualities = videoPlayer.getAvailableQualityLevels();
+                //   for (var i = 0; i < qualities.length; i++) {
+                //     $pbQualitySelect.append('<option value="'+qualities[i]+'">'+qualities[i]+'</option>');
+                //   };
                   
-                }
-                $pbQualitySelect.change(function(e){
-                  e.preventDefault();
-                  var newQuality = $(this).val();
-                  if(newQuality){
-                    videoPlayer.setPlaybackQuality(newQuality);
-                  } 
-                }); 
-                videoPlayer.setPlaybackQuality('default');
+                // }
               }
 
               if(videoPlayer.getPlayerState() !== YT.PlayerState.PLAYING) {
@@ -465,12 +486,9 @@ if (!window.location.origin) {
             }
         }, 100);
 
-      };
-      var onPlayerStateChange = function(event){};
+      }
 
-      var onPlaybackQualityChange = function(event){};
-
-      player = new YT.Player(options.selector, {
+     player = new YT.Player(options.selector, {
           videoId: options.videoId,
           events: {
             'onReady': onPlayerReady,

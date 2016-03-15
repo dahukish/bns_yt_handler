@@ -278,7 +278,7 @@
         html += '<a href="#" id="btn_volUp_'+contObj.dialogID+'" role="button" class="video-button aural volUp" title="volume up"><img src="'+_config.img_path+'button-volume-plus.png" alt="Volume Down"/></a>';
         html += '<div class="control fieldset first"><label for="videoQuality_'+contObj.dialogID+'" class="video-control label quality">Video Quality</label>';
         html += '<select name="videoQuality_'+contObj.dialogID+'" class="video-control select quality" id="videoQuality_'+contObj.dialogID+'">';
-        html += '<option value="default" selected="selected">default</option>';
+        // html += '<option value="default" selected="selected">default</option>';
         html += '</select></div>';
         html += '<div class="control fieldset last"><label for="playbackRate_'+contObj.dialogID+'" class="video-control label playbackrate">Playback Rate</label>';
         html += '<select name="playbackRate_'+contObj.dialogID+'" class="video-control select playbackrate" id="playbackRate_'+contObj.dialogID+'">';
