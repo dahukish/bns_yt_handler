@@ -423,7 +423,7 @@ if (!window.location.origin) {
 
         // need consistent way to stop videos
         function bnsStopVideo(videoPlayerObj){
-          if(/\Trident\/7\.0/i.test(navigator.userAgent)){
+          if(/\Trident\/\d\.0/i.test(navigator.userAgent)){
             videoPlayerObj.pauseVideo();
           } else {
             videoPlayerObj.stopVideo();
