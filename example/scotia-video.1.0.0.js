@@ -310,6 +310,15 @@ if (!window.location.origin) {
             $pbQualitySelect.append('<option value="'+qualityValues[i]+'">'+qualityValues[i]+'</option>');
           }
         }
+
+        if(event.target.getPlaybackQuality() !== 'unkown'){
+          $pbQualitySelect.find('option').each(function(index, ele){
+              if(event.target.getPlaybackQuality() === $(ele).attr('value')){
+                $(ele).attr('selected','selected');
+              }
+          });
+        }
+
         //try and set the quality level to the highest setting
         // if(typeof $pbQualitySelect.val() === 'string'){
         //     event.target.setPlaybackQuality($pbQualitySelect.val());
@@ -433,10 +442,12 @@ if (!window.location.origin) {
         var $pbQualitySelect = $("#videoQuality_"+options.videoId);
         $pbQualitySelect.change(function(e){
           e.preventDefault();
+          var currentSeek = videoPlayer.getCurrentTime();
           var newQuality = $(this).val();
           if(newQuality){
             bnsStopVideo(videoPlayer);
             videoPlayer.setPlaybackQuality(newQuality);
+            videoPlayer.seekTo(currentSeek, true);
             videoPlayer.playVideo();
           } 
         }); 
