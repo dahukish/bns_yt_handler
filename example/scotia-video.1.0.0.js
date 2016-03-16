@@ -425,10 +425,8 @@ if (!window.location.origin) {
         function bnsStopVideo(videoPlayerObj){
           if(navigator.userAgent.indexOf('Windows NT 6.1; WOW64; Trident/7.0;') >= 0){
             videoPlayerObj.pauseVideo();
-            console.log('IE11');
           } else {
             videoPlayerObj.stopVideo();
-            console.log('Awesome browser');
           }
         }
 
@@ -439,7 +437,6 @@ if (!window.location.origin) {
           if(newQuality){
             bnsStopVideo(videoPlayer);
             videoPlayer.setPlaybackQuality(newQuality);
-            console.log('switching');
             videoPlayer.playVideo();
           } 
         }); 
@@ -481,13 +478,6 @@ if (!window.location.origin) {
                 && !_firstLoad ) {
                 _firstLoad = true;
                 $('#btn_play_pause_'+options.videoId).trigger('click'); 
-                // if($pbQualitySelect.find('option').length <= 1) {
-                //   var qualities = videoPlayer.getAvailableQualityLevels();
-                //   for (var i = 0; i < qualities.length; i++) {
-                //     $pbQualitySelect.append('<option value="'+qualities[i]+'">'+qualities[i]+'</option>');
-                //   };
-                  
-                // }
               }
 
               if(videoPlayer.getPlayerState() !== YT.PlayerState.PLAYING) {
