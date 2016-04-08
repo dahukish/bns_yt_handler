@@ -163,7 +163,6 @@ if (!window.location.origin) {
       if(transcriptsList.length) {
         dialogObj.transcriptsList = transcriptsList;
       }
-        
     }
 
     function _getTransViewState($jqDialog){
@@ -252,13 +251,14 @@ if (!window.location.origin) {
             if(dialogObj.transcriptsList) {
               loadTranscripts(dialogObj.transcriptsList, 
               function() {
-                
                 var langTabindex = 1;
-                for (var i = arguments.length - 1; i >= 0; i--) {
-                  var langCode = _parseLangCode(arguments[i]);
+                var returnData = (typeof arguments[1] === 'string' && arguments[1] === 'success')? [arguments] : arguments;
+
+                for (var i = returnData.length - 1; i >= 0; i--) {
+                  var langCode = _parseLangCode(returnData[i]);
                   var beforeHtml = '<a id="'+dialogObj.dialogID+'-trans-box-'+langCode+'" tabindex="'+langTabindex+'" class="transcript-anchor-wrap">';
                   var afterHtml = '</a>';
-                  applyTransHtml(arguments[i], $videoDialog, beforeHtml, afterHtml);
+                  applyTransHtml(returnData[i], $videoDialog, beforeHtml, afterHtml);
                   langTabindex++;
                 };
                 
