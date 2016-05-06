@@ -11,12 +11,39 @@ if (!window.location.origin) {
     'use strict';
 
     // setup an instance of QuickCache for use withing this scope -SH
+    var _appLang = $('html').attr('lang');
     var _quickCache = new QuickCache();
     var _playerInstances = new QuickCache();
     var _youTubeIframeRdy = false;
     var _eventLoopInterval = null, _playerSliderInterval = null, _firstLoad = null;
 
+    var _pbLangDict = {
+      "default": {
+        "en": "normal",
+        "fr": "normale",
+        "es": "normal"
+      }
+    };
     
+    var _qltyLangDict = {
+        "large":{
+          "fr":"grand",
+          "es":"grande"
+         },
+        "medium":{
+          "fr":"moyen",
+          "es":"medio"
+         },
+        "small":{
+          "fr":"petit",
+          "es":"pequeña"
+         },
+        "tiny":{
+          "fr":"minuscule",
+          "es":"minúsculo"
+         }
+    };
+
     function parseVideoHrefSrc(hrefUrl) {
       var index = hrefUrl.indexOf('watch?v=');
       var indexShift = 8;
@@ -287,27 +314,45 @@ if (!window.location.origin) {
     }
 
     function _getAvialableRates(videoPlayerObj){
-      // return videoPlayerObj.B.availablePlaybackRates;
-      return videoPlayerObj.getAvailablePlaybackRates();
+      var rates = videoPlayerObj.getAvailablePlaybackRates();
+      
+        var ratesLangArr = [];
+        for (var i = 0; i < rates.length; i++) {
+          if(typeof _pbLangDict[rates[i]] !== "undefined" && typeof _pbLangDict[rates[i]][_appLang] !== "undefined"){
+            ratesLangArr.push({text: _pbLangDict[rates[i]][_appLang], val: rates[i]});
+          } else {
+            ratesLangArr.push({text: ((rates[i] === 1)? _pbLangDict['default'][_appLang] : rates[i]+'x'), val:rates[i]});
+          }
+        }
+        return ratesLangArr;
     }
 
     function _getAvialableQuality(videoPlayerObj){
-      return videoPlayerObj.getAvailableQualityLevels();
-      // return videoPlayerObj.B.availableQualityLevels;
+      var quality = videoPlayerObj.getAvailableQualityLevels();
+      
+       var qualityLangArr = []; 
+       for (var i = 0; i < quality.length; i++) {
+         if(typeof _qltyLangDict[quality[i]] !== "undefined" && typeof _qltyLangDict[quality[i]][_appLang] !== "undefined"){
+            qualityLangArr.push({text: _qltyLangDict[quality[i]][_appLang], val: quality[i]});
+         } else {
+            qualityLangArr.push({text: quality[i], val: quality[i]});
+         }
+       }
+       return qualityLangArr;
+      
     }
 
 
     function _ytIframeApiFactory(options, $dialog){ //TODO Break this out into a generic dirver loader call -SH
       var player;  
       
-
-       function onPlayerStateChange(event) {
+        function onPlayerStateChange(event) {
         //get the quality levels
         var $pbQualitySelect = $("#videoQuality_"+options.videoId);
         if(!$pbQualitySelect.find('option').length){
           var qualityValues = _getAvialableQuality(event.target);
           for (var i = 0; i < qualityValues.length; i++) {
-            $pbQualitySelect.append('<option value="'+qualityValues[i]+'">'+qualityValues[i]+'</option>');
+            $pbQualitySelect.append('<option value="'+qualityValues[i].val+'">'+qualityValues[i].text+'</option>');
           }
         }
 
@@ -318,11 +363,6 @@ if (!window.location.origin) {
               }
           });
         }
-
-        //try and set the quality level to the highest setting
-        // if(typeof $pbQualitySelect.val() === 'string'){
-        //     event.target.setPlaybackQuality($pbQualitySelect.val());
-        // } 
       };
 
       function onPlaybackQualityChange (event) {
@@ -337,7 +377,7 @@ if (!window.location.origin) {
         var videoPlayer = event.target;
         var maxDuration = videoPlayer.getDuration();
         var minDuration = 0;
-        var playbackRates = _getAvialableRates(videoPlayer);
+        // var playbackRates = _getAvialableRates(videoPlayer);
         
         // TODO: Refactor the snot of out this -SH
         $('#btn_play_pause_'+options.videoId).click(function(){
@@ -418,9 +458,10 @@ if (!window.location.origin) {
 
         var $pbRateSelect = $("#playbackRate_"+options.videoId);
         if($pbRateSelect.find('option').length <= 1){
-          var pbRates = videoPlayer.getAvailablePlaybackRates();
+          // var pbRates = videoPlayer.getAvailablePlaybackRates();
+          var pbRates = _getAvialableRates(videoPlayer);
           for (var i = 0; i < pbRates.length; i++) {
-            $pbRateSelect.append('<option value="'+pbRates[i]+'" '+((pbRates[i] === 1)? ' selected="selected" ' : '')+'>'+((pbRates[i] === 1)? 'normal' : pbRates[i]+'x')+'</option>');
+            $pbRateSelect.append('<option value="'+pbRates[i].val+'" '+((pbRates[i].val === 1)? ' selected="selected" ' : '')+'>'+pbRates[i].text+'</option>');
           };
           
         }
